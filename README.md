@@ -18,4 +18,14 @@ Windows:
 2. vcpkg integrate install
 3. vcpkg install glad
 4. vcpkg install glfw3
-5. 
+5. vcpkg install freeimage
+6. vcpkg install glew
+
+Compile:
+
+1. clion->setting->build,execution,deployment->cmake->cmake options:
+
+-DCMAKE_TOOLCHAIN_FILE=[vcpkg-root]/scripts/buildsystems/vcpkg.cmake -DVCPKG_PREFER_SYSTEM_LIBS:BOOL=OFF
+
+2. [vcpkg-root] replace your local dir
+
