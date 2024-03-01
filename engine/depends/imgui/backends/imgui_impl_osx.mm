@@ -7,7 +7,7 @@
 //  [X] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'.
 //  [X] Platform: Mouse support. Can discriminate Mouse/Pen.
 //  [X] Platform: Keyboard support. Since 1.87 we are using the io.AddKeyEvent() function. Pass ImGuiKey values to all key functions e.g. ImGui::IsKeyPressed(ImGuiKey_Space). [Legacy kVK_* values will also be supported unless IMGUI_DISABLE_OBSOLETE_KEYIO is set]
-//  [X] Platform: OSX clipboard is supported within core Dear ImGui (no specific code in this backend).
+//  [X] Platform: OSX clipboard is supported within component Dear ImGui (no specific code in this backend).
 //  [X] Platform: Gamepad support. Enabled with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
 //  [X] Platform: IME support.
 
@@ -56,9 +56,9 @@
 //  2020-05-25: Inputs: Added a fix for missing trackpad clicks when done with "soft tap".
 //  2019-12-05: Inputs: Added support for ImGuiMouseCursor_NotAllowed mouse cursor.
 //  2019-10-11: Inputs:  Fix using Backspace key.
-//  2019-07-21: Re-added clipboard handlers as they are not enabled by default in core imgui.cpp (reverted 2019-05-18 change).
+//  2019-07-21: Re-added clipboard handlers as they are not enabled by default in component imgui.cpp (reverted 2019-05-18 change).
 //  2019-05-28: Inputs: Added mouse cursor shape and visibility support.
-//  2019-05-18: Misc: Removed clipboard handlers as they are now supported by core imgui.cpp.
+//  2019-05-18: Misc: Removed clipboard handlers as they are now supported by component imgui.cpp.
 //  2019-05-11: Inputs: Don't filter character values before calling AddInputCharacter() apart from 0xF700..0xFFFF range.
 //  2018-11-30: Misc: Setting up io.BackendPlatformName so it can be displayed in the About Window.
 //  2018-07-07: Initial version.

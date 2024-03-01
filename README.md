@@ -20,12 +20,20 @@ Windows:
 4. vcpkg install glfw3
 5. vcpkg install freeimage
 6. vcpkg install glew
+7. vcpkg install glm
+8. vcpkg install rttr
+9. vcpkg install imgui
+10. 
+
+
 
 Compile:
 
 1. clion->setting->build,execution,deployment->cmake->cmake options:
 
--DCMAKE_TOOLCHAIN_FILE=[vcpkg-root]/scripts/buildsystems/vcpkg.cmake -DVCPKG_PREFER_SYSTEM_LIBS:BOOL=OFF
+```
+-DCMAKE_TOOLCHAIN_FILE=[vcpkg-root]/scripts/buildsystems/vcpkg.cmake
+```
 
 2. [vcpkg-root] replace your local dir
 

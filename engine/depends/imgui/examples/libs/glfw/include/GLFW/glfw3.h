@@ -4075,7 +4075,7 @@ GLFWAPI const char** glfwGetRequiredInstanceExtensions(uint32_t* count);
 
 /*! @brief Returns the address of the specified Vulkan instance function.
  *
- *  This function returns the address of the specified Vulkan core or extension
+ *  This function returns the address of the specified Vulkan component or extension
  *  function for the specified instance.  If instance is set to `NULL` it can
  *  return any function exported from the Vulkan loader, including at least the
  *  following functions:
