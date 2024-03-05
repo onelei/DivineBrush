@@ -10,7 +10,8 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include <stdio.h>
+#include "editor/window/editor_window.h"
+#include <cstdio>
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -65,7 +66,8 @@ int main(int, char**)
 #endif
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", nullptr, nullptr);
+    //Dear ImGui GLFW+OpenGL3 example
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "DivineBrush", nullptr, nullptr);
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
@@ -137,28 +139,36 @@ int main(int, char**)
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
 
+        DivineBrush::Editor::EditorWindow::GetHierarchyWindow()->GUI();
+        DivineBrush::Editor::EditorWindow::GetInspectorWindow()->GUI();
+        DivineBrush::Editor::EditorWindow::GetSceneWindow()->GUI();
+        DivineBrush::Editor::EditorWindow::GetGameWindow()->GUI();
+        DivineBrush::Editor::EditorWindow::GetProjectWindow()->GUI();
+        DivineBrush::Editor::EditorWindow::GetConsoleWindow()->GUI();
+
+
         // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-
-            ImGui::Begin("Hierarchy");                          // Create a window called "Hello, world!" and append into it.
-
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
-
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-            ImGui::End();
-        }
+//        {
+//            static float f = 0.0f;
+//            static int counter = 0;
+//
+//            ImGui::Begin("Hierarchy");                          // Create a window called "Hello, world!" and append into it.
+//
+//            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+//            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+//            ImGui::Checkbox("Another Window", &show_another_window);
+//
+//            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+//            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+//
+//            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+//                counter++;
+//            ImGui::SameLine();
+//            ImGui::Text("counter = %d", counter);
+//
+//            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+//            ImGui::End();
+//        }
 
         // 3. Show another simple window.
         if (show_another_window)
