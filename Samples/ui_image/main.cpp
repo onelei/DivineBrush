@@ -2,8 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <FreeImage.h>
 #include <iostream>
-#include <filesystem>
-namespace fs = std::filesystem;
 
 GLuint loadImageToTexture(const char* filename) {
     FreeImage_Initialise();

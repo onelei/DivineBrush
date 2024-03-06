@@ -13,6 +13,7 @@ find_package(glad CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(rttr CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
+find_package(freeimage CONFIG REQUIRED)
 
 set(IMGUI_BACKENDS
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_glfw.cpp
@@ -35,18 +36,26 @@ set(IMGUI_BACKENDS
         editor/window/game/game_window.cpp
         editor/window/game/game_window.h
         editor/window/project/project_window.cpp
-        editor/window/project/project_window.h)
+        editor/window/project/project_window.h
+        runtime/ui/behavior/ui_behaviour.cpp
+        runtime/ui/behavior/ui_behaviour.h
+        runtime/template/array_pool.h
+        runtime/template/dynamic_array_pool.h
+        runtime/template/dynamic_array_pool.h)
 
 include_directories(${PROJECT_SOURCE_DIR}/depends/imgui/backends)
 
-add_executable(${PROJECT_NAME} main.cpp
+add_executable(${PROJECT_NAME}
+        main.cpp
+        resources/app_icon.rc
+        ${SOURCE_FILES}
         ${IMGUI_BACKENDS}
         runtime/object/object.cpp
         runtime/object/object.h
         runtime/object/object.h
-        runtime/ui/ui_image.cpp
-        runtime/ui/ui_image.h
-        runtime/ui/ui_image.h
+        runtime/ui/image/image.cpp
+        runtime/ui/image/image.h
+        runtime/ui/image/image.h
         runtime/object/transform.cpp
         runtime/object/transform.h
         runtime/object/component.cpp
@@ -55,4 +64,11 @@ add_executable(${PROJECT_NAME} main.cpp
         runtime/object/game_object.h
         runtime/object/game_object.h)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad::glad opengl32 glm::glm RTTR::Core imgui::imgui)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+        glfw
+        glad::glad
+        opengl32
+        glm::glm
+        RTTR::Core
+        imgui::imgui
+        freeimage::FreeImage freeimage::FreeImagePlus)

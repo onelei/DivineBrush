@@ -4,9 +4,10 @@
 
 #include "imgui.h"
 #include "game_window.h"
+#include "../../../runtime/ui/image/image.h"
 
 namespace DivineBrush::Editor {
-
+    GLuint textureID;
     GameWindow::GameWindow() : EditorWindow(k_Game) {
 
     }
@@ -20,6 +21,12 @@ namespace DivineBrush::Editor {
             static float f = 0.0f;
             static int counter = 0;
 
+            if(textureID <= 0)
+            {
+                textureID =
+                    DivineBrush::UI::Image::LoadImageToTextureID("../samples/image/sample.png");
+            }
+            ImGui::Image((void*)(intptr_t)textureID, ImVec2(512, 512));
 
             ImGui::Text(
                     "Scene");               // Display some text (you can use a format strings too)

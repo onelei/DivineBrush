@@ -11,6 +11,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "editor/window/editor_window.h"
+#include "runtime/ui/image/image.h"
 #include <cstdio>
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -70,6 +71,17 @@ int main(int, char**)
     GLFWwindow* window = glfwCreateWindow(1280, 720, "DivineBrush", nullptr, nullptr);
     if (window == nullptr)
         return 1;
+    // icon
+    auto* icon_image = DivineBrush::UI::Image::LoadImage("../resources/icon.ico"); // 读取图标
+    if (icon_image!= nullptr) {
+        GLFWimage image;
+        image.width = static_cast<int>(icon_image->width);
+        image.height = static_cast<int>(icon_image->height);
+        image.pixels = icon_image->pixels; // 图像数据
+        glfwSetWindowIcon(window, 1, &image); // 设置窗口图标
+        delete icon_image;
+    }
+
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
 
@@ -79,6 +91,7 @@ int main(int, char**)
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;          // Enable Docking
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
