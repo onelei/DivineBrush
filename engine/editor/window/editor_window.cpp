@@ -18,7 +18,7 @@ namespace DivineBrush::Editor {
     EditorWindow::EditorWindow() = default;
 
     EditorWindow::EditorWindow(char *title) {
-        this->_title = title;
+        this->title = title;
     }
 
     EditorWindow::~EditorWindow() {
@@ -30,6 +30,11 @@ namespace DivineBrush::Editor {
 
     void EditorWindow::GUI() {
         ImGui::Begin(this->GetTitle(), nullptr, ImGuiWindowFlags_NoCollapse);
+        ImVec2 windowSize = ImGui::GetWindowSize();
+        if (windowSize.x != this->size.x || windowSize.y != this->size.y) {
+            this->size = windowSize;
+            OnResize();
+        }
         OnGUI();
         ImGui::End();
     }
@@ -43,6 +48,10 @@ namespace DivineBrush::Editor {
     }
 
     void EditorWindow::OnGUI() {
+
+    }
+
+    void EditorWindow::OnResize() {
 
     }
 

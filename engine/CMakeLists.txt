@@ -14,6 +14,7 @@ find_package(glm CONFIG REQUIRED)
 find_package(rttr CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(freeimage CONFIG REQUIRED)
+find_package(GLEW REQUIRED)
 
 set(IMGUI_BACKENDS
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_glfw.cpp
@@ -39,11 +40,23 @@ set(IMGUI_BACKENDS
         editor/window/project/project_window.h
         runtime/ui/behavior/ui_behaviour.cpp
         runtime/ui/behavior/ui_behaviour.h
-        runtime/template/array_pool.h
-        runtime/template/dynamic_array_pool.h
-        runtime/template/dynamic_array_pool.h)
+        depends/template/array_pool.h
+        depends/template/dynamic_array_pool.h
+        depends/template/dynamic_array_pool.h
+        runtime/ui/texture/texture.cpp
+        runtime/ui/texture/texture.h
+        runtime/ui/texture/texture2d.cpp
+        runtime/ui/texture/texture2d.h
+        runtime/render/render.cpp
+        runtime/render/render.h
+        runtime/application.cpp
+        runtime/application.h
+        runtime/render/shader.cpp
+        runtime/render/shader.h
+        depends/time/stop_watch.h)
 
 include_directories(${PROJECT_SOURCE_DIR}/depends/imgui/backends)
+        #${PROJECT_SOURCE_DIR}/depends/glfw3)
 
 add_executable(${PROJECT_NAME}
         main.cpp
@@ -71,4 +84,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         glm::glm
         RTTR::Core
         imgui::imgui
-        freeimage::FreeImage freeimage::FreeImagePlus)
+        freeimage::FreeImage freeimage::FreeImagePlus
+        GLEW::GLEW)

@@ -6,6 +6,7 @@
 #define ENGINE_IMAGE_H
 
 #include <GL/glew.h>
+#include <GL/gl.h>
 #include "FreeImage.h"
 #include "../behavior/ui_behaviour.h"
 
@@ -24,11 +25,6 @@ namespace DivineBrush::UI {
         unsigned int width = 0;
         unsigned int height = 0;
         BYTE *pixels = nullptr;
-
-    private:
-        static void FlipImageVertically(Image *image);
-
-        static void FlipImageVertically(unsigned int width, unsigned int height, unsigned int size, BYTE *pixels,BYTE *flippedPixels);
     };
 
 } // DivineBrush

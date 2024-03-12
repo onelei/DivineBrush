@@ -8,18 +8,19 @@
 #include "../../runtime/serialization/scriptable_object.h"
 #include <string>
 #include <unordered_map>
+#include <imgui.h>
 
 namespace DivineBrush::Editor {
     class HierarchyWindow;
 }
 
 namespace DivineBrush::Editor {
-    static char* k_Hierarchy = "Hierarchy";
-    static char* k_Inspector = "Inspector";
-    static char* k_Scene = "Scene";
-    static char* k_Game = "Game";
-    static char* k_Project = "Project";
-    static char* k_Console = "Console";
+    static char *k_Hierarchy = "Hierarchy";
+    static char *k_Inspector = "Inspector";
+    static char *k_Scene = "Scene";
+    static char *k_Game = "Game";
+    static char *k_Project = "Project";
+    static char *k_Console = "Console";
 
     class EditorWindow : public ScriptableObject {
     public:
@@ -50,8 +51,12 @@ namespace DivineBrush::Editor {
         static EditorWindow *CreateWindow(EditorWindow *editorWindow);
 
         virtual char *GetTitle() {
-            return this->_title;
+            return this->title;
         };
+
+        ImVec2 GetSize() const {
+            return this->size;
+        }
 
         void GUI();
 
@@ -61,10 +66,15 @@ namespace DivineBrush::Editor {
 
         virtual void OnGUI();
 
+        virtual void OnResize();
+
         virtual void OnDestroy();
 
     public:
-        char *_title;
+        //window title
+        char *title;
+        //window size
+        ImVec2 size;
     private:
         static std::unordered_map<char *, EditorWindow *> _window_map;
     };
