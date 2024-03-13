@@ -5,7 +5,6 @@
 #include <iostream>
 #include <fstream>
 #include "texture2d.h"
-#include "../../../depends/time/stop_watch.h"
 
 namespace DivineBrush {
     static const unsigned int bytesPerPixel = 4;
@@ -18,8 +17,7 @@ namespace DivineBrush {
 
     }
 
-    void Texture2d::LoadGLFWimage(char *path, GLFWimage* image) {
-        //FreeImage_Initialise();
+    void Texture2d::LoadGLFWimage(char *path, GLFWimage *image) {
         // 图像格式
         FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path);
         if (format == -1) {
@@ -39,7 +37,7 @@ namespace DivineBrush {
         FreeImage_Unload(bitmap);
         if (!FreeImage_FlipVertical(bitmap32)) {
             std::cerr << "Failed to flip vertical pTexture2D: " << path << std::endl;
-            return ;
+            return;
         }
 
         auto width = FreeImage_GetWidth(bitmap32);
@@ -53,7 +51,7 @@ namespace DivineBrush {
         glBindTexture(GL_TEXTURE_2D, gl_texture_id);
 
         auto bytes = FreeImage_GetBits(bitmap32);
-        image->pixels = new BYTE [size];
+        image->pixels = new BYTE[size];
         memcpy(image->pixels, bytes, size);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height,
                      0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
@@ -64,12 +62,15 @@ namespace DivineBrush {
 
     Texture2d *Texture2d::LoadFile(char *path) {
         auto *pTexture2D = new Texture2d();
-        //FreeImage_Initialise();
         // 图像格式
         FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path);
-        if (format == -1) {
-            std::cerr << "Could not find pTexture2D: " << path << std::endl;
-            return nullptr;
+        if (format == FIF_UNKNOWN) {
+            format = FreeImage_GetFIFFromFilename(path);
+            if (format == FIF_UNKNOWN) {
+                // 无法识别图像格式
+                std::cerr << "Could not get image format : " << path << std::endl;
+                return nullptr;
+            }
         }
         // 加载图像
         FIBITMAP *bitmap = FreeImage_Load(format, path);
@@ -77,7 +78,6 @@ namespace DivineBrush {
             std::cerr << "Failed to load pTexture2D: " << path << std::endl;
             return nullptr;
         }
-
         // 转换为32位RGB图像
         FIBITMAP *bitmap32 = FreeImage_ConvertTo32Bits(bitmap);
         FreeImage_Unload(bitmap);
@@ -85,55 +85,31 @@ namespace DivineBrush {
             std::cerr << "Failed to flip vertical pTexture2D: " << path << std::endl;
             return nullptr;
         }
-
-        auto width = FreeImage_GetWidth(bitmap32);
-        auto height = FreeImage_GetHeight(bitmap32);
-        auto size = width * height * bytesPerPixel;
-//        FREE_IMAGE_COLOR_TYPE colorType = FreeImage_GetColorType(bitmap);
-//        switch (colorType) {
-//            //灰度图，光亮度低的地方显示为白色，可以使用单一颜色通道在OpenGL中表示灰度值。
-//            case FIC_MINISWHITE:
-//                //灰度图，光亮度低的地方显示为黑色，同样用单一颜色通道在OpenGL中表示灰度值。
-//            case FIC_MINISBLACK:
-//                pTexture2D->gl_texture_format = GL_RED;
-//                break;
-//                //传统的RGB颜色模型，使用三个颜色通道，不包含透明度。
-//            case FIC_RGB:
-//                pTexture2D->gl_texture_format = GL_RGB;
-//                break;
-//                //RGB颜色模型带有alpha透明通道，使用四个颜色通道。
-//            case FIC_RGBALPHA:
-//                pTexture2D->gl_texture_format = GL_RGBA;
-//                break;
-//                //调色板索引色图像，在GL中直接使用调色板索引模型较为复杂，一般不直接映射，而是先转换成RGB或RGBA格式。
-//            case FIC_PALETTE:
-//                //CMYK颜色模型主要用于打印，在OpenGL中不直接使用。一般需要将CMYK转换为RGB或RGBA格式进行处理。
-//            case FIC_CMYK:
-//            default:
-//                break;
-//        }
+        // 检查像素格式决定是否有Alpha通道
+        int bitsPerPixel = FreeImage_GetBPP(bitmap32);
+        bool hasAlpha = FreeImage_IsTransparent(bitmap32) || (bitsPerPixel == 32);
+        GLenum gl_texture_format = hasAlpha ? GL_COMPRESSED_RGBA_S3TC_DXT5_EXT : GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+        //如果原始图像数据是以BGR(A)格式存储的（FreeImage的常规情形），而上传时没有正确地转换为OpenGL期望的RGB(A)格式，会导致颜色通道位置错误，从而产生色彩偏差。
+        // 对于DXT压缩，错误的通道顺序会导致颜色混乱。
+        int texture_format = hasAlpha ? GL_BGRA : GL_BGR;
         pTexture2D->width = static_cast<GLsizei>(FreeImage_GetWidth(bitmap32));
         pTexture2D->height = static_cast<GLsizei>(FreeImage_GetHeight(bitmap32));
-        pTexture2D->gl_texture_format = GL_BGRA;
+        pTexture2D->gl_texture_format = gl_texture_format;
         // 创建纹理
-        glGenTextures(1, &pTexture2D->gl_texture_id);
+        glGenTextures(1, &(pTexture2D->gl_texture_id));
         glBindTexture(GL_TEXTURE_2D, pTexture2D->gl_texture_id);
-
-
-        glTexImage2D(GL_TEXTURE_2D, pTexture2D->mipmapCount, GL_COMPRESSED_RGB, pTexture2D->width, pTexture2D->height,
-                     0, pTexture2D->gl_texture_format, GL_UNSIGNED_BYTE, FreeImage_GetBits(bitmap32));
+        glTexImage2D(GL_TEXTURE_2D, pTexture2D->mipmapCount, pTexture2D->gl_texture_format, pTexture2D->width,
+                     pTexture2D->height,
+                     0, texture_format, GL_UNSIGNED_BYTE, FreeImage_GetBits(bitmap32));
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         FreeImage_Unload(bitmap32);
-        //FreeImage_DeInitialise();
         return pTexture2D;
     }
 
     Texture2d *Texture2d::LoadCompressFile(char *path) {
         auto *pTexture2D = new Texture2d();
-        StopWatch stopwatch;
-        stopwatch.Start();
         //读取 cpt 压缩纹理文件
         std::ifstream fileStream(path, std::ios::in | std::ios::binary);
         CompressFileHead fileHead;
@@ -141,7 +117,6 @@ namespace DivineBrush {
         unsigned char *data = (unsigned char *) malloc(fileHead.compressSize);
         fileStream.read((char *) data, fileHead.compressSize);
         fileStream.close();
-
         pTexture2D->width = fileHead.width;
         pTexture2D->height = fileHead.height;
         pTexture2D->gl_texture_format = fileHead.textureFormat;
@@ -151,8 +126,6 @@ namespace DivineBrush {
         glCompressedTexImage2D(GL_TEXTURE_2D, pTexture2D->mipmapCount, pTexture2D->gl_texture_format, pTexture2D->width,
                                pTexture2D->height,
                                0, fileHead.compressSize, data);
-        stopwatch.Stop();
-        auto time = stopwatch.ElapsedMilliSeconds();
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         delete (data);

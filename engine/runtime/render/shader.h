@@ -10,19 +10,20 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <glm/vec2.hpp>
+#include <vector>
 
 namespace DivineBrush {
     static const char* vertex_shader_text =
-            "#version 110\n"
+            "#version 330 core\n"
 
             "uniform mat4 u_mvp;\n"
 
-            "attribute  vec3 a_pos;\n"
-            "attribute  vec4 a_color;\n"
-            "attribute  vec2 a_uv;\n"
+            "layout(location = 0) in  vec3 a_pos;\n"
+            "layout(location = 1) in  vec4 a_color;\n"
+            "layout(location = 2) in  vec2 a_uv;\n"
 
-            "varying vec4 v_color;\n"
-            "varying vec2 v_uv;\n"
+            "out vec4 v_color;\n"
+            "out vec2 v_uv;\n"
 
             "void main()\n"
             "{\n"
@@ -32,185 +33,110 @@ namespace DivineBrush {
             "}\n";
 
     static const char* fragment_shader_text =
-            "#version 110\n"
+            "#version 330 core\n"
             "uniform sampler2D u_diffuse_texture;"
-            "varying vec4 v_color;\n"
-            "varying vec2 v_uv;\n"
+            "in vec4 v_color;\n"
+            "in vec2 v_uv;\n"
+            "layout(location = 0) out vec4 o_fragColor;\n"
             "void main()\n"
             "{\n"
-            "    gl_FragColor = texture2D(u_diffuse_texture,v_uv);\n"
+            "    o_fragColor = texture(u_diffuse_texture,v_uv) * v_color;\n"
             "}\n";
 
-    static const glm::vec3 kPositions[36] =
-            {
-                    //Front
-                    glm::vec3(-1.0f, -1.0f, 1.0f),
-                    glm::vec3(1.0f, -1.0f, 1.0f),
-                    glm::vec3(1.0f, 1.0f, 1.0f),
+    struct Vertex
+    {
+        glm::vec3 pos;
+        glm::vec4 color;
+        glm::vec2 uv;
+    };
 
-                    glm::vec3(-1.0f, -1.0f, 1.0f),
-                    glm::vec3(1.0f, 1.0f, 1.0f),
-                    glm::vec3(-1.0f, 1.0f, 1.0f),
+    //原始顶点数组
+    static const Vertex kVertexs[36] ={
+            //Front
+            glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 0.0f),
+            glm::vec3( 1.0f, -1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 0.0f),
+            glm::vec3( 1.0f,  1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 1.0f),
 
-                    //back
-                    glm::vec3(1.0f, -1.0f, -1.0f),
-                    glm::vec3(-1.0f, -1.0f, -1.0f),
-                    glm::vec3(-1.0f, 1.0f, -1.0f),
+            glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 0.0f),
+            glm::vec3( 1.0f,  1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 1.0f),
+            glm::vec3(-1.0f,  1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 1.0f),
 
-                    glm::vec3(1.0f, -1.0f, -1.0f),
-                    glm::vec3(-1.0f, 1.0f, -1.0f),
-                    glm::vec3(1.0f, 1.0f, -1.0f),
+            //back
+            glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 1.0f),
+            glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 0.0f),
+            glm::vec3( -1.0f, -1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 0.0f),
 
-                    //left
-                    glm::vec3(-1.0f, -1.0f, -1.0f),
-                    glm::vec3(-1.0f, -1.0f, 1.0f),
-                    glm::vec3(-1.0f, 1.0f, 1.0f),
+            glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 1.0f),
+            glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 0.0f),
+            glm::vec3( -1.0f,  1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 1.0f),
 
-                    glm::vec3(-1.0f, -1.0f, -1.0f),
-                    glm::vec3(-1.0f, 1.0f, 1.0f),
-                    glm::vec3(-1.0f, 1.0f, -1.0f),
 
-                    //right
-                    glm::vec3(1.0f, -1.0f, 1.0f),
-                    glm::vec3(1.0f, -1.0f, -1.0f),
-                    glm::vec3(1.0f, 1.0f, -1.0f),
+            //left
+            glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 1.0f),
+            glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 0.0f),
+            glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 0.0f),
 
-                    glm::vec3(1.0f, -1.0f, 1.0f),
-                    glm::vec3(1.0f, 1.0f, -1.0f),
-                    glm::vec3(1.0f, 1.0f, 1.0f),
+            glm::vec3(-1.0f, 1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 1.0f),
+            glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 0.0f),
+            glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 1.0f),
 
-                    //up
-                    glm::vec3(-1.0f, 1.0f, 1.0f),
-                    glm::vec3(1.0f, 1.0f, 1.0f),
-                    glm::vec3(1.0f, 1.0f, -1.0f),
+            //right
+            glm::vec3(1.0f, -1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 0.0f),
+            glm::vec3(1.0f, -1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 0.0f),
+            glm::vec3(1.0f, 1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 1.0f),
 
-                    glm::vec3(-1.0f, 1.0f, 1.0f),
-                    glm::vec3(1.0f, 1.0f, -1.0f),
-                    glm::vec3(-1.0f, 1.0f, -1.0f),
+            glm::vec3(1.0f, -1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 0.0f),
+            glm::vec3(1.0f, 1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 1.0f),
+            glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 1.0f),
 
-                    //down
-                    glm::vec3(-1.0f, -1.0f, -1.0f),
-                    glm::vec3(1.0f, -1.0f, -1.0f),
-                    glm::vec3(1.0f, -1.0f, 1.0f),
+            //up
+            glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 0.0f),
+            glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 0.0f),
+            glm::vec3(1.0f, 1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 1.0f),
 
-                    glm::vec3(-1.0f, -1.0f, -1.0f),
-                    glm::vec3(1.0f, -1.0f, 1.0f),
-                    glm::vec3(-1.0f, -1.0f, 1.0f),
-            };
+            glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 0.0f),
+            glm::vec3(1.0f, 1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 1.0f),
+            glm::vec3(-1.0f, 1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 1.0f),
 
-    static const glm::vec4 kColors[36] =
-            {
-                    //Front
-                    glm::vec4(1, 0, 0, 1),
-                    glm::vec4(1, 0, 0, 1),
-                    glm::vec4(1, 0, 0, 1),
+            //down
+            glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 0.0f),
+            glm::vec3(1.0f, -1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 0.0f),
+            glm::vec3(1.0f, -1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 1.0f),
 
-                    glm::vec4(1, 0, 0, 1),
-                    glm::vec4(1, 0, 0, 1),
-                    glm::vec4(1, 0, 0, 1),
+            glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 0.0f),
+            glm::vec3(1.0f, -1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(1.0f, 1.0f),
+            glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec4(1.0f,1.0f,1.0f,1.0f),   glm::vec2(0.0f, 1.0f),
+    };
 
-                    //back
-                    glm::vec4(1, 0, 0, 1),
-                    glm::vec4(1, 0, 0, 1),
-                    glm::vec4(1, 0, 0, 1),
+//去重的顶点Vector
+    static std::vector<Vertex> kVertexRemoveDumplicateVector;
+//顶点索引Vector
+    static std::vector<unsigned short> kVertexIndexVector;
 
-                    glm::vec4(1, 0, 0, 1),
-                    glm::vec4(1, 0, 0, 1),
-                    glm::vec4(1, 0, 0, 1),
-
-                    //left
-                    glm::vec4(0, 1, 0, 1),
-                    glm::vec4(0, 1, 0, 1),
-                    glm::vec4(0, 1, 0, 1),
-
-                    glm::vec4(0, 1, 0, 1),
-                    glm::vec4(0, 1, 0, 1),
-                    glm::vec4(0, 1, 0, 1),
-
-                    //right
-                    glm::vec4(0, 1, 0, 1),
-                    glm::vec4(0, 1, 0, 1),
-                    glm::vec4(0, 1, 0, 1),
-
-                    glm::vec4(0, 1, 0, 1),
-                    glm::vec4(0, 1, 0, 1),
-                    glm::vec4(0, 1, 0, 1),
-
-                    //up
-                    glm::vec4(0, 0, 1, 1),
-                    glm::vec4(0, 0, 1, 1),
-                    glm::vec4(0, 0, 1, 1),
-
-                    glm::vec4(0, 0, 1, 1),
-                    glm::vec4(0, 0, 1, 1),
-                    glm::vec4(0, 0, 1, 1),
-
-                    //down
-                    glm::vec4(0, 0, 1, 1),
-                    glm::vec4(0, 0, 1, 1),
-                    glm::vec4(0, 0, 1, 1),
-
-                    glm::vec4(0, 0, 1, 1),
-                    glm::vec4(0, 0, 1, 1),
-                    glm::vec4(0, 0, 1, 1),
-            };
-
-    static const glm::vec2 kUvs[36] =
-            {
-                    //Front
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-                    glm::vec2(0.0f, 1.0f),
-
-                    //back
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-                    glm::vec2(0.0f, 1.0f),
-
-                    //left
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-                    glm::vec2(0.0f, 1.0f),
-
-                    //right
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-                    glm::vec2(0.0f, 1.0f),
-
-                    //up
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-                    glm::vec2(0.0f, 1.0f),
-
-                    //down
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-
-                    glm::vec2(0.0f, 0.0f),
-                    glm::vec2(1.0f, 1.0f),
-                    glm::vec2(0.0f, 1.0f),
-            };
+//顶点去重
+    static void VertexRemoveDumplicate() {
+        for (int i = 0; i < 36; ++i) {
+            const Vertex &vertex = kVertexs[i];
+            //判断顶点是否存在
+            int index = -1;
+            for (int j = 0; j < kVertexRemoveDumplicateVector.size(); ++j) {
+                if (vertex.pos == kVertexRemoveDumplicateVector[j].pos &&
+                    vertex.color == kVertexRemoveDumplicateVector[j].color &&
+                    vertex.uv == kVertexRemoveDumplicateVector[j].uv) {
+                    index = j;
+                    break;
+                }
+            }
+            if (index < 0) {
+                //没找到就将目标顶点加入kVertexRemoveDumplicateVector，并记录索引为kVertexRemoveDumplicateVector.size()。
+                kVertexRemoveDumplicateVector.push_back(vertex);
+                kVertexIndexVector.push_back(kVertexRemoveDumplicateVector.size() - 1);
+            } else {
+                //找到了目标顶点，记录索引为kVertexRemoveDumplicateVector的位置。
+                kVertexIndexVector.push_back(index);
+            }
+        }
+    }
 
     class Shader {
     public:
@@ -220,6 +146,8 @@ namespace DivineBrush {
 
         GLuint vertex_shader, fragment_shader, program;
         GLint mvp_location, vpos_location, vcol_location, u_diffuse_texture_location, a_uv_location;
+        GLuint kVBO,kEBO;
+        GLuint kVAO;
     };
 
 } // DivineBrush

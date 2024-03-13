@@ -41,6 +41,8 @@ namespace DivineBrush {
     }
 
     int Render::Init() {
+        VertexRemoveDumplicate();
+
         glfwSetErrorCallback(glfw_error_callback);
         if (!glfwInit())
             exit(EXIT_FAILURE);
@@ -62,9 +64,9 @@ namespace DivineBrush {
 #else
         // GL 3.0 + GLSL 130
         glsl_version = "#version 130";
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);//3
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);//3
-        //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
         //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
 
@@ -151,7 +153,10 @@ namespace DivineBrush {
             //DivineBrush::Texture2d::CompressFile("../samples/image/sample.png","../samples/image/sample.glt");
             texture2d = DivineBrush::Texture2d::LoadCompressFile("../samples/image/sample.glt");
         }
-        auto *pShader = new Shader();
+        shader = new Shader();
+
+        GeneratorVertexArrayObject();
+        GeneratorBufferObject();
 
         // Main loop
 #ifdef __EMSCRIPTEN__
@@ -176,24 +181,24 @@ namespace DivineBrush {
             }
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer_object_id);
             //创建颜色纹理 Attach到FBO颜色附着点上
-            glGenTextures(1, &color_texture_id_);
-            glBindTexture(GL_TEXTURE_2D, color_texture_id_);
+            glGenTextures(1, &color_texture_id);
+            glBindTexture(GL_TEXTURE_2D, color_texture_id);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color_texture_id_, 0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color_texture_id, 0);
             //创建深度纹理 Attach到FBO深度附着点上
-            glGenTextures(1, &depth_texture_id_);
-            glBindTexture(GL_TEXTURE_2D, depth_texture_id_);
+            glGenTextures(1, &depth_texture_id);
+            glBindTexture(GL_TEXTURE_2D, depth_texture_id);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE,
                          nullptr);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_texture_id_, 0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_texture_id, 0);
             //检测帧缓冲区完整性
             GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if (status != GL_FRAMEBUFFER_COMPLETE) {
@@ -201,7 +206,6 @@ namespace DivineBrush {
                        status);//36055 = 0x8CD7 GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT 附着点没有东西
                 exit(EXIT_FAILURE);
             }
-
 
             float ratio;
             glm::mat4 model, view, projection, mvp;
@@ -232,26 +236,12 @@ namespace DivineBrush {
             mvp = projection * view * model;
 
             //指定GPU程序(就是指定顶点着色器、片段着色器)
-            glUseProgram(pShader->program);
+            glUseProgram(shader->program);
             {
                 glEnable(GL_DEPTH_TEST);
                 glEnable(GL_CULL_FACE);//开启背面剔除
-
-                //启用顶点Shader属性(a_pos)，指定与顶点坐标数据进行关联
-                glEnableVertexAttribArray(pShader->vpos_location);
-                glVertexAttribPointer(pShader->vpos_location, 3, GL_FLOAT, false, sizeof(glm::vec3), kPositions);
-
-                //启用顶点Shader属性(a_color)，指定与顶点颜色数据进行关联
-                glEnableVertexAttribArray(pShader->vcol_location);
-                glVertexAttribPointer(pShader->vcol_location, 3, GL_FLOAT, false, sizeof(glm::vec4), kColors);
-
-                //启用顶点Shader属性(a_uv)，指定与顶点UV数据进行关联
-                glEnableVertexAttribArray(pShader->a_uv_location);
-                glVertexAttribPointer(pShader->a_uv_location, 2, GL_FLOAT, false, sizeof(glm::vec2), kUvs);
-
-
                 //上传mvp矩阵
-                glUniformMatrix4fv(pShader->mvp_location, 1, GL_FALSE, &mvp[0][0]);
+                glUniformMatrix4fv(shader->mvp_location, 1, GL_FALSE, &mvp[0][0]);
 
                 //贴图设置
                 //激活纹理单元0
@@ -259,14 +249,16 @@ namespace DivineBrush {
                 //将加载的图片纹理句柄，绑定到纹理单元0的Texture2D上。
                 glBindTexture(GL_TEXTURE_2D, texture2d->gl_texture_id);
                 //设置Shader程序从纹理单元0读取颜色数据
-                glUniform1i(pShader->u_diffuse_texture_location, 0);
+                glUniform1i(shader->u_diffuse_texture_location, 0);
 
-                //void glDrawArrays(GLenum mode,GLint first,GLsizei count);
-                glDrawArrays(GL_TRIANGLES, 0, 6 * 6);//表示从第0个顶点开始画，总共画6个面，每个面6个顶点。
+                glBindVertexArray(shader->kVAO);
+                {
+                    glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_SHORT,0);//使用顶点索引进行绘制，最后的0表示数据偏移量。
+                }
+                glBindVertexArray(0);
             }
             //解绑FBO：完成FBO的渲染后，你通常会绑定回默认的帧缓冲区，继续渲染你的UI或其它画面内容。
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
             // Poll and handle events (inputs, window resize, etc.)
             // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
             // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
@@ -357,4 +349,46 @@ namespace DivineBrush {
     void Render::SetTexture2D(Texture2d *texture) {
         this->texture2d = texture;
     }
+
+    void Render::GeneratorVertexArrayObject(){
+        glGenVertexArrays(1,&shader->kVAO);
+    }
+
+    /// 创建VBO和EBO，设置VAO
+    void Render::GeneratorBufferObject()
+    {
+        //在GPU上创建缓冲区对象
+        glGenBuffers(1,&shader->kVBO);
+        //将缓冲区对象指定为顶点缓冲区对象
+        glBindBuffer(GL_ARRAY_BUFFER, shader->kVBO);
+        //上传顶点数据到缓冲区对象
+        glBufferData(GL_ARRAY_BUFFER, kVertexRemoveDumplicateVector.size() * sizeof(Vertex), &kVertexRemoveDumplicateVector[0], GL_STATIC_DRAW);
+
+        //在GPU上创建缓冲区对象
+        glGenBuffers(1,&shader->kEBO);
+        //将缓冲区对象指定为顶点索引缓冲区对象
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shader->kEBO);
+        //上传顶点索引数据到缓冲区对象
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, kVertexIndexVector.size() * sizeof(unsigned short), &kVertexIndexVector[0], GL_STATIC_DRAW);
+        //设置VAO
+        glBindVertexArray(shader->kVAO);
+        {
+            //指定当前使用的VBO
+            glBindBuffer(GL_ARRAY_BUFFER, shader->kVBO);
+            //将Shader变量(a_pos)和顶点坐标VBO句柄进行关联，最后的0表示数据偏移量。
+            glVertexAttribPointer(shader->vpos_location, 3, GL_FLOAT, false, sizeof(Vertex), 0);
+            //启用顶点Shader属性(a_color)，指定与顶点颜色数据进行关联。
+            glVertexAttribPointer(shader->vcol_location, 4, GL_FLOAT, false, sizeof(Vertex), (void*)(sizeof(float)*3));
+            //将Shader变量(a_uv)和顶点UV坐标VBO句柄进行关联。
+            glVertexAttribPointer(shader->a_uv_location, 2, GL_FLOAT, false, sizeof(Vertex), (void*)(sizeof(float)*(3+4)));
+
+            glEnableVertexAttribArray(shader->vpos_location);
+            glEnableVertexAttribArray(shader->vcol_location);
+            glEnableVertexAttribArray(shader->a_uv_location);
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shader->kEBO);
+        }
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
 } // DivineBrush
