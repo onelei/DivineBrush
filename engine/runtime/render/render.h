@@ -7,6 +7,7 @@
 
 #include "../ui/texture/texture2d.h"
 #include "shader.h"
+#include "../mesh/mesh_filter.h"
 
 namespace DivineBrush {
 
@@ -42,6 +43,8 @@ namespace DivineBrush {
         GLFWwindow *window;
         Texture2d *texture2d;
         Shader *shader;
+        MeshFilter* mesh_filter= nullptr;
+
         GLuint color_texture_id = 0;//FBO 颜色纹理
         GLuint depth_texture_id = 0;//FBO 深度纹理
     };

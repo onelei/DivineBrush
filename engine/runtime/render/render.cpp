@@ -41,8 +41,6 @@ namespace DivineBrush {
     }
 
     int Render::Init() {
-        VertexRemoveDumplicate();
-
         glfwSetErrorCallback(glfw_error_callback);
         if (!glfwInit())
             exit(EXIT_FAILURE);
@@ -62,8 +60,16 @@ namespace DivineBrush {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
 #else
+//        OpenGL Version	GLSL Version
+//        2.0	1.10
+//        2.1	1.20
+//        3.0	1.30
+//        3.1	1.40
+//        3.2	1.50
+//        >3.3	=OpenGL Version
+
         // GL 3.0 + GLSL 130
-        glsl_version = "#version 130";
+        glsl_version = "#version 150";
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
@@ -148,9 +154,13 @@ namespace DivineBrush {
         bool show_another_window = false;
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+        mesh_filter = new MeshFilter();
+        VertexRemoveDumplicate("../samples/model/cube.mesh");
+        mesh_filter->LoadMesh("../samples/model/cube.mesh");
+
         if (texture2d == nullptr) {
             //texture2d = DivineBrush::Texture2d::LoadFile("../samples/image/sample.png");
-            //DivineBrush::Texture2d::CompressFile("../samples/image/sample.png","../samples/image/sample.glt");
+            DivineBrush::Texture2d::CompressFile("../samples/image/sample.png","../samples/image/sample.glt");
             texture2d = DivineBrush::Texture2d::LoadCompressFile("../samples/image/sample.glt");
         }
         shader = new Shader();
@@ -168,7 +178,7 @@ namespace DivineBrush {
         while (!glfwWindowShouldClose(window))
 #endif
         {
-            int width=480;
+            int width = 480;
             int height = 320;
 
             //绑定FBO进行渲染：在你的渲染循环中，当你想将内容渲染到离屏缓冲区（即FBO）时，你应该先绑定FBO。
@@ -253,7 +263,7 @@ namespace DivineBrush {
 
                 glBindVertexArray(shader->kVAO);
                 {
-                    glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_SHORT,0);//使用顶点索引进行绘制，最后的0表示数据偏移量。
+                    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);//使用顶点索引进行绘制，最后的0表示数据偏移量。
                 }
                 glBindVertexArray(0);
             }
@@ -350,37 +360,40 @@ namespace DivineBrush {
         this->texture2d = texture;
     }
 
-    void Render::GeneratorVertexArrayObject(){
-        glGenVertexArrays(1,&shader->kVAO);
+    void Render::GeneratorVertexArrayObject() {
+        glGenVertexArrays(1, &shader->kVAO);
     }
 
     /// 创建VBO和EBO，设置VAO
-    void Render::GeneratorBufferObject()
-    {
+    void Render::GeneratorBufferObject() {
         //在GPU上创建缓冲区对象
-        glGenBuffers(1,&shader->kVBO);
+        glGenBuffers(1, &shader->kVBO);
         //将缓冲区对象指定为顶点缓冲区对象
         glBindBuffer(GL_ARRAY_BUFFER, shader->kVBO);
         //上传顶点数据到缓冲区对象
-        glBufferData(GL_ARRAY_BUFFER, kVertexRemoveDumplicateVector.size() * sizeof(Vertex), &kVertexRemoveDumplicateVector[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, mesh_filter->GetMesh()->vertex_num * sizeof(MeshFilter::Vertex),
+                     mesh_filter->GetMesh()->vertex_data, GL_STATIC_DRAW);
 
         //在GPU上创建缓冲区对象
-        glGenBuffers(1,&shader->kEBO);
+        glGenBuffers(1, &shader->kEBO);
         //将缓冲区对象指定为顶点索引缓冲区对象
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shader->kEBO);
         //上传顶点索引数据到缓冲区对象
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, kVertexIndexVector.size() * sizeof(unsigned short), &kVertexIndexVector[0], GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_filter->GetMesh()->vertex_index_num * sizeof(unsigned short),
+                     mesh_filter->GetMesh()->vertex_index_data, GL_STATIC_DRAW);
         //设置VAO
         glBindVertexArray(shader->kVAO);
         {
             //指定当前使用的VBO
             glBindBuffer(GL_ARRAY_BUFFER, shader->kVBO);
             //将Shader变量(a_pos)和顶点坐标VBO句柄进行关联，最后的0表示数据偏移量。
-            glVertexAttribPointer(shader->vpos_location, 3, GL_FLOAT, false, sizeof(Vertex), 0);
+            glVertexAttribPointer(shader->vpos_location, 3, GL_FLOAT, false, sizeof(MeshFilter::Vertex), 0);
             //启用顶点Shader属性(a_color)，指定与顶点颜色数据进行关联。
-            glVertexAttribPointer(shader->vcol_location, 4, GL_FLOAT, false, sizeof(Vertex), (void*)(sizeof(float)*3));
+            glVertexAttribPointer(shader->vcol_location, 4, GL_FLOAT, false, sizeof(MeshFilter::Vertex),
+                                  (void *) (sizeof(float) * 3));
             //将Shader变量(a_uv)和顶点UV坐标VBO句柄进行关联。
-            glVertexAttribPointer(shader->a_uv_location, 2, GL_FLOAT, false, sizeof(Vertex), (void*)(sizeof(float)*(3+4)));
+            glVertexAttribPointer(shader->a_uv_location, 2, GL_FLOAT, false, sizeof(MeshFilter::Vertex),
+                                  (void *) (sizeof(float) * (3 + 4)));
 
             glEnableVertexAttribArray(shader->vpos_location);
             glEnableVertexAttribArray(shader->vcol_location);

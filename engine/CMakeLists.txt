@@ -53,7 +53,9 @@ set(IMGUI_BACKENDS
         runtime/application.h
         runtime/render/shader.cpp
         runtime/render/shader.h
-        depends/time/stop_watch.h)
+        depends/time/stop_watch.h
+        runtime/mesh/mesh_filter.cpp
+        runtime/mesh/mesh_filter.h)
 
 include_directories(${PROJECT_SOURCE_DIR}/depends/imgui/backends)
         #${PROJECT_SOURCE_DIR}/depends/glfw3)
