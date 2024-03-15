@@ -16,24 +16,24 @@ namespace DivineBrush {
 
     class GameObject : public Object {
     public:
-        GameObject() = default;
+        GameObject();
 
         GameObject(std::string name);
 
         ~GameObject() override = default;
 
     public:
-        std::string getName(){
-           return this->_name;
+        std::string GetName(){
+           return this->name;
         }
 
-        void setName(std::string name){
-            this->_name = name;
+        void SetName(std::string name){
+            this->name = name;
         }
 
-        Component *addComponent(std::string component_name);
+        Component *AddComponent(const std::string& componentName);
 
-        Component *getComponent(std::string component_name);
+        Component *GetComponent(const std::string& componentName);
 
         virtual void start();
 
@@ -50,8 +50,8 @@ namespace DivineBrush {
         virtual void onDestroy();
 
     private:
-        std::string _name;
-        std::unordered_map<std::string, std::vector<Component *>> _component_map;
+        std::string name;
+        std::unordered_map<std::string, std::vector<Component *>> component_map;
     };
 
 } // DivineBrush

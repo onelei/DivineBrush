@@ -5,11 +5,17 @@
 #include <fstream>
 #include "mesh_filter.h"
 #include "../application.h"
+#include "rttr/registration.h"
 
 namespace DivineBrush {
+    using namespace rttr;
 
-    MeshFilter::MeshFilter() {
-        mesh = nullptr;
+    RTTR_REGISTRATION {
+        registration::class_<MeshFilter>("MeshFilter")
+                .constructor<>()(rttr::policy::ctor::as_raw_ptr);
+    }
+    MeshFilter::MeshFilter():mesh(nullptr) {
+
     }
 
     MeshFilter::~MeshFilter() {

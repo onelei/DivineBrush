@@ -9,15 +9,18 @@ using namespace rttr;
 
 namespace DivineBrush {
     RTTR_REGISTRATION//注册反射
-{
-    registration::class_<Transform>("Transform")
-    .
+    {
+        registration::class_<Transform>("Transform")
+                .constructor<>()(rttr::policy::ctor::as_raw_ptr)
+                .property("position", &Transform::GetPosition, &Transform::SetPosition)
+                .property("rotation", &Transform::GetRotation, &Transform::SetRotation)
+                .property("scale", &Transform::GetScale, &Transform::SetScale);
+    }
 
-    constructor<>()(rttr::policy::ctor::as_raw_ptr)
+    Transform::Transform() : position(0.f), rotation(0.f), scale(1.f) {
 
-    .property("position", &Transform::getPosition, &Transform::setPosition)
-    .property("rotation", &Transform::getRotation, &Transform::setRotation)
-    .property("scale", &Transform::getScale, &Transform::setScale);
-}
+    }
+
+    Transform::~Transform() = default;
 
 } // DivineBrush

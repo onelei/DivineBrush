@@ -5,7 +5,6 @@
 #ifndef ENGINE_RENDER_H
 #define ENGINE_RENDER_H
 
-#include "../ui/texture/texture2d.h"
 #include "mesh_render.h"
 
 namespace DivineBrush {
@@ -22,11 +21,6 @@ namespace DivineBrush {
         void InitImGui();
 
         void Run();
-
-        void GeneratorVertexArrayObject();
-
-        /// 创建VBO和EBO，设置VAO
-        void GeneratorBufferObject();
 
     private:
         GLFWwindow *window;

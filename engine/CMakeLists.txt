@@ -3,6 +3,9 @@ project(engine)
 
 set(CMAKE_CXX_STANDARD 17)
 
+#more warning
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
 if (WIN32)
     #ignore warning unicode
     add_compile_options(/wd4819)
@@ -59,7 +62,9 @@ set(IMGUI_BACKENDS
         runtime/render/material.cpp
         runtime/render/material.h
         runtime/render/mesh_render.cpp
-        runtime/render/mesh_render.h)
+        runtime/render/mesh_render.h
+        runtime/render/camera.cpp
+        runtime/render/camera.h)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 

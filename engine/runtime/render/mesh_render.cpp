@@ -1,11 +1,22 @@
 //
 // Created by onelei on 2024/3/15.
 //
-
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform2.hpp>
+#include <glm/gtx/euler_angles.hpp>
 #include "mesh_render.h"
+#include "rttr/registration.h"
+#include "../object/game_object.h"
+#include "../object/transform.h"
 
 namespace DivineBrush {
+    using namespace rttr;
 
+    RTTR_REGISTRATION {
+        registration::class_<MeshRender>("MeshRender")
+                .constructor<>()(rttr::policy::ctor::as_raw_ptr);
+    }
     void MeshRender::Prepare() {
         //获取Shader中的变量
         auto shader = material->GetShader();
@@ -56,6 +67,24 @@ namespace DivineBrush {
     }
 
     void MeshRender::Render() {
+        auto component = GetGameObject()->GetComponent("Transform");
+        auto transform = dynamic_cast<Transform *>(component);
+        if (!transform) {
+            return;
+        }
+        //进行实际的渲染调用：这里你绘制你的场景，包括提到的立方体渲染。
+        glm::mat4 trans = glm::translate(transform->GetPosition()); //不移动顶点坐标;
+
+        auto rotation = transform->GetRotation();
+        auto eulerAngleYXZ = glm::eulerAngleYXZ(glm::radians(rotation.y), glm::radians(rotation.x),
+                                                glm::radians(rotation.z)); //使用欧拉角旋转;
+
+        auto scale = glm::scale(transform->GetScale()); //缩放;
+        auto model = trans * scale * eulerAngleYXZ;
+
+        mvp = projection * view * model;
+        //SetMVP(mvp);
+
         //指定GPU程序(就是指定顶点着色器、片段着色器)
         glUseProgram(program_id);
         {

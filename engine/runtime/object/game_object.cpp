@@ -7,19 +7,34 @@
 
 using namespace rttr;
 namespace DivineBrush {
-    GameObject::GameObject(std::string name) {
-        this->setName(name);
+
+    GameObject::GameObject() {
+        this->SetName("GameObject");
     }
 
-    Component *GameObject::addComponent(std::string component_name) {
-        type t = type::get_by_name(component_name);
+    GameObject::GameObject(std::string name) {
+        this->SetName(name);
+    }
+
+    Component *GameObject::AddComponent(const std::string &componentName) {
+        type t = type::get_by_name(componentName);
         variant var = t.create();
         Component *component = var.get_value<Component *>();
-        component->setGameObject(this);
+        component->SetGameObject(this);
+        if (component_map.find(componentName) == component_map.end()) {
+            std::vector<Component *> componentVec;
+            componentVec.push_back(component);
+            component_map[componentName] = componentVec;
+        } else {
+            component_map[componentName].push_back(component);
+        }
         return component;
     }
 
-    Component *GameObject::getComponent(std::string component_name) {
+    Component *GameObject::GetComponent(const std::string &componentName) {
+        if (component_map.find(componentName) != component_map.end()) {
+            return component_map[componentName][0];
+        }
         return nullptr;
     }
 

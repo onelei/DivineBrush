@@ -3,11 +3,6 @@
 //
 
 #include "render.h"
-#include "shader.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform2.hpp>
-#include <glm/gtx/euler_angles.hpp>
 #include <cstdio>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -16,6 +11,9 @@
 #include "../application.h"
 #include "material.h"
 #include "mesh_render.h"
+#include "../object/game_object.h"
+#include "../object/transform.h"
+#include "camera.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -155,16 +153,24 @@ namespace DivineBrush {
         bool show_another_window = false;
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-        auto *mesh_filter = new MeshFilter();
+        auto gameObject = new GameObject("Cube");
+        auto transform = dynamic_cast<Transform*>(gameObject->AddComponent("Transform"));
+
+        auto mesh_filter = dynamic_cast<MeshFilter*>(gameObject->AddComponent("MeshFilter"));
         mesh_filter->LoadMesh("model/cube.mesh");
 
-        auto *material = new Material();
+        auto material = new Material();
         material->Parse("material/cube.mat");
 
-        mesh_render = new MeshRender();
+        mesh_render = dynamic_cast<MeshRender*>(gameObject->AddComponent("MeshRender"));
         mesh_render->SetMeshFilter(mesh_filter);
         mesh_render->SetMaterial(material);
         mesh_render->Prepare();
+
+        auto camera_gameObject = new GameObject("Camera");
+        auto camera_transform = dynamic_cast<Transform*>(camera_gameObject->AddComponent("Transform"));
+        camera_transform->SetPosition(glm::vec3(0, 0, 10));
+        auto camera = dynamic_cast<Camera*>(camera_gameObject->AddComponent("Camera"));
 
         // Main loop
 #ifdef __EMSCRIPTEN__
@@ -217,34 +223,30 @@ namespace DivineBrush {
                 exit(EXIT_FAILURE);
             }
 
-            float ratio;
-            glm::mat4 model, view, projection, mvp;
-
-            //glfwGetFramebufferSize(window, &width, &height);
-            ratio = width / (float) height;
-
             //设置视口和清除缓冲区：设置合适的视口，并且清除颜色和深度缓冲区，为渲染做准备。
             glViewport(0, 0, width, height);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glClearColor(49.f / 255, 77.f / 255, 121.f / 255, 1.f);
 
-            //进行实际的渲染调用：这里你绘制你的场景，包括提到的立方体渲染。
-            glm::mat4 trans = glm::translate(glm::vec3(0, 0, 0)); //不移动顶点坐标;
+            //camera
+            camera->SetCenter(glm::vec3(0, 0, 0));
+            camera->SetUp(glm::vec3(0, 1, 0));
+            camera->SetClearColor(glm::vec4(0.45f, 0.55f, 0.60f, 1.00f));
+            camera->SetFov(60.f);
+            camera->SetAspect(width / (float) height);
+            camera->SetNear(1.f);
+            camera->SetFar(1000.f);
 
+            camera->Clear();
+            camera->Render();
+
+            //旋转物体
             static float rotate_eulerAngle = 0.f;
             rotate_eulerAngle += 1.f;
-            glm::mat4 rotation = glm::eulerAngleYXZ(glm::radians(rotate_eulerAngle), glm::radians(rotate_eulerAngle),
-                                                    glm::radians(rotate_eulerAngle)); //使用欧拉角旋转;
+            auto rotation = transform->GetRotation();
+            rotation.y = rotate_eulerAngle;
+            transform->SetRotation(rotation);
 
-            glm::mat4 scale = glm::scale(glm::vec3(2.0f, 2.0f, 2.0f)); //缩放;
-            model = trans * scale * rotation;
-
-            view = glm::lookAt(glm::vec3(0, 0, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-
-            projection = glm::perspective(glm::radians(60.f), ratio, 1.f, 1000.f);
-
-            mvp = projection * view * model;
-            mesh_render->SetMVP(mvp);
+            mesh_render->SetView(camera->GetView());
+            mesh_render->SetProjection(camera->GetProjection());
             mesh_render->Render();
 
             //解绑FBO：完成FBO的渲染后，你通常会绑定回默认的帧缓冲区，继续渲染你的UI或其它画面内容。

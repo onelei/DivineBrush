@@ -21,12 +21,12 @@ namespace DivineBrush {
 
         ~Component() override = default;
 
-        GameObject* getGameObject();
+        GameObject* GetGameObject();
 
-        void setGameObject(GameObject* gameObject);
+        void SetGameObject(GameObject* gameObject);
 
     private:
-        GameObject* _gameObject = nullptr;
+        GameObject* gameObject = nullptr;
     };
 
 } // DivineBrush

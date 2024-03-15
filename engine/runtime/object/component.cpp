@@ -5,11 +5,11 @@
 #include "component.h"
 
 namespace DivineBrush {
-    GameObject * Component::getGameObject() {
-        return this->_gameObject;
+    GameObject * Component::GetGameObject() {
+        return this->gameObject;
     }
 
-    void Component::setGameObject(GameObject *gameObject) {
-        this->_gameObject = gameObject;
+    void Component::SetGameObject(GameObject *gameObject) {
+        this->gameObject = gameObject;
     }
 } // DivineBrush

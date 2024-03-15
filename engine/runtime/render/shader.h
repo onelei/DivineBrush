@@ -25,8 +25,6 @@ namespace DivineBrush {
 
         static Shader *Find(const std::string &shaderName);
 
-
-
     public:
         std::string shader_name;
 

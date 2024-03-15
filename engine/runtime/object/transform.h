@@ -11,39 +11,39 @@
 namespace DivineBrush {
     class Transform : public Component {
     public:
-        Transform() = default;
+        Transform();
 
-        ~Transform() override = default;
+        ~Transform();
 
     public:
-        void setPosition(glm::vec3 position) {
-            this->_position = position;
+        void SetPosition(glm::vec3 vec3) {
+            this->position = vec3;
         }
 
-        void setRotation(glm::vec3 rotation) {
-            this->_rotation = rotation;
+        void SetRotation(glm::vec3 vec3) {
+            this->rotation = vec3;
         }
 
-        void setScale(glm::vec3 scale) {
-            this->_scale = scale;
+        void SetScale(glm::vec3 vec3) {
+            this->scale = vec3;
         }
 
-        glm::vec3 getPosition() {
-            return this->_position;
+        glm::vec3 GetPosition() {
+            return this->position;
         }
 
-        glm::vec3 getRotation() {
-            return this->_rotation;
+        glm::vec3 GetRotation() {
+            return this->rotation;
         }
 
-        glm::vec3 getScale() {
-            return this->_scale;
+        glm::vec3 GetScale() {
+            return this->scale;
         }
 
     private:
-        glm::vec3 _position = glm::vec3(0.0f, 0.0f, 0.0f);
-        glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-        glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f);
+        glm::vec3 position;
+        glm::vec3 rotation;
+        glm::vec3 scale;
     };
 }
 #endif //ENGINE_TRANSFORM_H
