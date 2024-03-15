@@ -23,7 +23,8 @@ Windows:
 7. vcpkg install glm
 8. vcpkg install rttr
 9. vcpkg install imgui
-10. 
+10. vcpkg install rapidxml
+11. 
 
 
 

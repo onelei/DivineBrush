@@ -54,11 +54,17 @@ set(IMGUI_BACKENDS
         runtime/render/shader.cpp
         runtime/render/shader.h
         depends/time/stop_watch.h
-        runtime/mesh/mesh_filter.cpp
-        runtime/mesh/mesh_filter.h)
+        runtime/render/mesh_filter.cpp
+        runtime/render/mesh_filter.h
+        runtime/render/material.cpp
+        runtime/render/material.h
+        runtime/render/mesh_render.cpp
+        runtime/render/mesh_render.h)
 
-include_directories(${PROJECT_SOURCE_DIR}/depends/imgui/backends)
-        #${PROJECT_SOURCE_DIR}/depends/glfw3)
+find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
+
+include_directories(${PROJECT_SOURCE_DIR}/depends/imgui/backends
+        ${RAPIDXML_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME}
         main.cpp

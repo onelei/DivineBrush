@@ -6,8 +6,7 @@
 #define ENGINE_RENDER_H
 
 #include "../ui/texture/texture2d.h"
-#include "shader.h"
-#include "../mesh/mesh_filter.h"
+#include "mesh_render.h"
 
 namespace DivineBrush {
 
@@ -24,16 +23,6 @@ namespace DivineBrush {
 
         void Run();
 
-        GLFWwindow *GetWindow();
-
-        Texture2d *GetTexture2D();
-
-        void SetTexture2D(Texture2d *texture);
-
-        GLuint GetColorTextureId() {
-            return color_texture_id;
-        }
-
         void GeneratorVertexArrayObject();
 
         /// 创建VBO和EBO，设置VAO
@@ -41,12 +30,7 @@ namespace DivineBrush {
 
     private:
         GLFWwindow *window;
-        Texture2d *texture2d;
-        Shader *shader;
-        MeshFilter* mesh_filter= nullptr;
-
-        GLuint color_texture_id = 0;//FBO 颜色纹理
-        GLuint depth_texture_id = 0;//FBO 深度纹理
+        MeshRender* mesh_render= nullptr;
     };
 
 } // DivineBrush

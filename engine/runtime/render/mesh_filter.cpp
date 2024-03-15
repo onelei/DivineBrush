@@ -4,7 +4,7 @@
 
 #include <fstream>
 #include "mesh_filter.h"
-#include "../render/shader.h"
+#include "../application.h"
 
 namespace DivineBrush {
 
@@ -20,7 +20,7 @@ namespace DivineBrush {
 
     void MeshFilter::LoadMesh(const char *mesh_file_path) {
         //读取 Mesh文件头
-        std::ifstream input_file_stream(mesh_file_path, std::ios::in | std::ios::binary);
+        std::ifstream input_file_stream(Application::GetDataPath()+mesh_file_path, std::ios::in | std::ios::binary);
         MeshFileHead mesh_file_head;
         input_file_stream.read((char *) &mesh_file_head, sizeof(mesh_file_head));
         //读取顶点数据
@@ -40,7 +40,7 @@ namespace DivineBrush {
     }
 
     void ExportMesh(char* mesh_file_path) {
-//        std::ofstream output_file_stream(mesh_file_path, std::ios::out | std::ios::binary);
+//        std::ofstream output_file_stream(Application::GetDataPath()+mesh_file_path, std::ios::out | std::ios::binary);
 //        MeshFilter::MeshFileHead mesh_file_head;
 //        mesh_file_head.type[0] = 'm';
 //        mesh_file_head.type[1] = 'e';

@@ -12,6 +12,8 @@
 
 // Main code
 int main(int, char **) {
-    DivineBrush::Application::GetInstance().Init();
+    std::string dataPath = "../samples/";
+    std::string persistentDataPath;
+    DivineBrush::Application::Init(dataPath, persistentDataPath);
     return 0;
 }

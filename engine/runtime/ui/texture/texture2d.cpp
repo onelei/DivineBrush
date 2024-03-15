@@ -5,21 +5,18 @@
 #include <iostream>
 #include <fstream>
 #include "texture2d.h"
+#include "../../application.h"
 
 namespace DivineBrush {
     static const unsigned int bytesPerPixel = 4;
 
-    Texture2d::Texture2d() {
+    Texture2d::Texture2d() = default;
 
-    }
+    Texture2d::~Texture2d() = default;
 
-    Texture2d::~Texture2d() {
-
-    }
-
-    void Texture2d::LoadGLFWimage(char *path, GLFWimage *image) {
+    void Texture2d::LoadGLFWimage(const char *path, GLFWimage *image) {
         // 图像格式
-        FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path);
+        FREE_IMAGE_FORMAT format = FreeImage_GetFileType( path);
         if (format == -1) {
             std::cerr << "Could not find pTexture2D: " << path <<
                       std::endl;
@@ -60,7 +57,7 @@ namespace DivineBrush {
         FreeImage_Unload(bitmap32);
     }
 
-    Texture2d *Texture2d::LoadFile(char *path) {
+    Texture2d *Texture2d::LoadFile(const char *path) {
         auto *pTexture2D = new Texture2d();
         // 图像格式
         FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path);
@@ -86,7 +83,7 @@ namespace DivineBrush {
             return nullptr;
         }
         // 检查像素格式决定是否有Alpha通道
-        int bitsPerPixel = FreeImage_GetBPP(bitmap32);
+        auto bitsPerPixel = FreeImage_GetBPP(bitmap32);
         bool hasAlpha = FreeImage_IsTransparent(bitmap32) || (bitsPerPixel == 32);
         GLenum gl_texture_format = hasAlpha ? GL_COMPRESSED_RGBA_S3TC_DXT5_EXT : GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
         //如果原始图像数据是以BGR(A)格式存储的（FreeImage的常规情形），而上传时没有正确地转换为OpenGL期望的RGB(A)格式，会导致颜色通道位置错误，从而产生色彩偏差。
@@ -108,13 +105,13 @@ namespace DivineBrush {
         return pTexture2D;
     }
 
-    Texture2d *Texture2d::LoadCompressFile(char *path) {
+    Texture2d *Texture2d::LoadCompressFile(std::string &path) {
         auto *pTexture2D = new Texture2d();
         //读取 cpt 压缩纹理文件
-        std::ifstream fileStream(path, std::ios::in | std::ios::binary);
+        std::ifstream fileStream(Application::GetDataPath()+path, std::ios::in | std::ios::binary);
         CompressFileHead fileHead;
         fileStream.read((char *) &fileHead, sizeof(CompressFileHead));
-        unsigned char *data = (unsigned char *) malloc(fileHead.compressSize);
+        auto *data = (unsigned char *) malloc(fileHead.compressSize);
         fileStream.read((char *) data, fileHead.compressSize);
         fileStream.close();
         pTexture2D->width = fileHead.width;
@@ -132,9 +129,8 @@ namespace DivineBrush {
         return pTexture2D;
     }
 
-    void Texture2d::CompressFile(char *imageFilePath, char *targetImageFilePath) {
-
-        Texture2d *texture2d = LoadFile(imageFilePath);
+    void Texture2d::CompressFile(std::string &imageFilePath, std::string &targetImageFilePath) {
+        Texture2d *texture2d = LoadFile(imageFilePath.c_str());
         if (texture2d == nullptr) {
             std::cerr << "Failed to load pTexture2D: " << imageFilePath << std::endl;
             return;
@@ -157,7 +153,7 @@ namespace DivineBrush {
         glGetCompressedTexImage(GL_TEXTURE_2D, 0, texture);
 
         //5. 保存为文件
-        std::ofstream fileStream(targetImageFilePath, std::ios::out | std::ios::binary);
+        std::ofstream fileStream(Application::GetDataPath()+targetImageFilePath, std::ios::out | std::ios::binary);
 
         CompressFileHead fileHead;
         //glCompressedTexImage2D -> glt

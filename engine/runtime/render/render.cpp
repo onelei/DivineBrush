@@ -13,6 +13,9 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "../../editor/window/editor_window.h"
+#include "../application.h"
+#include "material.h"
+#include "mesh_render.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -34,6 +37,8 @@
 
 
 namespace DivineBrush {
+    class Application;
+
     const char *glsl_version;
 
     static void glfw_error_callback(int error, const char *description) {
@@ -103,10 +108,6 @@ namespace DivineBrush {
         return 0;
     }
 
-    GLFWwindow *Render::GetWindow() {
-        return this->window;
-    }
-
     void Render::InitImGui() {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
@@ -154,19 +155,16 @@ namespace DivineBrush {
         bool show_another_window = false;
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-        mesh_filter = new MeshFilter();
-        VertexRemoveDumplicate("../samples/model/cube.mesh");
-        mesh_filter->LoadMesh("../samples/model/cube.mesh");
+        auto *mesh_filter = new MeshFilter();
+        mesh_filter->LoadMesh("model/cube.mesh");
 
-        if (texture2d == nullptr) {
-            //texture2d = DivineBrush::Texture2d::LoadFile("../samples/image/sample.png");
-            DivineBrush::Texture2d::CompressFile("../samples/image/sample.png","../samples/image/sample.glt");
-            texture2d = DivineBrush::Texture2d::LoadCompressFile("../samples/image/sample.glt");
-        }
-        shader = new Shader();
+        auto *material = new Material();
+        material->Parse("material/cube.mat");
 
-        GeneratorVertexArrayObject();
-        GeneratorBufferObject();
+        mesh_render = new MeshRender();
+        mesh_render->SetMeshFilter(mesh_filter);
+        mesh_render->SetMaterial(material);
+        mesh_render->Prepare();
 
         // Main loop
 #ifdef __EMSCRIPTEN__
@@ -191,24 +189,26 @@ namespace DivineBrush {
             }
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer_object_id);
             //创建颜色纹理 Attach到FBO颜色附着点上
-            glGenTextures(1, &color_texture_id);
-            glBindTexture(GL_TEXTURE_2D, color_texture_id);
+            glGenTextures(1, &Application::color_texture_id);
+            glBindTexture(GL_TEXTURE_2D, Application::color_texture_id);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color_texture_id, 0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, Application::color_texture_id,
+                                   0);
             //创建深度纹理 Attach到FBO深度附着点上
-            glGenTextures(1, &depth_texture_id);
-            glBindTexture(GL_TEXTURE_2D, depth_texture_id);
+            glGenTextures(1, &Application::depth_texture_id);
+            glBindTexture(GL_TEXTURE_2D, Application::depth_texture_id);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE,
                          nullptr);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_texture_id, 0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, Application::depth_texture_id,
+                                   0);
             //检测帧缓冲区完整性
             GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if (status != GL_FRAMEBUFFER_COMPLETE) {
@@ -244,29 +244,9 @@ namespace DivineBrush {
             projection = glm::perspective(glm::radians(60.f), ratio, 1.f, 1000.f);
 
             mvp = projection * view * model;
+            mesh_render->SetMVP(mvp);
+            mesh_render->Render();
 
-            //指定GPU程序(就是指定顶点着色器、片段着色器)
-            glUseProgram(shader->program);
-            {
-                glEnable(GL_DEPTH_TEST);
-                glEnable(GL_CULL_FACE);//开启背面剔除
-                //上传mvp矩阵
-                glUniformMatrix4fv(shader->mvp_location, 1, GL_FALSE, &mvp[0][0]);
-
-                //贴图设置
-                //激活纹理单元0
-                glActiveTexture(GL_TEXTURE0);
-                //将加载的图片纹理句柄，绑定到纹理单元0的Texture2D上。
-                glBindTexture(GL_TEXTURE_2D, texture2d->gl_texture_id);
-                //设置Shader程序从纹理单元0读取颜色数据
-                glUniform1i(shader->u_diffuse_texture_location, 0);
-
-                glBindVertexArray(shader->kVAO);
-                {
-                    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);//使用顶点索引进行绘制，最后的0表示数据偏移量。
-                }
-                glBindVertexArray(0);
-            }
             //解绑FBO：完成FBO的渲染后，你通常会绑定回默认的帧缓冲区，继续渲染你的UI或其它画面内容。
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             // Poll and handle events (inputs, window resize, etc.)
@@ -350,58 +330,6 @@ namespace DivineBrush {
 
         glfwDestroyWindow(window);
         glfwTerminate();
-    }
-
-    Texture2d *Render::GetTexture2D() {
-        return this->texture2d;
-    }
-
-    void Render::SetTexture2D(Texture2d *texture) {
-        this->texture2d = texture;
-    }
-
-    void Render::GeneratorVertexArrayObject() {
-        glGenVertexArrays(1, &shader->kVAO);
-    }
-
-    /// 创建VBO和EBO，设置VAO
-    void Render::GeneratorBufferObject() {
-        //在GPU上创建缓冲区对象
-        glGenBuffers(1, &shader->kVBO);
-        //将缓冲区对象指定为顶点缓冲区对象
-        glBindBuffer(GL_ARRAY_BUFFER, shader->kVBO);
-        //上传顶点数据到缓冲区对象
-        glBufferData(GL_ARRAY_BUFFER, mesh_filter->GetMesh()->vertex_num * sizeof(MeshFilter::Vertex),
-                     mesh_filter->GetMesh()->vertex_data, GL_STATIC_DRAW);
-
-        //在GPU上创建缓冲区对象
-        glGenBuffers(1, &shader->kEBO);
-        //将缓冲区对象指定为顶点索引缓冲区对象
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shader->kEBO);
-        //上传顶点索引数据到缓冲区对象
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_filter->GetMesh()->vertex_index_num * sizeof(unsigned short),
-                     mesh_filter->GetMesh()->vertex_index_data, GL_STATIC_DRAW);
-        //设置VAO
-        glBindVertexArray(shader->kVAO);
-        {
-            //指定当前使用的VBO
-            glBindBuffer(GL_ARRAY_BUFFER, shader->kVBO);
-            //将Shader变量(a_pos)和顶点坐标VBO句柄进行关联，最后的0表示数据偏移量。
-            glVertexAttribPointer(shader->vpos_location, 3, GL_FLOAT, false, sizeof(MeshFilter::Vertex), 0);
-            //启用顶点Shader属性(a_color)，指定与顶点颜色数据进行关联。
-            glVertexAttribPointer(shader->vcol_location, 4, GL_FLOAT, false, sizeof(MeshFilter::Vertex),
-                                  (void *) (sizeof(float) * 3));
-            //将Shader变量(a_uv)和顶点UV坐标VBO句柄进行关联。
-            glVertexAttribPointer(shader->a_uv_location, 2, GL_FLOAT, false, sizeof(MeshFilter::Vertex),
-                                  (void *) (sizeof(float) * (3 + 4)));
-
-            glEnableVertexAttribArray(shader->vpos_location);
-            glEnableVertexAttribArray(shader->vcol_location);
-            glEnableVertexAttribArray(shader->a_uv_location);
-
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, shader->kEBO);
-        }
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
 } // DivineBrush

@@ -5,41 +5,43 @@
 #ifndef ENGINE_APPLICATION_H
 #define ENGINE_APPLICATION_H
 
-#include "render/render.h"
+//#include "string"
+#include <string>
+#include <GL/glew.h>
 
 namespace DivineBrush {
     class Application {
     public:
-        static Application &GetInstance() {
-            static Application instance;
-            return instance;
+        static GLuint color_texture_id;//FBO 颜色纹理
+        static GLuint depth_texture_id;//FBO 深度纹理
+
+        static const std::string &GetDataPath() {
+            return data_path;
         }
 
-        void Init();
+        static void SetDataPath(std::string dataPath) {
+            data_path = std::move(dataPath);
+        }
+
+        static const std::string &GetPersistentDataPath() {
+            return persistent_data_path;
+        }
+
+        static void SetPersistentDataPath(std::string persistentDataPath) {
+            persistent_data_path = std::move(persistentDataPath);
+        }
+
+        static void Init(std::string &dataPath, std::string &persistentDataPath);
 
         void Update();
 
-        void Render();
-
         void UpdateScreenSize();
 
-        void Run();
-
-        class Render *GetRender(){
-            return render;
-        }
+        static void Run();
 
     private:
-        // 私有化构造函数
-        Application() = default;
-
-        // 禁止拷贝
-        Application(const Application &) = delete;
-
-        // 禁止赋值
-        Application &operator=(const Application &) = delete;
-
-        class Render *render;
+        static std::string data_path;
+        static std::string persistent_data_path;
     };
 } // DivineBrush
 

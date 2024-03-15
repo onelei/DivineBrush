@@ -6,6 +6,7 @@
 #define ENGINE_TEXTURE2D_H
 
 #include "texture.h"
+#include "iostream"
 
 namespace DivineBrush {
 
@@ -16,13 +17,13 @@ namespace DivineBrush {
         ~Texture2d();
 
     public:
-        static void LoadGLFWimage(char *path, GLFWimage *image);
+        static void LoadGLFWimage(const char *path, GLFWimage *image);
 
-        static Texture2d *LoadFile(char *path);
+        static Texture2d *LoadFile(const char *path);
 
-        static Texture2d *LoadCompressFile(char *path);
+        static Texture2d *LoadCompressFile(std::string &path);
 
-        static void CompressFile(char *imageFilePath, char *targetImageFilePath);
+        static void CompressFile(std::string &imageFilePath, std::string &targetImageFilePath);
 
         struct CompressFileHead {
             char type[3];
