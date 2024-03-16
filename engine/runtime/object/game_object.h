@@ -22,6 +22,7 @@ namespace DivineBrush {
 
         ~GameObject() override = default;
 
+        static std::string kTagMainCamera;
     public:
         std::string GetName(){
            return this->name;
@@ -29,6 +30,14 @@ namespace DivineBrush {
 
         void SetName(std::string name){
             this->name = name;
+        }
+
+        void SetTag(std::string tag) {
+            this->tag = std::move(tag);
+        }
+
+        std::string GetTag() {
+            return this->tag;
         }
 
         Component *AddComponent(const std::string& componentName);
@@ -52,6 +61,7 @@ namespace DivineBrush {
     private:
         std::string name;
         std::unordered_map<std::string, std::vector<Component *>> component_map;
+        std::string tag;
     };
 
 } // DivineBrush

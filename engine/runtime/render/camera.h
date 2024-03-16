@@ -10,8 +10,11 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <glm/vec2.hpp>
+#include <functional>
+#include <utility>
 #include "../object/component.h"
 #include "../object/transform.h"
+#include "mesh_render.h"
 
 namespace DivineBrush {
     class Camera : public Component {
@@ -87,8 +90,8 @@ namespace DivineBrush {
         }
 
         void Clear();
-
         void Render();
+        static void RenderAll(MeshRender *mesh_render);
 
     private:
         float fov = 45.0f;
@@ -104,6 +107,9 @@ namespace DivineBrush {
 
         glm::mat4 view;
         glm::mat4 projection;
+        static std::vector<Camera *> cameras;
+        static Camera *camera;
+        static Camera *main_camera;
     };
 
 } // DivineBrush

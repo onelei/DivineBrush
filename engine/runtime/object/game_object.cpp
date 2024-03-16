@@ -7,7 +7,7 @@
 
 using namespace rttr;
 namespace DivineBrush {
-
+    std::string GameObject::kTagMainCamera = "MainCamera";
     GameObject::GameObject() {
         this->SetName("GameObject");
     }

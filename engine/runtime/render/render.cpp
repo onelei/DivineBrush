@@ -171,6 +171,15 @@ namespace DivineBrush {
         auto camera_transform = dynamic_cast<Transform*>(camera_gameObject->AddComponent("Transform"));
         camera_transform->SetPosition(glm::vec3(0, 0, 10));
         auto camera = dynamic_cast<Camera*>(camera_gameObject->AddComponent("Camera"));
+        camera->GetGameObject()->SetTag(GameObject::kTagMainCamera);
+
+        //创建相机2 GameObject
+        auto go_camera_2 = new GameObject("main_camera");
+        //挂上 Transform 组件
+        auto transform_camera_2 = dynamic_cast<Transform *>(go_camera_2->AddComponent("Transform"));
+        transform_camera_2->SetPosition(glm::vec3(5, 0, 10));
+        //挂上 Camera 组件
+        auto camera_2 = dynamic_cast<Camera *>(go_camera_2->AddComponent("Camera"));
 
         // Main loop
 #ifdef __EMSCRIPTEN__
@@ -235,8 +244,13 @@ namespace DivineBrush {
             camera->SetNear(1.f);
             camera->SetFar(1000.f);
 
-            camera->Clear();
-            camera->Render();
+            //设置相机2
+            camera_2->SetCenter(glm::vec3(glm::vec3(transform_camera_2->GetPosition().x, 0, 0)));
+            camera_2->SetUp(glm::vec3(0, 1, 0));
+            camera_2->SetFov(60.f);
+            camera_2->SetAspect(width / (float) height);
+            camera_2->SetNear(1.f);
+            camera_2->SetFar(1000.f);
 
             //旋转物体
             static float rotate_eulerAngle = 0.f;
@@ -245,9 +259,7 @@ namespace DivineBrush {
             rotation.y = rotate_eulerAngle;
             transform->SetRotation(rotation);
 
-            mesh_render->SetView(camera->GetView());
-            mesh_render->SetProjection(camera->GetProjection());
-            mesh_render->Render();
+            Camera::RenderAll(mesh_render);
 
             //解绑FBO：完成FBO的渲染后，你通常会绑定回默认的帧缓冲区，继续渲染你的UI或其它画面内容。
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
