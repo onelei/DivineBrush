@@ -4,6 +4,7 @@
 
 #include "render.h"
 #include <cstdio>
+#include <glm/ext/matrix_transform.hpp>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -14,6 +15,7 @@
 #include "../object/game_object.h"
 #include "../object/transform.h"
 #include "camera.h"
+#include "../input/input.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -41,6 +43,22 @@ namespace DivineBrush {
 
     static void glfw_error_callback(int error, const char *description) {
         fprintf(stderr, "GLFW Error %d: %s\n", error, description);
+    }
+
+    static void glfw_key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+        Input::RecordKey(key, action);
+    }
+
+    static void glfw_mouse_button_callback(GLFWwindow *window, int button, int action, int mods) {
+        Input::RecordKey(button, action);
+    }
+
+    static void glfw_scroll_callback(GLFWwindow *window, double x, double y) {
+        Input::SetMouseScroll(y);
+    }
+
+    static void glfw_cursor_pos_callback(GLFWwindow *window, double x, double y) {
+        Input::SetMousePosition(x, y);
     }
 
     int Render::Init() {
@@ -84,6 +102,11 @@ namespace DivineBrush {
         this->window = glfwCreateWindow(960, 640, "DivineBrush", nullptr, nullptr);
         if (this->window == nullptr)
             exit(EXIT_FAILURE);
+
+        glfwSetKeyCallback(window, glfw_key_callback);
+        glfwSetMouseButtonCallback(window, glfw_mouse_button_callback);
+        glfwSetScrollCallback(window, glfw_scroll_callback);
+        glfwSetCursorPosCallback(window, glfw_cursor_pos_callback);
 
         // icon
         GLFWimage image;
@@ -154,32 +177,36 @@ namespace DivineBrush {
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
         auto gameObject = new GameObject("Cube");
-        auto transform = dynamic_cast<Transform*>(gameObject->AddComponent("Transform"));
+        auto transform = dynamic_cast<Transform *>(gameObject->AddComponent("Transform"));
 
-        auto mesh_filter = dynamic_cast<MeshFilter*>(gameObject->AddComponent("MeshFilter"));
+        auto mesh_filter = dynamic_cast<MeshFilter *>(gameObject->AddComponent("MeshFilter"));
         mesh_filter->LoadMesh("model/cube.mesh");
 
         auto material = new Material();
         material->Parse("material/cube.mat");
 
-        mesh_render = dynamic_cast<MeshRender*>(gameObject->AddComponent("MeshRender"));
+        mesh_render = dynamic_cast<MeshRender *>(gameObject->AddComponent("MeshRender"));
         mesh_render->SetMeshFilter(mesh_filter);
         mesh_render->SetMaterial(material);
         mesh_render->Prepare();
 
         auto camera_gameObject = new GameObject("Camera");
-        auto camera_transform = dynamic_cast<Transform*>(camera_gameObject->AddComponent("Transform"));
+        auto camera_transform = dynamic_cast<Transform *>(camera_gameObject->AddComponent("Transform"));
         camera_transform->SetPosition(glm::vec3(0, 0, 10));
-        auto camera = dynamic_cast<Camera*>(camera_gameObject->AddComponent("Camera"));
+        auto camera = dynamic_cast<Camera *>(camera_gameObject->AddComponent("Camera"));
         camera->GetGameObject()->SetTag(GameObject::kTagMainCamera);
+        camera->SetDepth(0);
 
         //创建相机2 GameObject
         auto go_camera_2 = new GameObject("main_camera");
         //挂上 Transform 组件
         auto transform_camera_2 = dynamic_cast<Transform *>(go_camera_2->AddComponent("Transform"));
-        transform_camera_2->SetPosition(glm::vec3(5, 0, 10));
+        transform_camera_2->SetPosition(glm::vec3(1, 0, 10));
         //挂上 Camera 组件
         auto camera_2 = dynamic_cast<Camera *>(go_camera_2->AddComponent("Camera"));
+        camera_2->SetDepth(1);
+        //camera_2->SetCullingMask(0x02);
+        auto mousePosition = Input::GetMousePosition();
 
         // Main loop
 #ifdef __EMSCRIPTEN__
@@ -253,11 +280,29 @@ namespace DivineBrush {
             camera_2->SetFar(1000.f);
 
             //旋转物体
-            static float rotate_eulerAngle = 0.f;
-            rotate_eulerAngle += 1.f;
-            auto rotation = transform->GetRotation();
-            rotation.y = rotate_eulerAngle;
-            transform->SetRotation(rotation);
+            if (Input::GetKeyDown(GLFW_KEY_R)) {
+                auto rotate_eulerAngle = Input::GetMousePosition().x - mousePosition.x;
+                auto rotation = transform->GetRotation();
+                rotation.y = rotate_eulerAngle;
+                transform->SetRotation(rotation);
+            }
+
+            //旋转相机
+            if (Input::GetKeyDown(GLFW_KEY_LEFT_ALT) && Input::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
+                float degrees = Input::GetMousePosition().x - mousePosition.x;
+
+                glm::mat4 old_mat4 = glm::mat4(1.0f);
+                //以相机所在坐标系位置，计算用于旋转的矩阵，这里是零点，所以直接用方阵。
+                glm::mat4 rotate_mat4 = glm::rotate(old_mat4, glm::radians(degrees), glm::vec3(0.0f, 1.0f, 0.0f));
+                glm::vec4 old_pos = glm::vec4(camera_transform->GetPosition(), 1.0f);
+                glm::vec4 new_pos = rotate_mat4 * old_pos;//旋转矩阵 * 原来的坐标 = 相机以零点做旋转。
+
+                camera_transform->SetPosition(glm::vec3(new_pos));
+            }
+
+            mousePosition = Input::GetMousePosition();
+            camera_transform->SetPosition(camera_transform->GetPosition() * (10 - Input::GetMouseScroll()) / 10.f);
+            Input::Update();
 
             Camera::RenderAll(mesh_render);
 
@@ -285,6 +330,7 @@ namespace DivineBrush {
             DivineBrush::Editor::EditorWindow::GetGameWindow()->GUI();
             DivineBrush::Editor::EditorWindow::GetProjectWindow()->GUI();
             DivineBrush::Editor::EditorWindow::GetConsoleWindow()->GUI();
+
 
 
 //         //    2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.

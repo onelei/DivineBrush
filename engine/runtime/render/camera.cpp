@@ -18,7 +18,9 @@ namespace DivineBrush {
         registration::class_<Camera>("Camera")
                 .constructor<>()(rttr::policy::ctor::as_raw_ptr);
     }
+
     std::vector<Camera *> Camera::cameras;
+
     Camera::Camera() {
         clear_flag = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
         clear_color = glm::vec4(49.f / 255, 77.f / 255, 121.f / 255, 1.f);
@@ -45,15 +47,34 @@ namespace DivineBrush {
 
     void Camera::RenderAll(MeshRender *mesh_render) {
         for (auto &camera: cameras) {
-            if(camera->GetGameObject()->GetTag() == GameObject::kTagMainCamera)
-            {
+            if (camera->GetGameObject()->GetTag() == GameObject::kTagMainCamera) {
                 camera->Clear();
             }
             camera->Render();
+            //剔除不需要渲染的物体
+            //对两个数的位进行逐位的与(AND)操作。如果两个相应的位都为1，则该位的结果为1；否则，为0。
+            if((mesh_render->GetGameObject()->GetLayer()&camera->GetCullingMask()) == 0x00){
+                continue;
+            }
             //从当前Camera获取View Projection
             mesh_render->SetView(camera->GetView());
             mesh_render->SetProjection(camera->GetProjection());
             mesh_render->Render();
         }
     }
+
+    void Camera::SetDepth(int depth) {
+        if (this->depth == depth) {
+            return;
+        }
+        this->depth = depth;
+        SortByDepth();
+    }
+
+    void Camera::SortByDepth() {
+        std::sort(cameras.begin(), cameras.end(), [](Camera *a, Camera *b) {
+            return a->GetDepth() < b->GetDepth();
+        });
+    }
+
 } // DivineBrush

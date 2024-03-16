@@ -41,6 +41,8 @@ namespace DivineBrush {
             this->far = far;
         }
 
+        void SetDepth(int depth);
+
         float GetFov() {
             return this->fov;
         }
@@ -55,6 +57,18 @@ namespace DivineBrush {
 
         float GetFar() {
             return this->far;
+        }
+
+        int GetDepth() {
+            return this->depth;
+        }
+
+        void SetCullingMask(unsigned char culling_mask) {
+            this->culling_mask = culling_mask;
+        }
+
+        unsigned char GetCullingMask() {
+            return this->culling_mask;
         }
 
         void SetCenter(glm::vec3 center) {
@@ -98,6 +112,8 @@ namespace DivineBrush {
         float aspect = 1.0f;
         float near = 0.1f;
         float far = 100.0f;
+        int depth = 0;
+        unsigned char culling_mask = 0x01;
         glm::vec3 center;
         glm::vec3 up;
 
@@ -108,8 +124,8 @@ namespace DivineBrush {
         glm::mat4 view;
         glm::mat4 projection;
         static std::vector<Camera *> cameras;
-        static Camera *camera;
-        static Camera *main_camera;
+
+        static void SortByDepth();
     };
 
 } // DivineBrush

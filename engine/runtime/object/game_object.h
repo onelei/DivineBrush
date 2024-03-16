@@ -40,6 +40,14 @@ namespace DivineBrush {
             return this->tag;
         }
 
+        void SetLayer(unsigned char layer) {
+            this->layer = layer;
+        }
+
+        unsigned char GetLayer() const {
+            return this->layer;
+        }
+
         Component *AddComponent(const std::string& componentName);
 
         Component *GetComponent(const std::string& componentName);
@@ -62,6 +70,7 @@ namespace DivineBrush {
         std::string name;
         std::unordered_map<std::string, std::vector<Component *>> component_map;
         std::string tag;
+        unsigned char layer = 0x01;
     };
 
 } // DivineBrush
