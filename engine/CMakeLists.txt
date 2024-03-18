@@ -66,7 +66,13 @@ set(IMGUI_BACKENDS
         runtime/render/camera.cpp
         runtime/render/camera.h
         runtime/input/input.cpp
-        runtime/input/input.h)
+        runtime/input/input.h
+        runtime/screen/screen.cpp
+        runtime/screen/screen.h
+        samples/scene/sample_scene.cpp
+        samples/scene/sample_scene.h
+        runtime/object/scene.cpp
+        runtime/object/scene.h)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 

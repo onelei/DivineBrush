@@ -105,7 +105,7 @@ namespace DivineBrush {
 
         void Clear();
         void Render();
-        static void RenderAll(MeshRender *mesh_render);
+        static void RenderAll();
 
     private:
         float fov = 45.0f;

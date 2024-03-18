@@ -10,12 +10,11 @@
 #include "imgui_impl_opengl3.h"
 #include "../../editor/window/editor_window.h"
 #include "../application.h"
-#include "material.h"
-#include "mesh_render.h"
 #include "../object/game_object.h"
-#include "../object/transform.h"
 #include "camera.h"
 #include "../input/input.h"
+#include "../object/scene.h"
+#include "../screen/screen.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -123,7 +122,6 @@ namespace DivineBrush {
             exit(EXIT_FAILURE);
         }
 
-
         InitImGui();
 
         return 0;
@@ -176,37 +174,8 @@ namespace DivineBrush {
         bool show_another_window = false;
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-        auto gameObject = new GameObject("Cube");
-        auto transform = dynamic_cast<Transform *>(gameObject->AddComponent("Transform"));
-
-        auto mesh_filter = dynamic_cast<MeshFilter *>(gameObject->AddComponent("MeshFilter"));
-        mesh_filter->LoadMesh("model/cube.mesh");
-
-        auto material = new Material();
-        material->Parse("material/cube.mat");
-
-        mesh_render = dynamic_cast<MeshRender *>(gameObject->AddComponent("MeshRender"));
-        mesh_render->SetMeshFilter(mesh_filter);
-        mesh_render->SetMaterial(material);
-        mesh_render->Prepare();
-
-        auto camera_gameObject = new GameObject("Camera");
-        auto camera_transform = dynamic_cast<Transform *>(camera_gameObject->AddComponent("Transform"));
-        camera_transform->SetPosition(glm::vec3(0, 0, 10));
-        auto camera = dynamic_cast<Camera *>(camera_gameObject->AddComponent("Camera"));
-        camera->GetGameObject()->SetTag(GameObject::kTagMainCamera);
-        camera->SetDepth(0);
-
-        //创建相机2 GameObject
-        auto go_camera_2 = new GameObject("main_camera");
-        //挂上 Transform 组件
-        auto transform_camera_2 = dynamic_cast<Transform *>(go_camera_2->AddComponent("Transform"));
-        transform_camera_2->SetPosition(glm::vec3(1, 0, 10));
-        //挂上 Camera 组件
-        auto camera_2 = dynamic_cast<Camera *>(go_camera_2->AddComponent("Camera"));
-        camera_2->SetDepth(1);
-        //camera_2->SetCullingMask(0x02);
-        auto mousePosition = Input::GetMousePosition();
+        auto gameObject = new GameObject("SampleScene");
+        auto scene = dynamic_cast<Scene *>(gameObject->AddComponent("SampleScene"));
 
         // Main loop
 #ifdef __EMSCRIPTEN__
@@ -218,9 +187,9 @@ namespace DivineBrush {
         while (!glfwWindowShouldClose(window))
 #endif
         {
-            int width = 480;
-            int height = 320;
-
+            Screen::SetScreenSize(480, 320);
+            int width = Screen::GetWidth();
+            int height = Screen::GetHeight();
             //绑定FBO进行渲染：在你的渲染循环中，当你想将内容渲染到离屏缓冲区（即FBO）时，你应该先绑定FBO。
             //创建全局FBO，将整个游戏渲染到FBO，提供给编辑器，作为Game视图显示
             GLuint frame_buffer_object_id = 0;
@@ -262,49 +231,10 @@ namespace DivineBrush {
             //设置视口和清除缓冲区：设置合适的视口，并且清除颜色和深度缓冲区，为渲染做准备。
             glViewport(0, 0, width, height);
 
-            //camera
-            camera->SetCenter(glm::vec3(0, 0, 0));
-            camera->SetUp(glm::vec3(0, 1, 0));
-            camera->SetClearColor(glm::vec4(0.45f, 0.55f, 0.60f, 1.00f));
-            camera->SetFov(60.f);
-            camera->SetAspect(width / (float) height);
-            camera->SetNear(1.f);
-            camera->SetFar(1000.f);
-
-            //设置相机2
-            camera_2->SetCenter(glm::vec3(glm::vec3(transform_camera_2->GetPosition().x, 0, 0)));
-            camera_2->SetUp(glm::vec3(0, 1, 0));
-            camera_2->SetFov(60.f);
-            camera_2->SetAspect(width / (float) height);
-            camera_2->SetNear(1.f);
-            camera_2->SetFar(1000.f);
-
-            //旋转物体
-            if (Input::GetKeyDown(GLFW_KEY_R)) {
-                auto rotate_eulerAngle = Input::GetMousePosition().x - mousePosition.x;
-                auto rotation = transform->GetRotation();
-                rotation.y = rotate_eulerAngle;
-                transform->SetRotation(rotation);
-            }
-
-            //旋转相机
-            if (Input::GetKeyDown(GLFW_KEY_LEFT_ALT) && Input::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
-                float degrees = Input::GetMousePosition().x - mousePosition.x;
-
-                glm::mat4 old_mat4 = glm::mat4(1.0f);
-                //以相机所在坐标系位置，计算用于旋转的矩阵，这里是零点，所以直接用方阵。
-                glm::mat4 rotate_mat4 = glm::rotate(old_mat4, glm::radians(degrees), glm::vec3(0.0f, 1.0f, 0.0f));
-                glm::vec4 old_pos = glm::vec4(camera_transform->GetPosition(), 1.0f);
-                glm::vec4 new_pos = rotate_mat4 * old_pos;//旋转矩阵 * 原来的坐标 = 相机以零点做旋转。
-
-                camera_transform->SetPosition(glm::vec3(new_pos));
-            }
-
-            mousePosition = Input::GetMousePosition();
-            camera_transform->SetPosition(camera_transform->GetPosition() * (10 - Input::GetMouseScroll()) / 10.f);
+            scene->Update();
             Input::Update();
 
-            Camera::RenderAll(mesh_render);
+            Camera::RenderAll();
 
             //解绑FBO：完成FBO的渲染后，你通常会绑定回默认的帧缓冲区，继续渲染你的UI或其它画面内容。
             glBindFramebuffer(GL_FRAMEBUFFER, 0);

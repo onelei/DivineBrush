@@ -25,6 +25,12 @@ namespace DivineBrush {
 
         void SetGameObject(GameObject* gameObject);
 
+        virtual void Awake();
+
+        virtual void Update();
+
+        virtual void Destroy();
+
     private:
         GameObject* gameObject = nullptr;
     };

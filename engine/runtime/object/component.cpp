@@ -12,4 +12,16 @@ namespace DivineBrush {
     void Component::SetGameObject(GameObject *gameObject) {
         this->gameObject = gameObject;
     }
+
+    void Component::Awake() {
+
+    }
+
+    void Component::Update() {
+
+    }
+
+    void Component::Destroy() {
+
+    }
 } // DivineBrush

@@ -7,6 +7,7 @@
 
 #include "object.h"
 #include "component.h"
+#include "../render/camera.h"
 
 namespace DivineBrush {
     class Component;
@@ -20,9 +21,10 @@ namespace DivineBrush {
 
         GameObject(std::string name);
 
-        ~GameObject() override = default;
+        ~GameObject();
 
         static std::string kTagMainCamera;
+        static void RenderAll(Camera *camera);
     public:
         std::string GetName(){
            return this->name;
@@ -71,6 +73,7 @@ namespace DivineBrush {
         std::unordered_map<std::string, std::vector<Component *>> component_map;
         std::string tag;
         unsigned char layer = 0x01;
+        static std::vector<GameObject *> game_objects;
     };
 
 } // DivineBrush

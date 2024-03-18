@@ -45,21 +45,14 @@ namespace DivineBrush {
         projection = glm::perspective(glm::radians(fov), aspect, near, far);
     }
 
-    void Camera::RenderAll(MeshRender *mesh_render) {
+    void Camera::RenderAll() {
         for (auto &camera: cameras) {
             if (camera->GetGameObject()->GetTag() == GameObject::kTagMainCamera) {
                 camera->Clear();
             }
             camera->Render();
-            //剔除不需要渲染的物体
-            //对两个数的位进行逐位的与(AND)操作。如果两个相应的位都为1，则该位的结果为1；否则，为0。
-            if((mesh_render->GetGameObject()->GetLayer()&camera->GetCullingMask()) == 0x00){
-                continue;
-            }
-            //从当前Camera获取View Projection
-            mesh_render->SetView(camera->GetView());
-            mesh_render->SetProjection(camera->GetProjection());
-            mesh_render->Render();
+
+            GameObject::RenderAll(camera);
         }
     }
 

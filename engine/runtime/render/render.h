@@ -24,7 +24,6 @@ namespace DivineBrush {
 
     private:
         GLFWwindow *window;
-        MeshRender* mesh_render= nullptr;
     };
 
 } // DivineBrush
