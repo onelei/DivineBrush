@@ -43,7 +43,7 @@ namespace DivineBrush {
         };
 
         void LoadMesh(const char *mesh_file_path);
-
+        void CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned short> &vertex_index_data);
 
         Mesh *GetMesh() {
             return this->mesh;

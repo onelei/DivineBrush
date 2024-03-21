@@ -9,9 +9,12 @@
 
 
 #include "runtime/application.h"
+#include "depends/debug/debug.h"
 
 // Main code
 int main(int, char **) {
+    DivineBrush::Debug::Init();
+    //Log("log start2");
     std::string dataPath = "../samples/";
     std::string persistentDataPath;
     DivineBrush::Application::Init(dataPath, persistentDataPath);

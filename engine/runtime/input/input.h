@@ -6,11 +6,9 @@
 #define ENGINE_INPUT_H
 
 #include <unordered_map>
+#include "../../depends/vector/vector2f.h"
 
 namespace DivineBrush {
-    struct Vector2f {
-        float x, y;
-    };
 
     class Input {
     public:

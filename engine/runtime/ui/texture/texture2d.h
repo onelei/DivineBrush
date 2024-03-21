@@ -25,6 +25,9 @@ namespace DivineBrush {
 
         static void CompressFile(std::string &imageFilePath, std::string &targetImageFilePath);
 
+        static Texture2d *Create(unsigned short width, unsigned short height, unsigned int server_format,
+                                 unsigned int client_format, unsigned int data_type, unsigned char *data);
+
         struct CompressFileHead {
             char type[3];
             int mipmapCount;

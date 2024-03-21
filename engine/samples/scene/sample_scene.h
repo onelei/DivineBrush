@@ -8,9 +8,9 @@
 #include "../../runtime/object/scene.h"
 #include "../../runtime/object/transform.h"
 #include "../../runtime/render/camera.h"
-#include "../../runtime/input/input.h"
 #include "../../runtime/render/camera.h"
 #include "../../runtime/object/game_object.h"
+#include "../../depends/vector/vector2f.h"
 
 namespace DivineBrush {
 
@@ -23,6 +23,8 @@ namespace DivineBrush {
         void Update() override;
 
         void Destroy() override;
+
+        void CreateFont();
 
     private:
         Camera *camera;

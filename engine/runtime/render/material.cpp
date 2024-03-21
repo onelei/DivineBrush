@@ -37,7 +37,7 @@ namespace DivineBrush {
             }
             std::string shader_property_name = texture_name_attribute->value();
             std::string image_path = texture_image_attribute->value();
-            textures.emplace_back(texture_name_attribute->value(), Texture2d::LoadCompressFile(image_path));
+            textures.emplace_back(texture_name_attribute->value(), image_path.empty()? nullptr:Texture2d::LoadCompressFile(image_path));
             material_texture_node = material_texture_node->next_sibling("texture");
         }
     }
@@ -49,4 +49,15 @@ namespace DivineBrush {
     void Material::SetUniform1i(const std::string &shaderPropertyName, int value) {
         uniform_1i_vec.emplace_back(shaderPropertyName, value);
     }
+
+    void Material::SetTexture(const std::string &shaderPropertyName, Texture2d *texture) {
+        for (auto &pair: textures) {
+            if (pair.first == shaderPropertyName) {
+                delete (pair.second);
+                pair.second = texture;
+                break;
+            }
+        }
+    }
+
 } // DivineBrush

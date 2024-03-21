@@ -170,4 +170,24 @@ namespace DivineBrush {
         fileStream.write((char *) texture, compressSize);
         fileStream.close();
     }
+
+    Texture2d *Texture2d::Create(unsigned short width, unsigned short height, unsigned int server_format,
+                                 unsigned int client_format, unsigned int data_type, unsigned char *data) {
+        auto texture2d = new Texture2d();
+        texture2d->gl_texture_format = server_format;
+        texture2d->width = width;
+        texture2d->height = height;
+
+        //1. 通知显卡创建纹理对象，返回句柄;
+        glGenTextures(1, &(texture2d->gl_texture_id));
+        //2. 将纹理绑定到特定纹理目标;
+        glBindTexture(GL_TEXTURE_2D, texture2d->gl_texture_id);
+        //3. 将图片rgb数据上传到GPU;
+        glTexImage2D(GL_TEXTURE_2D, 0, texture2d->gl_texture_format, texture2d->width, texture2d->height, 0,
+                     client_format, data_type, data);
+        //4. 指定放大，缩小滤波方式，线性滤波，即放大缩小的插值方式;
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        return texture2d;
+    }
 } // DivineBrush

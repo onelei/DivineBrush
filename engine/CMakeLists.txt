@@ -18,6 +18,8 @@ find_package(rttr CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(freeimage CONFIG REQUIRED)
 find_package(GLEW REQUIRED)
+find_package(Freetype REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
 
 set(IMGUI_BACKENDS
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_glfw.cpp
@@ -72,7 +74,14 @@ set(IMGUI_BACKENDS
         samples/scene/sample_scene.cpp
         samples/scene/sample_scene.h
         runtime/object/scene.cpp
-        runtime/object/scene.h)
+        runtime/object/scene.h
+        depends/debug/debug.cpp
+        depends/debug/debug.h
+        runtime/font/font.cpp
+        runtime/font/font.h
+        depends/vector/vector2f.h
+        depends/vector/vector3f.h
+        depends/vector/vector4f.h)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
@@ -106,4 +115,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         RTTR::Core
         imgui::imgui
         freeimage::FreeImage freeimage::FreeImagePlus
-        GLEW::GLEW)
+        GLEW::GLEW
+        Freetype::Freetype
+        spdlog::spdlog)

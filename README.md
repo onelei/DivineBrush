@@ -24,7 +24,8 @@ Windows:
 8. vcpkg install rttr
 9. vcpkg install imgui
 10. vcpkg install rapidxml
-11. 
+11. vcpkg install freetype
+12. 
 
 
 

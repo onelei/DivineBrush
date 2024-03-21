@@ -59,4 +59,18 @@ namespace DivineBrush {
 //        output_file_stream.write((char *)&kVertexIndexVector[0], kVertexIndexVector.size() * sizeof(unsigned short));
 //        output_file_stream.close();
     }
+
+    void MeshFilter::CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned short> &vertex_index_data) {
+        mesh = new Mesh();
+        mesh->vertex_num = vertex_data.size();
+        mesh->vertex_index_num = vertex_index_data.size();
+
+        unsigned short vertex_data_size = mesh->vertex_num * sizeof(Vertex);
+        mesh->vertex_data = static_cast<Vertex *>(malloc(vertex_data_size));
+        memcpy(mesh->vertex_data, &vertex_data[0], vertex_data_size);
+
+        unsigned short vertex_index_data_size = mesh->vertex_num * sizeof(Vertex);
+        mesh->vertex_index_data = static_cast<unsigned short *>(malloc(vertex_index_data_size));
+        memcpy(mesh->vertex_index_data, &vertex_index_data[0], vertex_index_data_size);
+    }
 } // DivineBrush

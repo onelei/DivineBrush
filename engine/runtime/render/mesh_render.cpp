@@ -21,6 +21,11 @@ namespace DivineBrush {
         //获取Shader中的变量
         auto shader = material->GetShader();
         program_id = shader->GetProgramId();
+        auto component_mesh_filter = GetGameObject()->GetComponent("MeshFilter");
+        mesh_filter = dynamic_cast<MeshFilter *>(component_mesh_filter);
+        if (!mesh_filter) {
+            return;
+        }
         mvp_location = glGetUniformLocation(program_id, "u_mvp");
         vpos_location = glGetAttribLocation(program_id, "a_pos");
         vcol_location = glGetAttribLocation(program_id, "a_color");
@@ -72,6 +77,11 @@ namespace DivineBrush {
         if (!transform) {
             return;
         }
+        auto component_mesh_filter = GetGameObject()->GetComponent("MeshFilter");
+        mesh_filter = dynamic_cast<MeshFilter *>(component_mesh_filter);
+        if (!mesh_filter) {
+            return;
+        }
         //进行实际的渲染调用：这里你绘制你的场景，包括提到的立方体渲染。
         glm::mat4 trans = glm::translate(transform->GetPosition()); //不移动顶点坐标;
 
@@ -90,6 +100,8 @@ namespace DivineBrush {
         {
             glEnable(GL_DEPTH_TEST);
             glEnable(GL_CULL_FACE);//开启背面剔除
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             //上传mvp矩阵
             glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
             //拿到保存的Texture
@@ -107,7 +119,7 @@ namespace DivineBrush {
 
             glBindVertexArray(kVAO);
             {
-                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);//使用顶点索引进行绘制，最后的0表示数据偏移量。
+                glDrawElements(GL_TRIANGLES, mesh_filter->GetMesh()->vertex_index_num, GL_UNSIGNED_SHORT, 0);//使用顶点索引进行绘制，最后的0表示数据偏移量。
             }
             glBindVertexArray(0);
         }
