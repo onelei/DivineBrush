@@ -8,20 +8,21 @@
 using namespace rttr;
 namespace DivineBrush {
     std::string GameObject::kTagMainCamera = "MainCamera";
-    std::vector<GameObject *> GameObject::game_objects;
 
     GameObject::GameObject() {
         this->SetName("GameObject");
-        game_objects.push_back(this);
+        GetRootNode()->AddChild(this);
+        AddComponent("Transform");
     }
 
     GameObject::GameObject(std::string name) {
         this->SetName(name);
-        game_objects.push_back(this);
+        GetRootNode()->AddChild(this);
+        AddComponent("Transform");
     }
 
     GameObject::~GameObject() {
-        game_objects.erase(std::remove(game_objects.begin(), game_objects.end(), this), game_objects.end());
+        this->GetParent()->RemoveChild(this);
     }
 
     Component *GameObject::AddComponent(const std::string &componentName) {
@@ -29,7 +30,6 @@ namespace DivineBrush {
         variant var = t.create();
         Component *component = var.get_value<Component *>();
         component->SetGameObject(this);
-        component->Awake();
         if (component_map.find(componentName) == component_map.end()) {
             std::vector<Component *> componentVec;
             componentVec.push_back(component);
@@ -37,6 +37,7 @@ namespace DivineBrush {
         } else {
             component_map[componentName].push_back(component);
         }
+        component->OnAwake();
         return component;
     }
 
@@ -47,49 +48,57 @@ namespace DivineBrush {
         return nullptr;
     }
 
-    void GameObject::RenderAll(Camera *camera) {
+    void GameObject::RenderAll() {
         //剔除不需要渲染的物体
-        for (auto &gameObject : game_objects) {
-            auto mesh_render = dynamic_cast<MeshRender *>(gameObject->GetComponent("MeshRender"));
-            if(!mesh_render) {
-                continue;
+        ForeachGameObject([](GameObject *gameObject) {
+            if (!gameObject->IsActive()) {
+                return;
             }
-            //对两个数的位进行逐位的与(AND)操作。如果两个相应的位都为1，则该位的结果为1；否则，为0。
-            if((mesh_render->GetGameObject()->GetLayer()&camera->GetCullingMask()) == 0x00){
-                continue;
+            auto mesh_render_component = gameObject->GetComponent("MeshRender");
+            if (!mesh_render_component) {
+                return;
             }
-            //从当前Camera获取View Projection
-            mesh_render->SetView(camera->GetView());
-            mesh_render->SetProjection(camera->GetProjection());
+            auto mesh_render = dynamic_cast<MeshRender *>(mesh_render_component);
+            if (!mesh_render) {
+                return;
+            }
             mesh_render->Render();
+        });
+    }
+
+    void GameObject::UpdateAll() {
+        ForeachGameObject([](GameObject *gameObject) {
+            if (!gameObject->IsActive()) {
+                return;
+            }
+            gameObject->ForeachComponent( [](Component *component) {
+                component->OnUpdate();
+            });
+        });
+    }
+
+    void GameObject::ForeachComponent(std::function<void(Component *)> func) {
+        for (auto &v: component_map) {
+            for (auto &component: v.second) {
+                func(component);
+            }
         }
     }
 
-    void GameObject::start() {
-
+    void GameObject::ForeachGameObject(std::function<void(GameObject *)> func) {
+        Foreach(GetRootNode(), [&func](Node *node) {
+            auto gameObject = dynamic_cast<GameObject *>(node);
+            func(gameObject);
+        });
     }
 
-    void GameObject::update() {
-
+    GameObject *GameObject::Find(std::string gameObject_name) {
+        GameObject *result = nullptr;
+        Node::Find(GetRootNode(), [&gameObject_name](Node *node) {
+            auto gameObject = dynamic_cast<GameObject *>(node);
+            return (gameObject->GetName() == gameObject_name);
+        }, reinterpret_cast<Node **>(&result));
+        return result;
     }
 
-    void GameObject::fixedUpdate() {
-
-    }
-
-    void GameObject::lateUpdate() {
-
-    }
-
-    void GameObject::onEnable() {
-
-    }
-
-    void GameObject::onDisable() {
-
-    }
-
-    void GameObject::onDestroy() {
-
-    }
 } // DivineBrush

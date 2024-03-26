@@ -5,14 +5,18 @@
 #include <iostream>
 #include <fstream>
 #include "texture2d.h"
-#include "../../application.h"
+#include "../application.h"
 
 namespace DivineBrush {
     static const unsigned int bytesPerPixel = 4;
 
     Texture2d::Texture2d() = default;
 
-    Texture2d::~Texture2d() = default;
+    Texture2d::~Texture2d() {
+        if (gl_texture_id) {
+            glDeleteTextures(1, &gl_texture_id);
+        }
+    }
 
     void Texture2d::LoadGLFWimage(const char *path, GLFWimage *image) {
         // 图像格式
@@ -105,7 +109,7 @@ namespace DivineBrush {
         return pTexture2D;
     }
 
-    Texture2d *Texture2d::LoadCompressFile(std::string &path) {
+    Texture2d *Texture2d::LoadCompressFile(std::string path) {
         auto *pTexture2D = new Texture2d();
         //读取 cpt 压缩纹理文件
         std::ifstream fileStream(Application::GetDataPath()+path, std::ios::in | std::ios::binary);
@@ -129,7 +133,8 @@ namespace DivineBrush {
         return pTexture2D;
     }
 
-    void Texture2d::CompressFile(std::string &imageFilePath, std::string &targetImageFilePath) {
+    void Texture2d::CompressFile(std::string imageFilePath, std::string targetImageFilePath) {
+        imageFilePath = Application::GetDataPath() + imageFilePath;
         Texture2d *texture2d = LoadFile(imageFilePath.c_str());
         if (texture2d == nullptr) {
             std::cerr << "Failed to load pTexture2D: " << imageFilePath << std::endl;

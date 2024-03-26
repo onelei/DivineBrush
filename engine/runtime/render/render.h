@@ -24,6 +24,7 @@ namespace DivineBrush {
 
     private:
         GLFWwindow *window;
+        static bool useImGui;
     };
 
 } // DivineBrush

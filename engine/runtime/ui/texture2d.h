@@ -21,12 +21,20 @@ namespace DivineBrush {
 
         static Texture2d *LoadFile(const char *path);
 
-        static Texture2d *LoadCompressFile(std::string &path);
+        static Texture2d *LoadCompressFile(std::string path);
 
-        static void CompressFile(std::string &imageFilePath, std::string &targetImageFilePath);
+        static void CompressFile(std::string imageFilePath, std::string targetImageFilePath);
 
         static Texture2d *Create(unsigned short width, unsigned short height, unsigned int server_format,
                                  unsigned int client_format, unsigned int data_type, unsigned char *data);
+
+        int GetWidth() const {
+            return width;
+        }
+
+        int GetHeight() const {
+            return height;
+        }
 
         struct CompressFileHead {
             char type[3];
@@ -36,6 +44,10 @@ namespace DivineBrush {
             int textureFormat;
             int compressSize;
         };
+
+    private:
+        int width;
+        int height;
     };
 
 } // DivineBrush

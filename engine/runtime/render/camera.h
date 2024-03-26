@@ -25,6 +25,12 @@ namespace DivineBrush {
         ~Camera();
 
     public:
+
+        enum class CameraMode : unsigned char {
+            Perspective,
+            Orthographic,
+        };
+
         void SetFov(float fov) {
             this->fov = fov;
         }
@@ -79,6 +85,14 @@ namespace DivineBrush {
             this->up = up;
         }
 
+        void SetMode(CameraMode mode) {
+            this->mode = mode;
+        }
+
+        CameraMode GetMode() {
+            return this->mode;
+        }
+
         glm::vec3 GetCenter() {
             return this->center;
         }
@@ -95,6 +109,14 @@ namespace DivineBrush {
             return this->clear_color;
         }
 
+        void SetClearFlag(unsigned int clear_flag) {
+            this->clear_flag = clear_flag;
+        }
+
+        unsigned int GetClearFlag() {
+            return this->clear_flag;
+        }
+
         glm::mat4 GetView() {
             return view;
         }
@@ -103,9 +125,38 @@ namespace DivineBrush {
             return projection;
         }
 
+        void SetLeft(float left) {
+            this->left = left;
+        }
+
+        void SetRight(float right) {
+            this->right = right;
+        }
+
+        void SetBottom(float bottom) {
+            this->bottom = bottom;
+        }
+
+        void SetTop(float top) {
+            this->top = top;
+        }
+
+        void SetOrthographic(float left, float right, float bottom, float top) {
+            this->left = left;
+            this->right = right;
+            this->bottom = bottom;
+            this->top = top;
+        }
+
         void Clear();
+
         void Render();
+
         static void RenderAll();
+
+        static Camera* GetCurrentCamera() {
+            return current_camera;
+        }
 
     private:
         float fov = 45.0f;
@@ -117,13 +168,20 @@ namespace DivineBrush {
         glm::vec3 center;
         glm::vec3 up;
 
+        CameraMode mode = CameraMode::Perspective;
+        float left;
+        float right;
+        float bottom;
+        float top;
+
         Transform *transform;
-        GLbitfield clear_flag = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+        unsigned int clear_flag = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
         glm::vec4 clear_color;
 
         glm::mat4 view;
         glm::mat4 projection;
         static std::vector<Camera *> cameras;
+        static Camera* current_camera;
 
         static void SortByDepth();
     };

@@ -8,6 +8,7 @@
 #include "object.h"
 #include "component.h"
 #include "../render/camera.h"
+#include "../../depends/node/node.h"
 
 namespace DivineBrush {
     class Component;
@@ -15,7 +16,7 @@ namespace DivineBrush {
 
 namespace DivineBrush {
 
-    class GameObject : public Object {
+    class GameObject : public Object, public Node {
     public:
         GameObject();
 
@@ -24,13 +25,23 @@ namespace DivineBrush {
         ~GameObject();
 
         static std::string kTagMainCamera;
-        static void RenderAll(Camera *camera);
+
+        static void RenderAll();
+
+        static void UpdateAll();
+
+        static void ForeachGameObject(std::function<void(GameObject *)> func);
+
+        static GameObject*Find(std::string name);
+
+        void ForeachComponent(std::function<void(Component *)> func);
+
     public:
-        std::string GetName(){
-           return this->name;
+        std::string GetName() {
+            return this->name;
         }
 
-        void SetName(std::string name){
+        void SetName(std::string name) {
             this->name = name;
         }
 
@@ -50,30 +61,28 @@ namespace DivineBrush {
             return this->layer;
         }
 
-        Component *AddComponent(const std::string& componentName);
+        void SetActive(bool is_active) {
+            this->is_active = is_active;
+        }
 
-        Component *GetComponent(const std::string& componentName);
+        bool IsActive() const {
+            return this->is_active;
+        }
 
-        virtual void start();
+        Component *AddComponent(const std::string &componentName);
 
-        virtual void update();
+        Component *GetComponent(const std::string &componentName);
 
-        virtual void fixedUpdate();
-
-        virtual void lateUpdate();
-
-        virtual void onEnable();
-
-        virtual void onDisable();
-
-        virtual void onDestroy();
+        std::unordered_map<std::string, std::vector<Component *>> GetComponents() {
+            return component_map;
+        }
 
     private:
         std::string name;
         std::unordered_map<std::string, std::vector<Component *>> component_map;
         std::string tag;
         unsigned char layer = 0x01;
-        static std::vector<GameObject *> game_objects;
+        bool is_active = true;
     };
 
 } // DivineBrush

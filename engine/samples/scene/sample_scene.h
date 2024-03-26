@@ -18,13 +18,15 @@ namespace DivineBrush {
     public:
         SampleScene();
 
-        void Awake() override;
+        void OnAwake() override;
 
-        void Update() override;
+        void OnUpdate() override;
 
-        void Destroy() override;
+        void OnDestroy() override;
 
         void CreateFont();
+
+        void CreateUI();
 
     private:
         Camera *camera;

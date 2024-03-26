@@ -8,6 +8,7 @@
 #include <fstream>
 #include "shader.h"
 #include "../application.h"
+#include "../../depends/debug/debug.h"
 
 namespace DivineBrush {
     std::unordered_map<std::string, Shader *> Shader::shader_map;
@@ -65,6 +66,14 @@ namespace DivineBrush {
         glShaderSource(vertex_shader, 1, &vertex_shader_text, nullptr);
         //编译Shader
         glCompileShader(vertex_shader);
+        //获取编译结果
+        GLint compile_status = GL_FALSE;
+        glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &compile_status);
+        if (compile_status == GL_FALSE) {
+            GLchar message[256];
+            glGetShaderInfoLog(vertex_shader, sizeof(message), 0, message);
+            DEBUG_LOG_ERROR("compile vertex shader error:{}", message);
+        }
 
         //创建片段Shader
         auto fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -72,6 +81,14 @@ namespace DivineBrush {
         glShaderSource(fragment_shader, 1, &fragment_shader_text, nullptr);
         //编译Shader
         glCompileShader(fragment_shader);
+        //获取编译结果
+        compile_status = GL_FALSE;
+        glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &compile_status);
+        if (compile_status == GL_FALSE) {
+            GLchar message[256];
+            glGetShaderInfoLog(fragment_shader, sizeof(message), 0, message);
+            DEBUG_LOG_ERROR("compile fragment shader error:{}", message);
+        }
 
         //创建GPU程序
         program_id = glCreateProgram();
@@ -80,7 +97,14 @@ namespace DivineBrush {
         glAttachShader(program_id, fragment_shader);
         //Link
         glLinkProgram(program_id);
-
+        //获取编译结果
+        GLint link_status = GL_FALSE;
+        glGetProgramiv(program_id, GL_LINK_STATUS, &link_status);
+        if (link_status == GL_FALSE) {
+            GLchar message[256];
+            glGetProgramInfoLog(program_id, sizeof(message), 0, message);
+            DEBUG_LOG_ERROR("link shader error:{}", message);
+        }
     }
 
 } // DivineBrush

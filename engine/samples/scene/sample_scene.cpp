@@ -8,6 +8,8 @@
 #include "../../runtime/screen/screen.h"
 #include "../../runtime/font/font.h"
 #include "../../runtime/input/input.h"
+#include "../../runtime/ui/image.h"
+#include "../../runtime/ui/mask.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -21,9 +23,9 @@ namespace DivineBrush {
 
     }
 
-    void SampleScene::Awake() {
+    void SampleScene::OnAwake() {
         auto gameObject = new GameObject("Cube");
-        transform = dynamic_cast<Transform *>(gameObject->AddComponent("Transform"));
+        transform = dynamic_cast<Transform *>(gameObject->GetComponent("Transform"));
 
         auto mesh_filter = dynamic_cast<MeshFilter *>(gameObject->AddComponent("MeshFilter"));
         mesh_filter->LoadMesh("model/cube.mesh");
@@ -34,10 +36,9 @@ namespace DivineBrush {
         auto mesh_render = dynamic_cast<MeshRender *>(gameObject->AddComponent("MeshRender"));
         mesh_render->SetMeshFilter(mesh_filter);
         mesh_render->SetMaterial(material);
-        mesh_render->Prepare();
 
         auto camera_gameObject = new GameObject("Camera");
-        camera_transform = dynamic_cast<Transform *>(camera_gameObject->AddComponent("Transform"));
+        camera_transform = dynamic_cast<Transform *>(camera_gameObject->GetComponent("Transform"));
         camera_transform->SetPosition(glm::vec3(0, 0, 10));
         camera = dynamic_cast<Camera *>(camera_gameObject->AddComponent("Camera"));
         camera->GetGameObject()->SetTag(GameObject::kTagMainCamera);
@@ -55,9 +56,11 @@ namespace DivineBrush {
         mousePosition = Input::GetMousePosition();
 
         CreateFont();
+
+        CreateUI();
     }
 
-    void SampleScene::Update() {
+    void SampleScene::OnUpdate() {
         //camera
         camera->SetCenter(glm::vec3(0, 0, 0));
         camera->SetUp(glm::vec3(0, 1, 0));
@@ -74,6 +77,14 @@ namespace DivineBrush {
 //        camera_2->SetAspect(Screen::GetAspect());
 //        camera_2->SetNear(1.f);
 //        camera_2->SetFar(1000.f);
+
+        if(Input::GetKeyUp(GLFW_KEY_A)){
+            auto pGameObject = GameObject::Find("mask");
+            if (pGameObject == nullptr) {
+                return;
+            }
+            pGameObject->SetActive(!pGameObject->IsActive());
+        }
 
         //旋转物体
         if (Input::GetKeyDown(GLFW_KEY_R)) {
@@ -100,10 +111,6 @@ namespace DivineBrush {
         camera_transform->SetPosition(camera_transform->GetPosition() * (10 - Input::GetMouseScroll()) / 10.f);
     }
 
-    void SampleScene::Destroy() {
-
-    }
-
     void SampleScene::CreateFont() {
         //生成文字贴图
         auto font = Font::Load("font/hkyuan.ttf", 20);
@@ -126,9 +133,9 @@ namespace DivineBrush {
                     {{1.0f +
                       offset, 2.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {character->right_bottom_x, character->left_top_y}},
                     {{1.0f +
-                      offset, 4.0f,  1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {character->right_bottom_x, character->right_bottom_y}},
+                      offset, 4.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {character->right_bottom_x, character->right_bottom_y}},
                     {{-1.0f +
-                      offset, 4.0f,  1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {character->left_top_x,     character->right_bottom_y}}
+                      offset, 4.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {character->left_top_x,     character->right_bottom_y}}
             };
             std::vector<unsigned short> index_vector = {
                     0, 1, 2,
@@ -138,7 +145,7 @@ namespace DivineBrush {
             auto go = new GameObject("font");
             go->SetLayer(0x01);
             //挂上 Transform 组件
-            auto transform = dynamic_cast<Transform *>(go->AddComponent("Transform"));
+            auto transform = dynamic_cast<Transform *>(go->GetComponent("Transform"));
             transform->SetPosition({-8.f, 0.f, 0.f});
             //挂上 MeshFilter 组件
             auto mesh_filter = dynamic_cast<MeshFilter *>(go->AddComponent("MeshFilter"));
@@ -146,14 +153,59 @@ namespace DivineBrush {
             //创建 Material
             auto material = new Material();//设置材质
             material->Parse("material/font.mat");
-            //挂上 MeshRenderer 组件
+            //挂上 MeshRender 组件
             auto mesh_renderer = dynamic_cast<MeshRender *>(go->AddComponent("MeshRender"));
             mesh_renderer->SetMaterial(material);
             mesh_renderer->SetMeshFilter(mesh_filter);
-            mesh_renderer->Prepare();
             //使用文字贴图
             material->SetTexture("u_diffuse_texture", font->GetFontTexture());
         }
+    }
+
+    void SampleScene::CreateUI() {
+        //创建UI相机 GameObject
+        auto go_camera_ui = new GameObject("ui_camera");
+        //挂上 Transform 组件
+        auto transform_camera_ui = dynamic_cast<Transform *>(go_camera_ui->GetComponent("Transform"));
+        transform_camera_ui->SetPosition(glm::vec3(0, 0, 10));
+        //挂上 Camera 组件
+        auto camera_ui = dynamic_cast<Camera *>(go_camera_ui->AddComponent("Camera"));
+        camera_ui->SetDepth(1);
+        camera_ui->SetCullingMask(0x02);
+        //UI相机不能清除之前的颜色。不然用第一个相机矩阵渲染的物体就被清除 没了。
+        camera_ui->SetClearFlag(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        //设置正交相机
+        camera_ui->SetCenter(glm::vec3(0, 0, 0));
+        camera_ui->SetUp(glm::vec3(0, 1, 0));
+        camera_ui->SetOrthographic(-Screen::GetWidth() / 2, Screen::GetWidth() / 2, -Screen::GetHeight() / 2,
+                                   Screen::GetHeight() / 2);
+        camera_ui->SetNear(-100);
+        camera_ui->SetFar(100);
+        camera_ui->SetMode(Camera::CameraMode::Orthographic);
+
+        //创建 image
+        auto go = new GameObject("image");
+        go->SetLayer(0x02);
+        //挂上 Image 组件
+        auto image = dynamic_cast<UI::Image *>(go->AddComponent("Image"));
+        //Texture2d::CompressFile("image/image2.png", "image/image2.glt");
+        image->Load("image/image2.glt");
+        dynamic_cast<Transform *>(go->GetComponent("Transform"));//->SetScale(glm::vec3(0.99f, 1.1f, 0.99f));
+
+        //创建 GameObject
+        auto go_mask = new GameObject("mask");
+        go_mask->SetLayer(0x02);
+        go_mask->SetParent(go);
+        //挂上 Transform 组件
+        dynamic_cast<Transform *>(go_mask->GetComponent("Transform"));
+        //挂上 Mask 组件
+        auto mask = dynamic_cast<UI::Mask *>(go_mask->AddComponent("Mask"));
+        //Texture2d::CompressFile("image/mask.png", "image/mask.glt");
+        mask->Load("image/mask.glt");
+    }
+
+    void SampleScene::OnDestroy() {
+        Component::OnDestroy();
     }
 
 } // DivineBrush

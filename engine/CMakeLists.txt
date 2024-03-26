@@ -43,15 +43,15 @@ set(IMGUI_BACKENDS
         editor/window/game/game_window.h
         editor/window/project/project_window.cpp
         editor/window/project/project_window.h
-        runtime/ui/behavior/ui_behaviour.cpp
-        runtime/ui/behavior/ui_behaviour.h
+        runtime/ui/ui_behaviour.cpp
+        runtime/ui/ui_behaviour.h
         depends/template/array_pool.h
         depends/template/dynamic_array_pool.h
         depends/template/dynamic_array_pool.h
-        runtime/ui/texture/texture.cpp
-        runtime/ui/texture/texture.h
-        runtime/ui/texture/texture2d.cpp
-        runtime/ui/texture/texture2d.h
+        runtime/ui/texture.cpp
+        runtime/ui/texture.h
+        runtime/ui/texture2d.cpp
+        runtime/ui/texture2d.h
         runtime/render/render.cpp
         runtime/render/render.h
         runtime/application.cpp
@@ -81,7 +81,15 @@ set(IMGUI_BACKENDS
         runtime/font/font.h
         depends/vector/vector2f.h
         depends/vector/vector3f.h
-        depends/vector/vector4f.h)
+        depends/vector/vector4f.h
+        runtime/render/render_control.cpp
+        runtime/render/render_control.h
+        runtime/render/render_control.cpp
+        runtime/ui/mask.cpp
+        runtime/ui/mask.h
+        runtime/ui/mask.h
+        depends/node/node.cpp
+        depends/node/node.h)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
@@ -96,9 +104,9 @@ add_executable(${PROJECT_NAME}
         runtime/object/object.cpp
         runtime/object/object.h
         runtime/object/object.h
-        runtime/ui/image/image.cpp
-        runtime/ui/image/image.h
-        runtime/ui/image/image.h
+        runtime/ui/image.cpp
+        runtime/ui/image.h
+        runtime/ui/image.h
         runtime/object/transform.cpp
         runtime/object/transform.h
         runtime/object/component.cpp

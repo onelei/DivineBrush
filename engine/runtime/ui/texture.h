@@ -15,7 +15,7 @@
 //order is important
 
 #include <FreeImage.h>
-#include "../../object/object.h"
+#include "../object/object.h"
 
 namespace DivineBrush {
     class Texture : public Object {

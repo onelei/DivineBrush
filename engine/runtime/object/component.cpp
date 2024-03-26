@@ -13,15 +13,32 @@ namespace DivineBrush {
         this->gameObject = gameObject;
     }
 
-    void Component::Awake() {
+    void Component::OnAwake() {
 
     }
 
-    void Component::Update() {
+    void Component::OnUpdate() {
 
     }
 
-    void Component::Destroy() {
+    void Component::OnDestroy() {
 
     }
+
+    void Component::OnPreprocessRender() {
+
+    }
+
+    void Component::OnPostprocessRender() {
+
+    }
+
+    void Component::OnEnable() {
+
+    }
+
+    void Component::OnDisable() {
+
+    }
+
 } // DivineBrush

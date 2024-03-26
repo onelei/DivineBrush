@@ -8,7 +8,8 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include "FreeImage.h"
-#include "../behavior/ui_behaviour.h"
+#include "ui_behaviour.h"
+#include "texture2d.h"
 
 namespace DivineBrush::UI {
 
@@ -18,13 +19,17 @@ namespace DivineBrush::UI {
 
         ~Image();
 
-        static Image *LoadImage(char *filename);
-        static GLuint LoadImageToTextureID(char* filename);
+        void Load(std::string filename);
 
-    public:
-        unsigned int width = 0;
-        unsigned int height = 0;
-        BYTE *pixels = nullptr;
+        void OnUpdate() override;
+
+        void OnPreprocessRender() override;
+
+        void OnPostprocessRender() override;
+
+    private:
+        std::string file_name;
+        Texture2d *texture2d;
     };
 
 } // DivineBrush

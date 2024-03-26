@@ -5,7 +5,7 @@
 #ifndef ENGINE_UI_BEHAVIOUR_H
 #define ENGINE_UI_BEHAVIOUR_H
 
-#include "../../object/component.h"
+#include "../object/component.h"
 
 namespace DivineBrush::UI {
     class UIBehaviour : public Component {

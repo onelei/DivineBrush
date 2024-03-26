@@ -25,14 +25,23 @@ namespace DivineBrush {
 
         void SetGameObject(GameObject* gameObject);
 
-        virtual void Awake();
+        virtual void OnAwake();
 
-        virtual void Update();
+        virtual void OnUpdate();
 
-        virtual void Destroy();
+        virtual void OnDestroy();
+
+        virtual void OnPreprocessRender();
+
+        virtual void OnPostprocessRender();
+
+        virtual void OnEnable();
+
+        virtual void OnDisable();
 
     private:
         GameObject* gameObject = nullptr;
+        bool is_dirty = true;
     };
 
 } // DivineBrush

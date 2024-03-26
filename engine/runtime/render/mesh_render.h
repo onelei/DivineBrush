@@ -19,10 +19,6 @@ namespace DivineBrush {
 
         ~MeshRender() = default;
 
-        void SetView(glm::mat4 view) { this->view = view; }
-
-        void SetProjection(glm::mat4 projection) { this->projection = projection; }
-
         void SetMaterial(Material *material) { this->material = material; }
 
         Material *GetMaterial() { return material; }
@@ -35,20 +31,16 @@ namespace DivineBrush {
 
         glm::mat4 GetMVP() { return mvp; }
 
-        void Prepare();
-
         void Render();
 
     private:
-        glm::mat4 view;
-        glm::mat4 projection;
         Material *material = nullptr;
         MeshFilter *mesh_filter = nullptr;
         unsigned int program_id;
         glm::mat4 mvp;
-        GLint mvp_location, vpos_location, vcol_location, a_uv_location;
         GLuint kVBO, kEBO;
         GLuint kVAO;
+        void Prepare();
     };
 
 } // DivineBrush

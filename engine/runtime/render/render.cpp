@@ -39,6 +39,7 @@ namespace DivineBrush {
     class Application;
 
     const char *glsl_version;
+    bool Render::useImGui = true;
 
     static void glfw_error_callback(int error, const char *description) {
         fprintf(stderr, "GLFW Error %d: %s\n", error, description);
@@ -174,6 +175,8 @@ namespace DivineBrush {
         bool show_another_window = false;
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
+        Screen::SetScreenSize(480, 320);
+
         auto gameObject = new GameObject("SampleScene");
         auto scene = dynamic_cast<Scene *>(gameObject->AddComponent("SampleScene"));
 
@@ -187,57 +190,65 @@ namespace DivineBrush {
         while (!glfwWindowShouldClose(window))
 #endif
         {
-            Screen::SetScreenSize(480, 320);
+            //Screen::SetScreenSize(480, 320);
             int width = Screen::GetWidth();
             int height = Screen::GetHeight();
-            //绑定FBO进行渲染：在你的渲染循环中，当你想将内容渲染到离屏缓冲区（即FBO）时，你应该先绑定FBO。
-            //创建全局FBO，将整个游戏渲染到FBO，提供给编辑器，作为Game视图显示
-            GLuint frame_buffer_object_id = 0;
-            glGenFramebuffers(1, &frame_buffer_object_id);
-            if (frame_buffer_object_id == 0) {
-                printf("CreateFBO FBO Error!");
-                exit(EXIT_FAILURE);
+            if (useImGui) {
+                //绑定FBO进行渲染：在你的渲染循环中，当你想将内容渲染到离屏缓冲区（即FBO）时，你应该先绑定FBO。
+                //创建全局FBO，将整个游戏渲染到FBO，提供给编辑器，作为Game视图显示
+                GLuint frame_buffer_object_id = 0;
+                glGenFramebuffers(1, &frame_buffer_object_id);
+                if (frame_buffer_object_id == 0) {
+                    printf("CreateFBO FBO Error!");
+                    exit(EXIT_FAILURE);
+                }
+                glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer_object_id);
+                //创建颜色纹理 Attach到FBO颜色附着点上
+                glGenTextures(1, &Application::color_texture_id);
+                glBindTexture(GL_TEXTURE_2D, Application::color_texture_id);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                       Application::color_texture_id,
+                                       0);
+                //创建深度纹理 Attach到FBO深度附着点上
+                glGenTextures(1, &Application::depth_texture_id);
+                glBindTexture(GL_TEXTURE_2D, Application::depth_texture_id);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT,
+                             GL_UNSIGNED_BYTE,
+                             nullptr);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
+                                       Application::depth_texture_id,
+                                       0);
+                //检测帧缓冲区完整性
+                GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+                if (status != GL_FRAMEBUFFER_COMPLETE) {
+                    printf("BindFBO FBO Error,Status:{} !",
+                           status);//36055 = 0x8CD7 GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT 附着点没有东西
+                    exit(EXIT_FAILURE);
+                }
             }
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer_object_id);
-            //创建颜色纹理 Attach到FBO颜色附着点上
-            glGenTextures(1, &Application::color_texture_id);
-            glBindTexture(GL_TEXTURE_2D, Application::color_texture_id);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, Application::color_texture_id,
-                                   0);
-            //创建深度纹理 Attach到FBO深度附着点上
-            glGenTextures(1, &Application::depth_texture_id);
-            glBindTexture(GL_TEXTURE_2D, Application::depth_texture_id);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE,
-                         nullptr);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, Application::depth_texture_id,
-                                   0);
-            //检测帧缓冲区完整性
-            GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            if (status != GL_FRAMEBUFFER_COMPLETE) {
-                printf("BindFBO FBO Error,Status:{} !",
-                       status);//36055 = 0x8CD7 GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT 附着点没有东西
-                exit(EXIT_FAILURE);
-            }
-
             //设置视口和清除缓冲区：设置合适的视口，并且清除颜色和深度缓冲区，为渲染做准备。
             glViewport(0, 0, width, height);
 
-            scene->Update();
+
+            GameObject::UpdateAll();
+
             Input::Update();
 
             Camera::RenderAll();
 
-            //解绑FBO：完成FBO的渲染后，你通常会绑定回默认的帧缓冲区，继续渲染你的UI或其它画面内容。
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            if (useImGui) {
+                //解绑FBO：完成FBO的渲染后，你通常会绑定回默认的帧缓冲区，继续渲染你的UI或其它画面内容。
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            }
             // Poll and handle events (inputs, window resize, etc.)
             // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
             // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
@@ -245,23 +256,25 @@ namespace DivineBrush {
             // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
             glfwPollEvents();
 
-            // Start the Dear ImGui frame
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-
-            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-            if (show_demo_window)
-                ImGui::ShowDemoWindow(&show_demo_window);
-
-            DivineBrush::Editor::EditorWindow::GetHierarchyWindow()->GUI();
-            DivineBrush::Editor::EditorWindow::GetInspectorWindow()->GUI();
-            DivineBrush::Editor::EditorWindow::GetSceneWindow()->GUI();
-            DivineBrush::Editor::EditorWindow::GetGameWindow()->GUI();
-            DivineBrush::Editor::EditorWindow::GetProjectWindow()->GUI();
-            DivineBrush::Editor::EditorWindow::GetConsoleWindow()->GUI();
 
 
+            if (useImGui) {
+
+                // Start the Dear ImGui frame
+                ImGui_ImplOpenGL3_NewFrame();
+                ImGui_ImplGlfw_NewFrame();
+                ImGui::NewFrame();
+
+                DivineBrush::Editor::EditorWindow::GetGameWindow()->GUI();
+                DivineBrush::Editor::EditorWindow::GetHierarchyWindow()->GUI();
+                DivineBrush::Editor::EditorWindow::GetInspectorWindow()->GUI();
+                DivineBrush::Editor::EditorWindow::GetSceneWindow()->GUI();
+                DivineBrush::Editor::EditorWindow::GetProjectWindow()->GUI();
+                DivineBrush::Editor::EditorWindow::GetConsoleWindow()->GUI();
+
+                // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+                if (show_demo_window)
+                    ImGui::ShowDemoWindow(&show_demo_window);
 
 //         //    2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
 //        {
@@ -286,26 +299,31 @@ namespace DivineBrush {
 //            ImGui::End();
 //        }
 
-            // 3. Show another simple window.
-            if (show_another_window) {
-                ImGui::Begin("Another Window",
-                             &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-                ImGui::Text("Hello from another window!");
-                if (ImGui::Button("Close Me"))
-                    show_another_window = false;
-                ImGui::End();
+                // 3. Show another simple window.
+                if (show_another_window) {
+                    ImGui::Begin("Another Window",
+                                 &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+                    ImGui::Text("Hello from another window!");
+                    if (ImGui::Button("Close Me"))
+                        show_another_window = false;
+                    ImGui::End();
+                }
             }
 
-            // Rendering
-            ImGui::Render();
-//            int display_w, display_h;
-//            glfwGetFramebufferSize(window, &display_w, &display_h);
-//            glViewport(0, 0, display_w, display_h);
-            glViewport(0, 0, width, height);
-            glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w,
-                         clear_color.w);
-            glClear(GL_COLOR_BUFFER_BIT);
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            if (useImGui) {
+                // Rendering
+                ImGui::Render();
+                glViewport(0, 0, width, height);
+                glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w,
+                             clear_color.z * clear_color.w,
+                             clear_color.w);
+                glClear(GL_COLOR_BUFFER_BIT);
+                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            } else {
+                int display_w, display_h;
+                glfwGetFramebufferSize(window, &display_w, &display_h);
+                glViewport(0, 0, display_w, display_h);
+            }
 
             glfwSwapBuffers(window);
         }
@@ -317,7 +335,6 @@ namespace DivineBrush {
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
-
         glfwDestroyWindow(window);
         glfwTerminate();
     }

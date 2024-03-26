@@ -7,7 +7,7 @@
 
 #include <string>
 #include "shader.h"
-#include "../ui/texture/texture2d.h"
+#include "../ui/texture2d.h"
 
 namespace DivineBrush {
     class Material {

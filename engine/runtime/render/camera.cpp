@@ -20,6 +20,7 @@ namespace DivineBrush {
     }
 
     std::vector<Camera *> Camera::cameras;
+    Camera *Camera::current_camera;
 
     Camera::Camera() {
         clear_flag = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
@@ -42,7 +43,14 @@ namespace DivineBrush {
     void Camera::Render() {
         transform = dynamic_cast<Transform *>(GetGameObject()->GetComponent("Transform"));
         view = glm::lookAt(transform->GetPosition(), center, up);
-        projection = glm::perspective(glm::radians(fov), aspect, near, far);
+        switch (mode) {
+            case CameraMode::Perspective:
+                projection = glm::perspective(glm::radians(fov), aspect, near, far);
+                break;
+            case CameraMode::Orthographic:
+                projection = glm::ortho(left, right, bottom, top, near, far);
+                break;
+        }
     }
 
     void Camera::RenderAll() {
@@ -51,8 +59,8 @@ namespace DivineBrush {
                 camera->Clear();
             }
             camera->Render();
-
-            GameObject::RenderAll(camera);
+            current_camera = camera;
+            GameObject::RenderAll();
         }
     }
 
