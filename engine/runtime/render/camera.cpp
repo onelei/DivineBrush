@@ -41,7 +41,7 @@ namespace DivineBrush {
     }
 
     void Camera::Render() {
-        transform = dynamic_cast<Transform *>(GetGameObject()->GetComponent("Transform"));
+        transform = dynamic_cast<Transform *>(gameObject->GetComponent("Transform"));
         view = glm::lookAt(transform->GetPosition(), center, up);
         switch (mode) {
             case CameraMode::Perspective:

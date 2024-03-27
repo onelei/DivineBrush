@@ -33,7 +33,7 @@ namespace DivineBrush::UI {
         if (texture2d == nullptr) {
             return;
         }
-        auto mesh_filter = dynamic_cast<MeshFilter *>(GetGameObject()->GetComponent("MeshFilter"));
+        auto mesh_filter = dynamic_cast<MeshFilter *>(gameObject->GetComponent("MeshFilter"));
         if (mesh_filter != nullptr) {
             return;
         }

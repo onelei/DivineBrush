@@ -21,7 +21,7 @@ namespace DivineBrush {
         //获取Shader中的变量
         auto shader = material->GetShader();
         program_id = shader->GetProgramId();
-        auto component_mesh_filter = GetGameObject()->GetComponent("MeshFilter");
+        auto component_mesh_filter = gameObject->GetComponent("MeshFilter");
         mesh_filter = dynamic_cast<MeshFilter *>(component_mesh_filter);
         if (!mesh_filter) {
             return;
@@ -71,12 +71,12 @@ namespace DivineBrush {
     }
 
     void MeshRender::Render() {
-        auto component = GetGameObject()->GetComponent("Transform");
+        auto component = gameObject->GetComponent("Transform");
         auto transform = dynamic_cast<Transform *>(component);
         if (!transform) {
             return;
         }
-        auto component_mesh_filter = GetGameObject()->GetComponent("MeshFilter");
+        auto component_mesh_filter = gameObject->GetComponent("MeshFilter");
         mesh_filter = dynamic_cast<MeshFilter *>(component_mesh_filter);
         if (!mesh_filter) {
             return;

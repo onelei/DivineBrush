@@ -32,7 +32,7 @@ namespace DivineBrush::UI {
             return;
         }
         Component::OnUpdate();
-        auto mesh_filter = dynamic_cast<MeshFilter *>(GetGameObject()->GetComponent("MeshFilter"));
+        auto mesh_filter = dynamic_cast<MeshFilter *>(gameObject->GetComponent("MeshFilter"));
         if (mesh_filter != nullptr) {
             return;
         }

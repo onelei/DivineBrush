@@ -77,8 +77,8 @@ set(IMGUI_BACKENDS
         runtime/object/scene.h
         depends/debug/debug.cpp
         depends/debug/debug.h
-        runtime/font/font.cpp
-        runtime/font/font.h
+        runtime/ui/font.cpp
+        runtime/ui/font.h
         depends/vector/vector2f.h
         depends/vector/vector3f.h
         depends/vector/vector4f.h
@@ -89,7 +89,9 @@ set(IMGUI_BACKENDS
         runtime/ui/mask.h
         runtime/ui/mask.h
         depends/node/node.cpp
-        depends/node/node.h)
+        depends/node/node.h
+        runtime/ui/text.cpp
+        runtime/ui/text.h)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 

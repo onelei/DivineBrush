@@ -6,10 +6,11 @@
 #include "sample_scene.h"
 #include "rttr/registration.h"
 #include "../../runtime/screen/screen.h"
-#include "../../runtime/font/font.h"
+#include "../../runtime/ui/font.h"
 #include "../../runtime/input/input.h"
 #include "../../runtime/ui/image.h"
 #include "../../runtime/ui/mask.h"
+#include "../../runtime/ui/text.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -78,7 +79,7 @@ namespace DivineBrush {
 //        camera_2->SetNear(1.f);
 //        camera_2->SetFar(1000.f);
 
-        if(Input::GetKeyUp(GLFW_KEY_A)){
+        if (Input::GetKeyUp(GLFW_KEY_A)) {
             auto pGameObject = GameObject::Find("mask");
             if (pGameObject == nullptr) {
                 return;
@@ -202,6 +203,21 @@ namespace DivineBrush {
         auto mask = dynamic_cast<UI::Mask *>(go_mask->AddComponent("Mask"));
         //Texture2d::CompressFile("image/mask.png", "image/mask.glt");
         mask->Load("image/mask.glt");
+
+
+        //生成文字贴图
+        Font *font = Font::Load("font/hkyuan.ttf", 24);
+        //创建 GameObject
+        auto go_ui_text = new GameObject("text");
+        go_ui_text->SetLayer(0x02);
+        //挂上 Transform 组件
+        auto transform_ui_text = dynamic_cast<Transform *>(go_ui_text->GetComponent("Transform"));
+        transform_ui_text->SetPosition({0.f, -20.f, 0});
+        //挂上 UIText 组件
+        auto ui_text = dynamic_cast<UI::Text *>(go_ui_text->AddComponent("Text"));
+        ui_text->SetFont(font);
+        ui_text->SetText("looks good");
+        ui_text->SetColor({1, 0, 0, 1});
     }
 
     void SampleScene::OnDestroy() {

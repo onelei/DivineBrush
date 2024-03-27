@@ -39,9 +39,9 @@ namespace DivineBrush {
 
         virtual void OnDisable();
 
-    private:
-        GameObject* gameObject = nullptr;
+    protected:
         bool is_dirty = true;
+        GameObject* gameObject = nullptr;
     };
 
 } // DivineBrush
