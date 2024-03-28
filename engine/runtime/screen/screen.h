@@ -9,23 +9,32 @@ namespace DivineBrush {
 
     class Screen {
     public:
+
+        static void SetXY(int _x, int _y);
+
+        static int GetX() { return x; }
+
+        static int GetY() { return y; }
+
         static void SetScreenSize(int width, int height);
 
-        static int GetWidth();
+        static int GetWidth() { return width; }
 
-        static int GetHeight();
+        static int GetHeight() { return height; }
 
         static void SetWidth(int width);
 
         static void SetHeight(int height);
 
-        static float GetAspect();
+        static float GetAspect() { return aspect; }
 
 
     private:
         static int width;
         static int height;
         static float aspect;
+        static int x;
+        static int y;
 
         static void UpdateAspect();
     };

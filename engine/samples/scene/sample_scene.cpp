@@ -11,6 +11,7 @@
 #include "../../runtime/ui/image.h"
 #include "../../runtime/ui/mask.h"
 #include "../../runtime/ui/text.h"
+#include "../../runtime/ui/button.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -163,6 +164,8 @@ namespace DivineBrush {
         }
     }
 
+    bool is_pressed = false;
+
     void SampleScene::CreateUI() {
         //创建UI相机 GameObject
         auto go_camera_ui = new GameObject("ui_camera");
@@ -183,7 +186,7 @@ namespace DivineBrush {
         camera_ui->SetNear(-100);
         camera_ui->SetFar(100);
         camera_ui->SetMode(Camera::CameraMode::Orthographic);
-
+/*
         //创建 image
         auto go = new GameObject("image");
         go->SetLayer(0x02);
@@ -203,7 +206,7 @@ namespace DivineBrush {
         auto mask = dynamic_cast<UI::Mask *>(go_mask->AddComponent("Mask"));
         //Texture2d::CompressFile("image/mask.png", "image/mask.glt");
         mask->Load("image/mask.glt");
-
+*/
 
         //生成文字贴图
         Font *font = Font::Load("font/hkyuan.ttf", 24);
@@ -218,6 +221,34 @@ namespace DivineBrush {
         ui_text->SetFont(font);
         ui_text->SetText("looks good");
         ui_text->SetColor({1, 0, 0, 1});
+
+        //创建按钮普通状态图片
+        auto go_button_image_normal = new GameObject("button_normal");
+        go_button_image_normal->SetLayer(0x02);
+        go_button_image_normal->AddComponent("Transform");
+        auto ui_image_button_image_normal = dynamic_cast<UI::Image *>(go_button_image_normal->AddComponent("Image"));
+        //Texture2d::CompressFile("image/02.png", "image/02.cpt");
+        ui_image_button_image_normal->SetTexture2d(Texture2d::LoadCompressFile("image/02.cpt"));
+        //创建按钮按下状态图片
+        auto go_button_image_normal_press = new GameObject("button_press");
+        go_button_image_normal_press->SetLayer(0x02);
+        go_button_image_normal_press->AddComponent("Transform");
+        auto ui_image_button_image_normal_press = dynamic_cast<UI::Image *>(go_button_image_normal_press->AddComponent(
+                "Image"));
+        //Texture2d::CompressFile("image/03.png", "image/03.cpt");
+        ui_image_button_image_normal_press->SetTexture2d(Texture2d::LoadCompressFile("image/03.cpt"));
+        //创建按钮
+        auto go_ui_button = new GameObject("button");
+        go_ui_button->SetLayer(0x02);
+        auto transform_ui_button = dynamic_cast<Transform *>(go_ui_button->AddComponent("Transform"));
+        transform_ui_button->SetPosition({0.f, 0.f, 0});
+        auto ui_button = dynamic_cast<UI::Button *>(go_ui_button->AddComponent("Button"));
+        ui_button->SetNormalImage(ui_image_button_image_normal);
+        ui_button->SetPressedImage(ui_image_button_image_normal_press);
+        ui_button->SetOnClickCallback([=]() {
+            is_pressed = !is_pressed;
+            ui_text->SetText("is pressed: " + std::to_string(is_pressed));
+        });
     }
 
     void SampleScene::OnDestroy() {

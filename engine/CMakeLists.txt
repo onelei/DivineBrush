@@ -91,7 +91,10 @@ set(IMGUI_BACKENDS
         depends/node/node.cpp
         depends/node/node.h
         runtime/ui/text.cpp
-        runtime/ui/text.h)
+        runtime/ui/text.h
+        runtime/ui/button.cpp
+        runtime/ui/button.h
+        depends/vector/rect_int.h)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 

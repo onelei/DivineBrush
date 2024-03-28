@@ -30,6 +30,7 @@ namespace DivineBrush::Editor {
 
     void EditorWindow::GUI() {
         ImGui::Begin(this->GetTitle(), nullptr, ImGuiWindowFlags_NoCollapse);
+        this->position = ImGui::GetWindowPos();
         ImVec2 windowSize = ImGui::GetWindowSize();
         if (windowSize.x != this->size.x || windowSize.y != this->size.y) {
             this->size = windowSize;

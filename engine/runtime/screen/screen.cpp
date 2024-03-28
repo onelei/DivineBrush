@@ -5,22 +5,21 @@
 #include "screen.h"
 
 namespace DivineBrush {
+    int Screen::x;
+    int Screen::y;
     int Screen::width;
     int Screen::height;
     float Screen::aspect;
+
+    void Screen::SetXY(int _x, int _y) {
+        x = _x;
+        y = _y;
+    }
 
     void Screen::SetScreenSize(int _width, int _height) {
         width = _width;
         height = _height;
         UpdateAspect();
-    }
-
-    int Screen::GetWidth() {
-        return width;
-    }
-
-    int Screen::GetHeight() {
-        return height;
     }
 
     void Screen::SetWidth(int _width) {
@@ -31,10 +30,6 @@ namespace DivineBrush {
     void Screen::SetHeight(int _height) {
         height = _height;
         UpdateAspect();
-    }
-
-    float Screen::GetAspect() {
-        return aspect;
     }
 
     void Screen::UpdateAspect() {

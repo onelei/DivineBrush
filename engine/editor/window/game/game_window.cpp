@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "game_window.h"
 #include "../../../runtime/application.h"
+#include "../../../runtime/screen/screen.h"
 
 namespace DivineBrush::Editor {
     GLuint textureID;
@@ -19,9 +20,8 @@ namespace DivineBrush::Editor {
 
     void GameWindow::OnGUI() {
         {
-            static float f = 0.0f;
-            static int counter = 0;
-
+            auto windowsPos = ImGui::GetWindowPos();
+            Screen::SetXY(windowsPos.x, windowsPos.y);
             //            if(textureID <= 0)
             //            {
             //                textureID =

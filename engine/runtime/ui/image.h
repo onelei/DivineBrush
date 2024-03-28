@@ -21,6 +21,14 @@ namespace DivineBrush::UI {
 
         void Load(std::string filename);
 
+        void SetTexture2d(Texture2d *texture2d) {
+            this->texture2d = texture2d;
+        }
+
+        Texture2d *GetTexture2d() {
+            return texture2d;
+        }
+
         void OnUpdate() override;
 
         void OnPreprocessRender() override;

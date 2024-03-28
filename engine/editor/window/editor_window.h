@@ -73,6 +73,7 @@ namespace DivineBrush::Editor {
     public:
         //window title
         char *title;
+        ImVec2 position;
         //window size
         ImVec2 size;
     private:
