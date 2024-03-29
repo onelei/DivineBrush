@@ -5,11 +5,11 @@
 #ifndef ENGINE_SAMPLE_SCENE_H
 #define ENGINE_SAMPLE_SCENE_H
 
-#include "../../runtime/object/scene.h"
-#include "../../runtime/object/transform.h"
-#include "../../runtime/render/camera.h"
-#include "../../runtime/render/camera.h"
-#include "../../runtime/object/game_object.h"
+#include "../../Runtime/Component/scene.h"
+#include "../../Runtime/Component/transform.h"
+#include "../../Runtime/Render/Camera.h"
+#include "../../Runtime/Render/Camera.h"
+#include "../../Runtime/Component/GameObject.h"
 #include "../../depends/vector/vector2f.h"
 
 namespace DivineBrush {

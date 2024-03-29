@@ -1700,8 +1700,8 @@ enum ImGuiCond_
     ImGuiCond_None          = 0,        // No condition (always set the variable), same as _Always
     ImGuiCond_Always        = 1 << 0,   // No condition (always set the variable), same as _None
     ImGuiCond_Once          = 1 << 1,   // Set the variable once per runtime session (only the first call will succeed)
-    ImGuiCond_FirstUseEver  = 1 << 2,   // Set the variable if the object/window has no persistently saved data (no entry in .ini file)
-    ImGuiCond_Appearing     = 1 << 3,   // Set the variable if the object/window is appearing after being hidden/inactive (or the first time)
+    ImGuiCond_FirstUseEver  = 1 << 2,   // Set the variable if the Object/window has no persistently saved data (no entry in .ini file)
+    ImGuiCond_Appearing     = 1 << 3,   // Set the variable if the Object/window is appearing after being hidden/inactive (or the first time)
 };
 
 //-----------------------------------------------------------------------------

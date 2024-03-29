@@ -5,13 +5,13 @@
 #include <glm/ext/matrix_transform.hpp>
 #include "sample_scene.h"
 #include "rttr/registration.h"
-#include "../../runtime/screen/screen.h"
-#include "../../runtime/ui/font.h"
-#include "../../runtime/input/input.h"
-#include "../../runtime/ui/image.h"
-#include "../../runtime/ui/mask.h"
-#include "../../runtime/ui/text.h"
-#include "../../runtime/ui/button.h"
+#include "../../runtime/screen/Screen.h"
+#include "../../runtime/ui/Font.h"
+#include "../../runtime/input/Input.h"
+#include "../../runtime/ui/Image.h"
+#include "../../runtime/ui/Mask.h"
+#include "../../runtime/ui/Text.h"
+#include "../../runtime/ui/Button.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -186,7 +186,7 @@ namespace DivineBrush {
         camera_ui->SetNear(-100);
         camera_ui->SetFar(100);
         camera_ui->SetMode(Camera::CameraMode::Orthographic);
-/*
+
         //创建 image
         auto go = new GameObject("image");
         go->SetLayer(0x02);
@@ -206,7 +206,7 @@ namespace DivineBrush {
         auto mask = dynamic_cast<UI::Mask *>(go_mask->AddComponent("Mask"));
         //Texture2d::CompressFile("image/mask.png", "image/mask.glt");
         mask->Load("image/mask.glt");
-*/
+
 
         //生成文字贴图
         Font *font = Font::Load("font/hkyuan.ttf", 24);

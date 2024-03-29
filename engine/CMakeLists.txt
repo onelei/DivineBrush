@@ -24,77 +24,79 @@ find_package(spdlog CONFIG REQUIRED)
 set(IMGUI_BACKENDS
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_glfw.cpp
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_opengl3.cpp
-        editor/window/editor_window.h
-        editor/window/hierarchy/hierarchy_window.cpp
-        editor/window/hierarchy/hierarchy_window.h
-        editor/window/editor_window.cpp
-        runtime/serialization/scriptable_object.cpp
-        runtime/serialization/scriptable_object.h
-        editor/window/inspector/inspector_window.cpp
-        editor/window/inspector/inspector_window.h
-        editor/window/inspector/inspector_window.h
-        editor/window/scene/scene_window.cpp
-        editor/window/scene/scene_window.h
-        editor/window/scene/scene_window.h
-        editor/window/console/console_window.cpp
-        editor/window/console/console_window.h
-        editor/window/console/console_window.h
-        editor/window/game/game_window.cpp
-        editor/window/game/game_window.h
-        editor/window/project/project_window.cpp
-        editor/window/project/project_window.h
-        runtime/ui/ui_behaviour.cpp
-        runtime/ui/ui_behaviour.h
+        Editor/Window/EditorWindow.h
+        Editor/Window/HierarchyWindow.cpp
+        Editor/Window/HierarchyWindow.h
+        Editor/Window/EditorWindow.cpp
+        Runtime/Serialize/ScriptableObject.cpp
+        Runtime/Serialize/ScriptableObject.h
+        Editor/Window/InspectorWindow.cpp
+        Editor/Window/InspectorWindow.h
+        Editor/Window/InspectorWindow.h
+        Editor/Window/SceneWindow.cpp
+        Editor/Window/SceneWindow.h
+        Editor/Window/SceneWindow.h
+        Editor/Window/ConsoleWindow.cpp
+        Editor/Window/ConsoleWindow.h
+        Editor/Window/ConsoleWindow.h
+        Editor/Window/GameWindow.cpp
+        Editor/Window/GameWindow.h
+        Editor/Window/project_window.cpp
+        Editor/Window/project_window.h
+        Runtime/UI/UIBehaviour.cpp
+        Runtime/UI/UIBehaviour.h
         depends/template/array_pool.h
         depends/template/dynamic_array_pool.h
         depends/template/dynamic_array_pool.h
-        runtime/ui/texture.cpp
-        runtime/ui/texture.h
-        runtime/ui/texture2d.cpp
-        runtime/ui/texture2d.h
-        runtime/render/render.cpp
-        runtime/render/render.h
-        runtime/application.cpp
-        runtime/application.h
-        runtime/render/shader.cpp
-        runtime/render/shader.h
+        Runtime/UI/Texture.cpp
+        Runtime/UI/Texture.h
+        Runtime/UI/Texture2d.cpp
+        Runtime/UI/Texture2d.h
+        Runtime/Render/Render.cpp
+        Runtime/Render/Render.h
+        Runtime/application.cpp
+        Runtime/application.h
+        Runtime/Render/Shader.cpp
+        Runtime/Render/Shader.h
         depends/time/stop_watch.h
-        runtime/render/mesh_filter.cpp
-        runtime/render/mesh_filter.h
-        runtime/render/material.cpp
-        runtime/render/material.h
-        runtime/render/mesh_render.cpp
-        runtime/render/mesh_render.h
-        runtime/render/camera.cpp
-        runtime/render/camera.h
-        runtime/input/input.cpp
-        runtime/input/input.h
-        runtime/screen/screen.cpp
-        runtime/screen/screen.h
+        Runtime/Render/MeshFilter.cpp
+        Runtime/Render/MeshFilter.h
+        Runtime/Render/Material.cpp
+        Runtime/Render/Material.h
+        Runtime/Render/MeshRender.cpp
+        Runtime/Render/MeshRender.h
+        Runtime/Render/Camera.cpp
+        Runtime/Render/Camera.h
+        Runtime/Input/Input.cpp
+        Runtime/Input/Input.h
+        Runtime/Screen/Screen.cpp
+        Runtime/Screen/Screen.h
         samples/scene/sample_scene.cpp
         samples/scene/sample_scene.h
-        runtime/object/scene.cpp
-        runtime/object/scene.h
+        Runtime/Component/Scene.cpp
+        Runtime/Component/Scene.h
         depends/debug/debug.cpp
         depends/debug/debug.h
-        runtime/ui/font.cpp
-        runtime/ui/font.h
+        Runtime/UI/Font.cpp
+        Runtime/UI/Font.h
         depends/vector/vector2f.h
         depends/vector/vector3f.h
         depends/vector/vector4f.h
-        runtime/render/render_control.cpp
-        runtime/render/render_control.h
-        runtime/render/render_control.cpp
-        runtime/ui/mask.cpp
-        runtime/ui/mask.h
-        runtime/ui/mask.h
+        Runtime/Render/RenderControl.cpp
+        Runtime/Render/RenderControl.h
+        Runtime/Render/RenderControl.cpp
+        Runtime/UI/Mask.cpp
+        Runtime/UI/Mask.h
+        Runtime/UI/Mask.h
         depends/node/node.cpp
         depends/node/node.h
-        runtime/ui/text.cpp
-        runtime/ui/text.h
-        runtime/ui/button.cpp
-        runtime/ui/button.h
-        depends/vector/rect_int.h)
+        Runtime/UI/Text.cpp
+        Runtime/UI/Text.h
+        Runtime/UI/Button.cpp
+        Runtime/UI/Button.h
+        depends/vector/rect_int.h
+        Editor/Selection.cpp
+        Editor/Selection.h)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
@@ -102,23 +104,23 @@ include_directories(${PROJECT_SOURCE_DIR}/depends/imgui/backends
         ${RAPIDXML_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME}
-        main.cpp
-        resources/app_icon.rc
+        Main.cpp
+        Resources/app_icon.rc
         ${SOURCE_FILES}
         ${IMGUI_BACKENDS}
-        runtime/object/object.cpp
-        runtime/object/object.h
-        runtime/object/object.h
-        runtime/ui/image.cpp
-        runtime/ui/image.h
-        runtime/ui/image.h
-        runtime/object/transform.cpp
-        runtime/object/transform.h
-        runtime/object/component.cpp
-        runtime/object/component.h
-        runtime/object/game_object.cpp
-        runtime/object/game_object.h
-        runtime/object/game_object.h)
+        Runtime/Component/Object.cpp
+        Runtime/Component/Object.h
+        Runtime/Component/Object.h
+        Runtime/UI/Image.cpp
+        Runtime/UI/Image.h
+        Runtime/UI/Image.h
+        Runtime/Component/Transform.cpp
+        Runtime/Component/Transform.h
+        Runtime/Component/Component.cpp
+        Runtime/Component/Component.h
+        Runtime/Component/GameObject.cpp
+        Runtime/Component/GameObject.h
+        Runtime/Component/GameObject.h)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw

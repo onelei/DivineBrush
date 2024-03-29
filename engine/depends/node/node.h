@@ -30,6 +30,10 @@ namespace DivineBrush {
             return parent;
         }
 
+        std::list<Node *> GetChildren() {
+            return children;
+        }
+
         void SetParent(Node *parent);
 
     private :
