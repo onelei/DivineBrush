@@ -10,6 +10,8 @@
 #include "Camera.h"
 #include "../Component/GameObject.h"
 #include "rttr/registration.h"
+#include "easy/details/profiler_colors.h"
+#include "easy/profiler.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -54,6 +56,7 @@ namespace DivineBrush {
     }
 
     void Camera::RenderAll() {
+        EASY_FUNCTION(profiler::colors::Magenta); // 标记函数
         for (auto &camera: cameras) {
             if (camera->GetGameObject()->GetTag() == GameObject::kTagMainCamera) {
                 camera->Clear();

@@ -21,6 +21,9 @@ find_package(GLEW REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 
+list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/depends/easy_profiler/bin)
+find_package(easy_profiler CONFIG REQUIRED)
+
 set(IMGUI_BACKENDS
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_glfw.cpp
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_opengl3.cpp
@@ -96,12 +99,19 @@ set(IMGUI_BACKENDS
         Runtime/UI/Button.h
         depends/vector/rect_int.h
         Editor/Selection.cpp
-        Editor/Selection.h)
+        Editor/Selection.h
+        Runtime/Audio/Audio.cpp
+        Runtime/Audio/Audio.h)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
+# 添加easy_profiler的子目录
+#add_subdirectory(depends/easy_profiler)
+
 include_directories(${PROJECT_SOURCE_DIR}/depends/imgui/backends
-        ${RAPIDXML_INCLUDE_DIRS})
+        ${RAPIDXML_INCLUDE_DIRS}
+        # 包括easy_profiler的头文件
+        ${PROJECT_SOURCE_DIR}/depends/easy_profiler/include)
 
 add_executable(${PROJECT_NAME}
         Main.cpp
@@ -132,4 +142,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         freeimage::FreeImage freeimage::FreeImagePlus
         GLEW::GLEW
         Freetype::Freetype
-        spdlog::spdlog)
+        spdlog::spdlog
+        easy_profiler)

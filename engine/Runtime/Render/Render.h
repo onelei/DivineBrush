@@ -22,6 +22,8 @@ namespace DivineBrush {
 
         void Run();
 
+        void Update();
+
     private:
         GLFWwindow *window;
         static bool useImGui;
