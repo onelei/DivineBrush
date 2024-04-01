@@ -210,7 +210,7 @@ namespace DivineBrush {
                         exit(EXIT_FAILURE);
                     }
                     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer_object_id);
-                    //创建颜色纹理 Attach到FBO颜色附着点上
+                    // 创建颜色纹理并附加到FBO的颜色附着点上
                     glGenTextures(1, &Application::color_texture_id);
                     glBindTexture(GL_TEXTURE_2D, Application::color_texture_id);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -221,17 +221,19 @@ namespace DivineBrush {
                     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
                                            Application::color_texture_id,
                                            0);
-                    //创建深度纹理 Attach到FBO深度附着点上
+                    // 创建深度-模板纹理并附加到FBO的深度附着点上，并且这个纹理也将用于模板
                     glGenTextures(1, &Application::depth_texture_id);
                     glBindTexture(GL_TEXTURE_2D, Application::depth_texture_id);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT,
-                                 GL_UNSIGNED_BYTE,
+                    // 注意这里使用GL_DEPTH24_STENCIL8作为内部格式，并且数据格式改为GL_UNSIGNED_INT_24_8
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, width, height, 0, GL_DEPTH_STENCIL,
+                                 GL_UNSIGNED_INT_24_8,
                                  nullptr);
-                    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
+                    // 注意附加到GL_DEPTH_STENCIL_ATTACHMENT
+                    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D,
                                            Application::depth_texture_id,
                                            0);
                     //检测帧缓冲区完整性
