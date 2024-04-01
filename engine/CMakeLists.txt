@@ -20,9 +20,9 @@ find_package(freeimage CONFIG REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
-
-list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/depends/easy_profiler/bin)
+list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/depends/easy_profiler/lib/cmake/easy_profiler)
 find_package(easy_profiler CONFIG REQUIRED)
+find_package(sol2 CONFIG REQUIRED)
 
 set(IMGUI_BACKENDS
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_glfw.cpp
@@ -105,12 +105,8 @@ set(IMGUI_BACKENDS
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
-# 添加easy_profiler的子目录
-#add_subdirectory(depends/easy_profiler)
-
 include_directories(${PROJECT_SOURCE_DIR}/depends/imgui/backends
         ${RAPIDXML_INCLUDE_DIRS}
-        # 包括easy_profiler的头文件
         ${PROJECT_SOURCE_DIR}/depends/easy_profiler/include)
 
 add_executable(${PROJECT_NAME}
@@ -143,4 +139,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         GLEW::GLEW
         Freetype::Freetype
         spdlog::spdlog
-        easy_profiler)
+        easy_profiler
+        sol2)

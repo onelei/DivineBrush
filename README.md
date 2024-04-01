@@ -25,7 +25,9 @@ Windows:
 9. vcpkg install imgui
 10. vcpkg install rapidxml
 11. vcpkg install freetype
-12. 
+12. vcpkg install sol2
+13. vcpkg install spdlog
+14. 
 
 
 
