@@ -18,9 +18,7 @@ namespace DivineBrush {
 
     class GameObject : public Object, public Node {
     public:
-        GameObject();
-
-        GameObject(char * name);
+        GameObject(const char * name);
 
         ~GameObject();
 
@@ -37,11 +35,11 @@ namespace DivineBrush {
         void ForeachComponent(std::function<void(Component *)> func);
 
     public:
-        char * GetName() {
+        const char * GetName() {
             return this->name;
         }
 
-        void SetName(char * name) {
+        void SetName(const char * name) {
             this->name = name;
         }
 
@@ -69,8 +67,8 @@ namespace DivineBrush {
             return this->is_active;
         }
 
-        Component *AddComponent(const std::string &componentName);
-
+        Component *AddComponentByName(const std::string &componentName);
+        Component *AddComponent(Component * component);
         Component *GetComponent(const std::string &componentName);
 
         std::unordered_map<std::string, std::vector<Component *>> GetComponents() {
@@ -78,7 +76,7 @@ namespace DivineBrush {
         }
 
     private:
-        char * name;
+        const char * name;
         std::unordered_map<std::string, std::vector<Component *>> component_map;
         std::string tag;
         unsigned char layer = 0x01;

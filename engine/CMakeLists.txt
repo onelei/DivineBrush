@@ -23,6 +23,7 @@ find_package(spdlog CONFIG REQUIRED)
 list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/depends/easy_profiler/lib/cmake/easy_profiler)
 find_package(easy_profiler CONFIG REQUIRED)
 find_package(sol2 CONFIG REQUIRED)
+find_package(Lua REQUIRED)
 
 set(IMGUI_BACKENDS
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_glfw.cpp
@@ -101,13 +102,16 @@ set(IMGUI_BACKENDS
         Editor/Selection.cpp
         Editor/Selection.h
         Runtime/Audio/Audio.cpp
-        Runtime/Audio/Audio.h)
+        Runtime/Audio/Audio.h
+        Runtime/Binder/LuaBinder.cpp
+        Runtime/Binder/LuaBinder.h)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
 include_directories(${PROJECT_SOURCE_DIR}/depends/imgui/backends
         ${RAPIDXML_INCLUDE_DIRS}
-        ${PROJECT_SOURCE_DIR}/depends/easy_profiler/include)
+        ${PROJECT_SOURCE_DIR}/depends/easy_profiler/include
+        ${LUA_INCLUDE_DIR})
 
 add_executable(${PROJECT_NAME}
         Main.cpp
@@ -140,4 +144,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         Freetype::Freetype
         spdlog::spdlog
         easy_profiler
-        sol2)
+        sol2
+        ${LUA_LIBRARIES})

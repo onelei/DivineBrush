@@ -68,12 +68,12 @@ namespace DivineBrush::UI {
         auto mesh_filter = dynamic_cast<MeshFilter *>(gameObject->GetComponent("MeshFilter"));
         if (mesh_filter == nullptr) {
             //挂上 MeshFilter 组件
-            mesh_filter = dynamic_cast<MeshFilter *>(gameObject->AddComponent("MeshFilter"));
+            mesh_filter = dynamic_cast<MeshFilter *>(gameObject->AddComponentByName("MeshFilter"));
             //创建 Material
             auto material = new Material();//设置材质
             material->Parse("material/text.mat");
             //挂上 MeshRender 组件
-            auto mesh_render = dynamic_cast<MeshRender *>(gameObject->AddComponent("MeshRender"));
+            auto mesh_render = dynamic_cast<MeshRender *>(gameObject->AddComponentByName("MeshRender"));
             mesh_render->SetMaterial(material);
             //使用文字贴图
             material->SetTexture("u_diffuse_texture", fontTexture);

@@ -184,7 +184,7 @@ namespace DivineBrush {
         Screen::SetScreenSize(480, 320);
 
         auto gameObject = new GameObject("SampleScene");
-        auto scene = dynamic_cast<Scene *>(gameObject->AddComponent("SampleScene"));
+        auto scene = dynamic_cast<Scene *>(gameObject->AddComponentByName("SampleScene"));
 
         // Main loop
 #ifdef __EMSCRIPTEN__

@@ -30,7 +30,7 @@ namespace DivineBrush {
             return parent;
         }
 
-        std::list<Node *> GetChildren() {
+        std::list<Node *>& GetChildren() {
             return children;
         }
 

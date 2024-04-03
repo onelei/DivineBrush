@@ -12,6 +12,7 @@
 #include "../../runtime/ui/Mask.h"
 #include "../../runtime/ui/Text.h"
 #include "../../runtime/ui/Button.h"
+#include "../../Runtime/Binder/LuaBinder.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -29,20 +30,20 @@ namespace DivineBrush {
         auto gameObject = new GameObject("Cube");
         transform = dynamic_cast<Transform *>(gameObject->GetComponent("Transform"));
 
-        auto mesh_filter = dynamic_cast<MeshFilter *>(gameObject->AddComponent("MeshFilter"));
+        auto mesh_filter = dynamic_cast<MeshFilter *>(gameObject->AddComponentByName("MeshFilter"));
         mesh_filter->LoadMesh("model/cube.mesh");
 
         auto material = new Material();
         material->Parse("material/cube.mat");
 
-        auto mesh_render = dynamic_cast<MeshRender *>(gameObject->AddComponent("MeshRender"));
+        auto mesh_render = dynamic_cast<MeshRender *>(gameObject->AddComponentByName("MeshRender"));
         mesh_render->SetMeshFilter(mesh_filter);
         mesh_render->SetMaterial(material);
 
         auto camera_gameObject = new GameObject("Camera");
         camera_transform = dynamic_cast<Transform *>(camera_gameObject->GetComponent("Transform"));
         camera_transform->SetPosition(glm::vec3(0, 0, 10));
-        camera = dynamic_cast<Camera *>(camera_gameObject->AddComponent("Camera"));
+        camera = dynamic_cast<Camera *>(camera_gameObject->AddComponentByName("Camera"));
         camera->GetGameObject()->SetTag(GameObject::kTagMainCamera);
         camera->SetDepth(0);
 
@@ -60,6 +61,9 @@ namespace DivineBrush {
         CreateFont();
 
         CreateUI();
+
+        auto luaBinder = new LuaBinder();
+        luaBinder->Init();
     }
 
     void SampleScene::OnUpdate() {
@@ -150,13 +154,13 @@ namespace DivineBrush {
             auto transform = dynamic_cast<Transform *>(go->GetComponent("Transform"));
             transform->SetPosition({-8.f, 0.f, 0.f});
             //挂上 MeshFilter 组件
-            auto mesh_filter = dynamic_cast<MeshFilter *>(go->AddComponent("MeshFilter"));
+            auto mesh_filter = dynamic_cast<MeshFilter *>(go->AddComponentByName("MeshFilter"));
             mesh_filter->CreateMesh(vertex_vector, index_vector);
             //创建 Material
             auto material = new Material();//设置材质
             material->Parse("material/font.mat");
             //挂上 MeshRender 组件
-            auto mesh_renderer = dynamic_cast<MeshRender *>(go->AddComponent("MeshRender"));
+            auto mesh_renderer = dynamic_cast<MeshRender *>(go->AddComponentByName("MeshRender"));
             mesh_renderer->SetMaterial(material);
             mesh_renderer->SetMeshFilter(mesh_filter);
             //使用文字贴图
@@ -173,7 +177,7 @@ namespace DivineBrush {
         auto transform_camera_ui = dynamic_cast<Transform *>(go_camera_ui->GetComponent("Transform"));
         transform_camera_ui->SetPosition(glm::vec3(0, 0, 10));
         //挂上 Camera 组件
-        auto camera_ui = dynamic_cast<Camera *>(go_camera_ui->AddComponent("Camera"));
+        auto camera_ui = dynamic_cast<Camera *>(go_camera_ui->AddComponentByName("Camera"));
         camera_ui->SetDepth(1);
         camera_ui->SetCullingMask(0x02);
         //UI相机不能清除之前的颜色。不然用第一个相机矩阵渲染的物体就被清除 没了。
@@ -191,7 +195,7 @@ namespace DivineBrush {
         auto go = new GameObject("image");
         go->SetLayer(0x02);
         //挂上 Image 组件
-        auto image = dynamic_cast<UI::Image *>(go->AddComponent("Image"));
+        auto image = dynamic_cast<UI::Image *>(go->AddComponentByName("Image"));
         //Texture2d::CompressFile("image/image2.png", "image/image2.glt");
         image->Load("image/image2.glt");
         dynamic_cast<Transform *>(go->GetComponent("Transform"));//->SetScale(glm::vec3(0.99f, 1.1f, 0.99f));
@@ -203,7 +207,7 @@ namespace DivineBrush {
         //挂上 Transform 组件
         dynamic_cast<Transform *>(go_mask->GetComponent("Transform"));
         //挂上 Mask 组件
-        auto mask = dynamic_cast<UI::Mask *>(go_mask->AddComponent("Mask"));
+        auto mask = dynamic_cast<UI::Mask *>(go_mask->AddComponentByName("Mask"));
         //Texture2d::CompressFile("image/mask.png", "image/mask.glt");
         mask->Load("image/mask.glt");
 
@@ -217,7 +221,7 @@ namespace DivineBrush {
         auto transform_ui_text = dynamic_cast<Transform *>(go_ui_text->GetComponent("Transform"));
         transform_ui_text->SetPosition({0.f, -20.f, 0});
         //挂上 UIText 组件
-        auto ui_text = dynamic_cast<UI::Text *>(go_ui_text->AddComponent("Text"));
+        auto ui_text = dynamic_cast<UI::Text *>(go_ui_text->AddComponentByName("Text"));
         ui_text->SetFont(font);
         ui_text->SetText("looks good");
         ui_text->SetColor({1, 0, 0, 1});
@@ -225,24 +229,25 @@ namespace DivineBrush {
         //创建按钮普通状态图片
         auto go_button_image_normal = new GameObject("button_normal");
         go_button_image_normal->SetLayer(0x02);
-        go_button_image_normal->AddComponent("Transform");
-        auto ui_image_button_image_normal = dynamic_cast<UI::Image *>(go_button_image_normal->AddComponent("Image"));
+        go_button_image_normal->AddComponentByName("Transform");
+        auto ui_image_button_image_normal = dynamic_cast<UI::Image *>(go_button_image_normal->AddComponentByName(
+                "Image"));
         //Texture2d::CompressFile("image/02.png", "image/02.cpt");
         ui_image_button_image_normal->SetTexture2d(Texture2d::LoadCompressFile("image/02.cpt"));
         //创建按钮按下状态图片
         auto go_button_image_normal_press = new GameObject("button_press");
         go_button_image_normal_press->SetLayer(0x02);
-        go_button_image_normal_press->AddComponent("Transform");
-        auto ui_image_button_image_normal_press = dynamic_cast<UI::Image *>(go_button_image_normal_press->AddComponent(
+        go_button_image_normal_press->AddComponentByName("Transform");
+        auto ui_image_button_image_normal_press = dynamic_cast<UI::Image *>(go_button_image_normal_press->AddComponentByName(
                 "Image"));
         //Texture2d::CompressFile("image/03.png", "image/03.cpt");
         ui_image_button_image_normal_press->SetTexture2d(Texture2d::LoadCompressFile("image/03.cpt"));
         //创建按钮
         auto go_ui_button = new GameObject("button");
         go_ui_button->SetLayer(0x02);
-        auto transform_ui_button = dynamic_cast<Transform *>(go_ui_button->AddComponent("Transform"));
+        auto transform_ui_button = dynamic_cast<Transform *>(go_ui_button->AddComponentByName("Transform"));
         transform_ui_button->SetPosition({0.f, 0.f, 0});
-        auto ui_button = dynamic_cast<UI::Button *>(go_ui_button->AddComponent("Button"));
+        auto ui_button = dynamic_cast<UI::Button *>(go_ui_button->AddComponentByName("Button"));
         ui_button->SetNormalImage(ui_image_button_image_normal);
         ui_button->SetPressedImage(ui_image_button_image_normal_press);
         ui_button->SetOnClickCallback([=]() {

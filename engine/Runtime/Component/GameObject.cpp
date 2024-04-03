@@ -9,26 +9,37 @@ using namespace rttr;
 namespace DivineBrush {
     std::string GameObject::kTagMainCamera = "MainCamera";
 
-    GameObject::GameObject() {
-        this->SetName("GameObject");
-        GetRootNode()->AddChild(this);
-        AddComponent("Transform");
-    }
-
-    GameObject::GameObject(char * name) {
+    GameObject::GameObject(const char *name) {
         this->SetName(name);
+        AddComponentByName("Transform");
         GetRootNode()->AddChild(this);
-        AddComponent("Transform");
     }
 
     GameObject::~GameObject() {
-        this->GetParent()->RemoveChild(this);
+        //DEBUG_LOG_INFO("GameObject::~GameObject");
     }
 
-    Component *GameObject::AddComponent(const std::string &componentName) {
+    Component *GameObject::AddComponentByName(const std::string &componentName) {
         type t = type::get_by_name(componentName);
         variant var = t.create();
         Component *component = var.get_value<Component *>();
+        component->SetGameObject(this);
+        if (component_map.find(componentName) == component_map.end()) {
+            std::vector<Component *> componentVec;
+            componentVec.push_back(component);
+            component_map[componentName] = componentVec;
+        } else {
+            component_map[componentName].push_back(component);
+        }
+        component->OnAwake();
+        return component;
+    }
+
+    Component *GameObject::AddComponent(Component *component) {
+        if (component == nullptr) {
+            return nullptr;
+        }
+        std::string componentName = type::get(*component).get_name().to_string();
         component->SetGameObject(this);
         if (component_map.find(componentName) == component_map.end()) {
             std::vector<Component *> componentVec;
@@ -71,7 +82,7 @@ namespace DivineBrush {
             if (!gameObject->IsActive()) {
                 return;
             }
-            gameObject->ForeachComponent( [](Component *component) {
+            gameObject->ForeachComponent([](Component *component) {
                 component->OnUpdate();
             });
         });

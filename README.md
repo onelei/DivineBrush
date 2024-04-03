@@ -27,7 +27,8 @@ Windows:
 11. vcpkg install freetype
 12. vcpkg install sol2
 13. vcpkg install spdlog
-14. 
+14. vcpkg install lua
+15. 
 
 
 

@@ -49,7 +49,7 @@ namespace DivineBrush::UI {
                 0, 2, 3
         };
         //挂上 MeshFilter 组件
-        mesh_filter = dynamic_cast<MeshFilter *>(GetGameObject()->AddComponent("MeshFilter"));
+        mesh_filter = dynamic_cast<MeshFilter *>(GetGameObject()->AddComponentByName("MeshFilter"));
         mesh_filter->CreateMesh(vertex_vector, index_vector);
         //创建 Material
         auto material = new Material();//设置材质
@@ -58,7 +58,7 @@ namespace DivineBrush::UI {
         material->SetTexture("u_diffuse_texture", texture2d);
 
         //挂上 MeshRender 组件
-        auto pMeshRender = dynamic_cast<MeshRender *>(GetGameObject()->AddComponent("MeshRender"));
+        auto pMeshRender = dynamic_cast<MeshRender *>(GetGameObject()->AddComponentByName("MeshRender"));
         pMeshRender->SetMaterial(material);
         pMeshRender->SetMeshFilter(mesh_filter);
     }

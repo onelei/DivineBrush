@@ -8,6 +8,8 @@
 #include <unordered_map>
 #include <string>
 #include "Object.h"
+#include "sol/sol.hpp"
+#include <rttr/registration>
 
 namespace DivineBrush {
     class GameObject;
@@ -24,6 +26,12 @@ namespace DivineBrush {
         GameObject* GetGameObject();
 
         void SetGameObject(GameObject* gameObject);
+
+        void SetLuaComponent(sol::table lua_component){
+            this->luaComponent = lua_component;
+        }
+
+        void ExecuteLuaComponent(const char* function_name);
 
         virtual void OnAwake();
 
@@ -42,6 +50,7 @@ namespace DivineBrush {
     protected:
         bool is_dirty = true;
         GameObject* gameObject = nullptr;
+        sol::table luaComponent;
     };
 
 } // DivineBrush
