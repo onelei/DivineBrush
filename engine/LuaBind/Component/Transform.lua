@@ -13,7 +13,7 @@ function Transform:ctor()
     Component.ctor(self)
 end
 
-function Transform:InitCpp()
+function Transform:SetCpp()
     self.cpp = Cpp.Transform()
 end
 

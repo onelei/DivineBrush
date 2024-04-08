@@ -4,6 +4,7 @@
 
 #ifndef ENGINE_LUABINDER_H
 #define ENGINE_LUABINDER_H
+#include "sol/sol.hpp"
 
 namespace DivineBrush {
 
@@ -11,6 +12,8 @@ namespace DivineBrush {
     public:
         // 初始化
         void Init();
+    private:
+        sol::state solState;
     };
 
 } //  DivineBrush

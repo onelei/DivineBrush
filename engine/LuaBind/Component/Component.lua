@@ -11,14 +11,13 @@ function Component:ctor()
     self.components = {}
     ---@type GameObject
     self.gameObject = nil
-    ---C++组件实例
-    self.cpp = nil
-    self:InitCpp():SetLuaComponent(self)
+    self:SetCpp()
+    self.cpp:SetLuaComponent(self)
 end
 
-function Component:InitCpp()
+function Component:SetCpp()
+    ---C++组件实例
     self.cpp = Cpp.Component()
-    return self.cpp
 end
 
 --- GetCpp

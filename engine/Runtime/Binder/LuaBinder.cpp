@@ -3,13 +3,11 @@
 //
 
 #include "LuaBinder.h"
-#include "sol/sol.hpp"
 #include "../Component/GameObject.h"
 #include "../Component/Component.h"
 
 namespace DivineBrush {
     void LuaBinder::Init() {
-        sol::state solState;
         solState.open_libraries(sol::lib::base,
                                 sol::lib::package,
                                 sol::lib::coroutine,

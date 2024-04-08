@@ -9,7 +9,13 @@ local GameObject = class("GameObject")
 function GameObject:ctor(name)
     ---@type table[string,Component[]]
     self.componentMap = {}
-    self.cpp = Cpp.GameObject(name)
+    ---C++组件实例
+    self.cpp = nil
+    self:SetCpp(name)
+end
+
+function GameObject:SetCpp(...)
+    self.cpp = Cpp.GameObject(...)
 end
 
 function GameObject:GetCpp()
