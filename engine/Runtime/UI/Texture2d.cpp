@@ -6,6 +6,11 @@
 #include <fstream>
 #include "Texture2d.h"
 #include "../application.h"
+#include "../RenderPipeline/RenderPipeline.h"
+#include "../../depends/template/ObjectPool.h"
+#include "../RenderPipeline/Handler/CreateCompressedTexImage2DHandler.h"
+#include "../RenderPipeline/Handler/CreateTexImage2DHandler.h"
+#include "../RenderPipeline/Handler/DeleteTexturesHandler.h"
 
 namespace DivineBrush {
     static const unsigned int bytesPerPixel = 4;
@@ -13,8 +18,13 @@ namespace DivineBrush {
     Texture2d::Texture2d() = default;
 
     Texture2d::~Texture2d() {
-        if (gl_texture_id) {
-            glDeleteTextures(1, &gl_texture_id);
+        if (textureHandle > 0) {
+            auto handler = ObjectPool<DeleteTexturesHandler>::Get();
+            handler->textureCount = 1;
+            auto size = sizeof(unsigned int) * handler->textureCount;
+            handler->textureHandleArray = (unsigned int *) malloc(size);
+            memcpy(handler->textureHandleArray, &textureHandle, size);
+            RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
         }
     }
 
@@ -110,7 +120,7 @@ namespace DivineBrush {
     }
 
     Texture2d *Texture2d::LoadCompressFile(std::string path) {
-        auto *pTexture2D = new Texture2d();
+        auto *texture2d = new Texture2d();
         //读取 cpt 压缩纹理文件
         std::ifstream fileStream(Application::GetDataPath()+path, std::ios::in | std::ios::binary);
         CompressFileHead fileHead;
@@ -118,19 +128,22 @@ namespace DivineBrush {
         auto *data = (unsigned char *) malloc(fileHead.compressSize);
         fileStream.read((char *) data, fileHead.compressSize);
         fileStream.close();
-        pTexture2D->width = fileHead.width;
-        pTexture2D->height = fileHead.height;
-        pTexture2D->gl_texture_format = fileHead.textureFormat;
-        // 创建纹理
-        glGenTextures(1, &pTexture2D->gl_texture_id);
-        glBindTexture(GL_TEXTURE_2D, pTexture2D->gl_texture_id);
-        glCompressedTexImage2D(GL_TEXTURE_2D, pTexture2D->mipmapCount, pTexture2D->gl_texture_format, pTexture2D->width,
-                               pTexture2D->height,
-                               0, fileHead.compressSize, data);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        delete (data);
-        return pTexture2D;
+        texture2d->width = fileHead.width;
+        texture2d->height = fileHead.height;
+        texture2d->gl_texture_format = fileHead.textureFormat;
+        texture2d->textureHandle = RenderPipeline::GetInstance().GetRenderProgramGenerater()->CreateTexture();
+
+        auto handler = ObjectPool<CreateCompressedTexImage2DHandler>::Get();
+        handler->textureHandle = texture2d->textureHandle;
+        handler->width = texture2d->width;
+        handler->height = texture2d->height;
+        handler->textureFormat = texture2d->gl_texture_format;
+        handler->compressSize = fileHead.compressSize;
+        handler->data = data;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+
+        //delete (data);
+        return texture2d;
     }
 
     void Texture2d::CompressFile(std::string imageFilePath, std::string targetImageFilePath) {
@@ -183,16 +196,16 @@ namespace DivineBrush {
         texture2d->width = width;
         texture2d->height = height;
 
-        //1. 通知显卡创建纹理对象，返回句柄;
-        glGenTextures(1, &(texture2d->gl_texture_id));
-        //2. 将纹理绑定到特定纹理目标;
-        glBindTexture(GL_TEXTURE_2D, texture2d->gl_texture_id);
-        //3. 将图片rgb数据上传到GPU;
-        glTexImage2D(GL_TEXTURE_2D, 0, texture2d->gl_texture_format, texture2d->width, texture2d->height, 0,
-                     client_format, data_type, data);
-        //4. 指定放大，缩小滤波方式，线性滤波，即放大缩小的插值方式;
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        auto handler = ObjectPool<CreateTexImage2DHandler>::Get();
+        handler->textureHandle = RenderPipeline::GetInstance().GetRenderProgramGenerater()->CreateTexture();
+        handler->width = texture2d->width;
+        handler->height = texture2d->height;
+        handler->glTextureFormat = texture2d->gl_texture_format;
+        handler->clientFormat = client_format;
+        handler->dataType = data_type;
+        handler->data = data;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+
         return texture2d;
     }
 } // DivineBrush

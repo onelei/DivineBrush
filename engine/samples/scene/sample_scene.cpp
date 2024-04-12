@@ -5,7 +5,7 @@
 #include <glm/ext/matrix_transform.hpp>
 #include "sample_scene.h"
 #include "rttr/registration.h"
-#include "../../runtime/screen/Screen.h"
+#include "../../runtime/Screen/Screen.h"
 #include "../../runtime/ui/Font.h"
 #include "../../runtime/input/Input.h"
 #include "../../runtime/ui/Image.h"

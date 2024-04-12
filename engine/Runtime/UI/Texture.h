@@ -30,6 +30,7 @@ namespace DivineBrush {
         GLsizei height = 0;
         GLenum gl_texture_format;
         GLuint gl_texture_id = 0;
+        unsigned int textureHandle = 0;
     };
 }// DivineBrush
 

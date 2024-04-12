@@ -49,9 +49,9 @@ set(IMGUI_BACKENDS
         Editor/Window/project_window.h
         Runtime/UI/UIBehaviour.cpp
         Runtime/UI/UIBehaviour.h
-        depends/template/array_pool.h
-        depends/template/dynamic_array_pool.h
-        depends/template/dynamic_array_pool.h
+        depends/template/ArrayPool.h
+        depends/template/DynamicArrayPool.h
+        depends/template/DynamicArrayPool.h
         Runtime/UI/Texture.cpp
         Runtime/UI/Texture.h
         Runtime/UI/Texture2d.cpp
@@ -104,7 +104,65 @@ set(IMGUI_BACKENDS
         Runtime/Audio/Audio.cpp
         Runtime/Audio/Audio.h
         Runtime/Binder/LuaBinder.cpp
-        Runtime/Binder/LuaBinder.h)
+        Runtime/Binder/LuaBinder.h
+        Runtime/RenderPipeline/RenderCommand.h
+        Runtime/RenderPipeline/RenderPipeline.cpp
+        Runtime/RenderPipeline/RenderPipeline.h
+        Runtime/RenderPipeline/Handler/AsyncRenderCommandHandler.cpp
+        Runtime/RenderPipeline/Handler/AsyncRenderCommandHandler.h
+        Runtime/RenderPipeline/Handler/RenderCommandHandler.cpp
+        Runtime/RenderPipeline/Handler/RenderCommandHandler.h
+        Runtime/RenderPipeline/Handler/UpdateScreenSizeHandler.cpp
+        Runtime/RenderPipeline/Handler/UpdateScreenSizeHandler.h
+        Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp
+        Runtime/RenderPipeline/Handler/CompileShaderHandler.h
+        Runtime/RenderPipeline/Handler/UseShaderProgramHandler.cpp
+        Runtime/RenderPipeline/Handler/UseShaderProgramHandler.h
+        Runtime/RenderPipeline/Handler/CreateCompressedTexImage2DHandler.cpp
+        Runtime/RenderPipeline/Handler/CreateCompressedTexImage2DHandler.h
+        Runtime/RenderPipeline/Handler/CreateTexImage2DHandler.cpp
+        Runtime/RenderPipeline/Handler/CreateTexImage2DHandler.h
+        Runtime/RenderPipeline/Handler/DeleteTexturesHandler.cpp
+        Runtime/RenderPipeline/Handler/DeleteTexturesHandler.h
+        Runtime/RenderPipeline/Handler/UpdateTextureSubImage2DHandler.cpp
+        Runtime/RenderPipeline/Handler/UpdateTextureSubImage2DHandler.h
+        Runtime/RenderPipeline/Handler/CreateVAOHandler.cpp
+        Runtime/RenderPipeline/Handler/CreateVAOHandler.h
+        Runtime/RenderPipeline/Handler/UpdateVBOSubDataHandler.cpp
+        Runtime/RenderPipeline/Handler/UpdateVBOSubDataHandler.h
+        Runtime/RenderPipeline/Handler/SetStateEnableHandler.cpp
+        Runtime/RenderPipeline/Handler/SetStateEnableHandler.h
+        Runtime/RenderPipeline/Handler/SetBlendFuncHandler.cpp
+        Runtime/RenderPipeline/Handler/SetBlendFuncHandler.h
+        Runtime/RenderPipeline/Handler/SetUniformMatrix4fvHandler.cpp
+        Runtime/RenderPipeline/Handler/SetUniformMatrix4fvHandler.h
+        Runtime/RenderPipeline/Handler/ActiveAndBindTextureHandler.cpp
+        Runtime/RenderPipeline/Handler/ActiveAndBindTextureHandler.h
+        Runtime/RenderPipeline/Handler/SetUniform1iHandler.cpp
+        Runtime/RenderPipeline/Handler/SetUniform1iHandler.h
+        Runtime/RenderPipeline/Handler/BindVAOAndDrawElementsHandler.cpp
+        Runtime/RenderPipeline/Handler/BindVAOAndDrawElementsHandler.h
+        Runtime/RenderPipeline/Handler/SetClearFlagAndClearColorBufferHandler.cpp
+        Runtime/RenderPipeline/Handler/SetClearFlagAndClearColorBufferHandler.h
+        Runtime/RenderPipeline/Handler/SetStencilFuncHandler.cpp
+        Runtime/RenderPipeline/Handler/SetStencilFuncHandler.h
+        Runtime/RenderPipeline/Handler/SetStencilOpHandler.cpp
+        Runtime/RenderPipeline/Handler/SetStencilOpHandler.h
+        Runtime/RenderPipeline/Handler/SetStencilBufferClearValueHandler.cpp
+        Runtime/RenderPipeline/Handler/SetStencilBufferClearValueHandler.h
+        Runtime/RenderPipeline/Handler/EndFrameHandler.cpp
+        Runtime/RenderPipeline/Handler/EndFrameHandler.h
+        depends/template/RingBuffer.h
+        Runtime/RenderPipeline/RenderProgramGenerater.cpp
+        Runtime/RenderPipeline/RenderProgramGenerater.h
+        depends/template/Singleton.h
+        depends/template/ObjectPool.h
+        depends/template/ObjectPool.cpp
+        depends/template/SharedPTRObjectPool.cpp
+        depends/template/SharedPTRObjectPool.h
+        Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp
+        Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp
+        Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 

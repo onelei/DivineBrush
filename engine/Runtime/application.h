@@ -5,7 +5,6 @@
 #ifndef ENGINE_APPLICATION_H
 #define ENGINE_APPLICATION_H
 
-//#include "string"
 #include <string>
 #include <GL/glew.h>
 

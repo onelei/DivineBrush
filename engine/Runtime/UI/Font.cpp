@@ -7,6 +7,9 @@
 #include "../application.h"
 #include <fstream>
 #include "../../depends/debug/debug.h"
+#include "../../depends/template/ObjectPool.h"
+#include "../RenderPipeline/Handler/UpdateTextureSubImage2DHandler.h"
+#include "../RenderPipeline/RenderPipeline.h"
 
 namespace DivineBrush {
     std::unordered_map<std::string, Font *> Font::font_map;
@@ -91,6 +94,18 @@ namespace DivineBrush {
         glTexSubImage2D(GL_TEXTURE_2D, 0, font_texture_fill_x, font_texture_fill_y, ft_bitmap.width, ft_bitmap.rows,
                         GL_RED, GL_UNSIGNED_BYTE,
                         ft_bitmap.buffer);
+        auto handler = ObjectPool<UpdateTextureSubImage2DHandler>::Get();
+        handler->textureHandle = font_texture->textureHandle;
+        handler->x = font_texture_fill_x;
+        handler->y = font_texture_fill_y;
+        handler->width = ft_bitmap.width;
+        handler->height = ft_bitmap.rows;
+        handler->format = GL_RED;
+        handler->type = GL_UNSIGNED_BYTE;
+        handler->data = ft_bitmap.buffer;
+        handler->dataSize = ft_bitmap.width * ft_bitmap.rows * sizeof(GL_UNSIGNED_BYTE);
+        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+
         character_map[ch] = new Character(font_texture_fill_x * 1.0f / font_texture_size,
                                           font_texture_fill_y * 1.0f / font_texture_size,
                                           (font_texture_fill_x + ft_bitmap.width) * 1.0f / font_texture_size,

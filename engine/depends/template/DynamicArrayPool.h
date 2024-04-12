@@ -2,8 +2,8 @@
 // Created by onelei on 2024/3/6.
 //
 
-#ifndef ENGINE_DYNAMIC_ARRAY_POOL_H
-#define ENGINE_DYNAMIC_ARRAY_POOL_H
+#ifndef ENGINE_DYNAMICARRAYPOOL_H
+#define ENGINE_DYNAMICARRAYPOOL_H
 
 #include <vector>
 #include <stack>
@@ -43,4 +43,4 @@ namespace DivineBrush {
         std::stack<std::pair<T *, size_t>> _pool; // 保存数组指针和对应的大小
     };
 } // DivineBrush
-#endif //ENGINE_DYNAMIC_ARRAY_POOL_H
+#endif //ENGINE_DYNAMICARRAYPOOL_H

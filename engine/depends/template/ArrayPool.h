@@ -2,8 +2,8 @@
 // Created by onelei on 2024/3/6.
 //
 
-#ifndef ENGINE_ARRAY_POOL_H
-#define ENGINE_ARRAY_POOL_H
+#ifndef ENGINE_ARRAYPOOL_H
+#define ENGINE_ARRAYPOOL_H
 
 #include <vector>
 #include <stack>
@@ -49,4 +49,4 @@ namespace DivineBrush {
         std::stack<T *> _pool; // 未被使用的数组的栈
     };
 } // DivineBrush
-#endif //ENGINE_ARRAY_POOL_H
+#endif //ENGINE_ARRAYPOOL_H

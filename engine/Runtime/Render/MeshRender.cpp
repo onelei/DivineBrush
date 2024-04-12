@@ -8,6 +8,9 @@
 #include "MeshRender.h"
 #include "rttr/registration.h"
 #include "../Component/GameObject.h"
+#include "../RenderPipeline/Handler/CreateVAOHandler.h"
+#include "../../depends/template/ObjectPool.h"
+#include "../RenderPipeline/RenderPipeline.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -68,6 +71,20 @@ namespace DivineBrush {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, kEBO);
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        vaoHandle = RenderPipeline::GetInstance().GetRenderProgramGenerater()->CreateVAO();
+        vboHandle = RenderPipeline::GetInstance().GetRenderProgramGenerater()->CreateVBO();
+        auto handler = ObjectPool<CreateVAOHandler>::Get();
+        handler->vaoHandle = vaoHandle;
+        handler->vboHandle = vboHandle;
+        handler->vertexDataSize = mesh_filter->GetMesh()->vertex_num * sizeof(MeshFilter::Vertex);
+        handler->vertexDataCount = mesh_filter->GetMesh()->vertex_num;
+        handler->vertexData = mesh_filter->GetMesh()->vertex_data;
+        handler->vertexIndexDataSize = mesh_filter->GetMesh()->vertex_index_num * sizeof(unsigned short);
+        handler->vertexIndexData = mesh_filter->GetMesh()->vertex_index_data;
+        handler->shaderProgramHandle = program_id;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+
     }
 
     void MeshRender::Render() {

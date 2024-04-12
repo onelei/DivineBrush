@@ -6,7 +6,7 @@
 #include "imgui.h"
 #include "GameWindow.h"
 #include "../../runtime/application.h"
-#include "../../runtime/screen/Screen.h"
+#include "../../runtime/Screen/Screen.h"
 
 namespace DivineBrush::Editor {
     GLuint textureID;

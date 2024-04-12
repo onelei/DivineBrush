@@ -37,6 +37,8 @@ namespace DivineBrush {
         Material *material = nullptr;
         MeshFilter *mesh_filter = nullptr;
         unsigned int program_id;
+        unsigned int vaoHandle;
+        unsigned int vboHandle;
         glm::mat4 mvp;
         GLuint kVBO, kEBO;
         GLuint kVAO;
