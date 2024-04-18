@@ -117,11 +117,11 @@ namespace DivineBrush {
             return this->clear_flag;
         }
 
-        glm::mat4 GetView() {
+        glm::mat4 &GetView() {
             return view;
         }
 
-        glm::mat4 GetProjection() {
+        glm::mat4 &GetProjection() {
             return projection;
         }
 

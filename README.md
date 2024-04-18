@@ -29,6 +29,7 @@ Windows:
 13. vcpkg install spdlog
 14. vcpkg install lua
 15. vcpkg install spscqueue
+16. vcpkg install physx
 
 
 

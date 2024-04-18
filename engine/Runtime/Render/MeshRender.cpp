@@ -85,13 +85,13 @@ namespace DivineBrush {
         if (vaoHandle == 0) {
             Prepare();
         } else {
-            auto handler = ObjectPool<UpdateVBOSubDataHandler>::Get();
-            handler->vboHandle = vboHandle;
-            auto vertexDataSize = mesh->vertex_num * sizeof(MeshFilter::Vertex);
-            handler->vertexDataSize = vertexDataSize;
-            handler->vertexData= (unsigned char*)malloc(vertexDataSize);
-            memcpy(handler->vertexData, mesh->vertex_data, vertexDataSize);
-            RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+//            auto handler = ObjectPool<UpdateVBOSubDataHandler>::Get();
+//            handler->vboHandle = vboHandle;
+//            auto vertexDataSize = mesh->vertex_num * sizeof(MeshFilter::Vertex);
+//            handler->vertexDataSize = vertexDataSize;
+//            handler->vertexData= (unsigned char*)malloc(vertexDataSize);
+//            memcpy(handler->vertexData, mesh->vertex_data, vertexDataSize);
+//            RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
         }
 
         //进行实际的渲染调用：这里你绘制你的场景，包括提到的立方体渲染。
@@ -126,14 +126,10 @@ namespace DivineBrush {
         handler->dFactor = GL_ONE_MINUS_SRC_ALPHA;
         RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
         //上传mvp矩阵
-        auto mat4handler = ObjectPool<SetUniformMatrix4fvHandler>::Get();
-        mat4handler->shaderProgramHandle = shaderProgramHandle;
-        auto uniformName = "u_mvp";
-        mat4handler->uniformName= static_cast<char *>(malloc(strlen(uniformName) + 1));
-        strcpy(mat4handler->uniformName, uniformName);
-        mat4handler->transpose = false;
-        mat4handler->matrix = mvp;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(mat4handler);
+        //SetUniformMatrix4fv(shaderProgramHandle, "u_model", false, model);
+        //SetUniformMatrix4fv(shaderProgramHandle, "u_view", false, camera->GetView());
+        //SetUniformMatrix4fv(shaderProgramHandle, "u_projection", false, camera->GetProjection());
+        SetUniformMatrix4fv(shaderProgramHandle, "u_mvp", false, mvp);
 
         //拿到保存的Texture
         auto textures = material->GetTextures();
@@ -167,6 +163,17 @@ namespace DivineBrush {
         auto handler = ObjectPool<SetStateEnableHandler>::Get();
         handler->enable = enabled;
         handler->state = state;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+    }
+
+    void MeshRender::SetUniformMatrix4fv(unsigned int shader_program_handle, const char *uniformName, bool transpose,
+                                         glm::mat4 &matrix) {
+        auto handler = ObjectPool<SetUniformMatrix4fvHandler>::Get();
+        handler->shaderProgramHandle = shaderProgramHandle;
+        handler->uniformName= static_cast<char *>(malloc(strlen(uniformName) + 1));
+        strcpy(handler->uniformName, uniformName);
+        handler->transpose = transpose;
+        handler->matrix = matrix;
         RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
     }
 

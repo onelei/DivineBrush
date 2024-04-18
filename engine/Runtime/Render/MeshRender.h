@@ -39,6 +39,9 @@ namespace DivineBrush {
         void Prepare();
 
         void SetGLEnabled(unsigned int state, bool enabled);
+
+        void SetUniformMatrix4fv(unsigned int shader_program_handle, const char *uniform_name, bool transpose,
+                                 glm::mat4 &matrix);
     };
 
 } // DivineBrush
