@@ -15,10 +15,14 @@ namespace DivineBrush {
             renderCommand = RenderCommand::SetBlendFunc;
         }
 
-        ~SetBlendFuncHandler() = default;
+        ~SetBlendFuncHandler() override = default;
 
-        unsigned int sourceFactor = 0;
-        unsigned int destinationFactor = 0;
+        unsigned int sFactor = 0;
+        unsigned int dFactor = 0;
+
+        void Run() override;
+
+        void Clear() override;
     };
 } // DivineBrush
 

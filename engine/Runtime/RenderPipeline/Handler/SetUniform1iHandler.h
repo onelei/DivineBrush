@@ -16,13 +16,15 @@ namespace DivineBrush {
             renderCommand = RenderCommand::SetUniform1i;
         }
 
-        ~SetUniform1iHandler() {
-            free(uniformName);
-        }
+        ~SetUniform1iHandler() override = default;
 
         unsigned int shaderProgramHandle = 0;
         char *uniformName = nullptr;
         int value = 0;
+
+        void Run() override;
+
+        void Clear() override;
     };
 
 } // DivineBrush

@@ -6,13 +6,9 @@
 
 namespace DivineBrush {
 
-    RenderCommandHandler::RenderCommandHandler() {
+    RenderCommandHandler::RenderCommandHandler() = default;
 
-    }
-
-    RenderCommandHandler::~RenderCommandHandler() {
-
-    }
+    RenderCommandHandler::~RenderCommandHandler() = default;
 
     void RenderCommandHandler::Run() {
 

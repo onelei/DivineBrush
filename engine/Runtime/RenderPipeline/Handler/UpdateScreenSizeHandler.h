@@ -6,19 +6,22 @@
 #define ENGINE_UPDATESCREENSIZEHANDLER_H
 
 #include "RenderCommandHandler.h"
+#include "GLFW/glfw3.h"
 
 namespace DivineBrush {
-
-
     class UpdateScreenSizeHandler : public RenderCommandHandler {
     public:
         UpdateScreenSizeHandler() {
             renderCommand = RenderCommand::UpdateScreenSize;
         }
 
-        ~UpdateScreenSizeHandler() = default;
+        ~UpdateScreenSizeHandler() override = default;
+
+        GLFWwindow* window = nullptr;
 
         void Run() override;
+
+        void Clear() override;
     };
 } // DivineBrush
 

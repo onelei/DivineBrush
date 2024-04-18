@@ -6,15 +6,19 @@
 #include "../../../depends/debug/debug.h"
 #include <GL/glew.h>
 #include "../RenderPipeline.h"
+#include "../../template/ObjectPool.h"
 
 namespace DivineBrush {
     void CompileShaderHandler::Run() {
         RenderCommandHandler::Run();
         //创建顶点Shader
         auto vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+//        auto gl_error_code = glGetError();
+//        if (gl_error_code != GL_NO_ERROR) {
+//            DEBUG_LOG_ERROR("gl_error_code: {}", gl_error_code);
+//        }
         //指定Shader源码
-        const GLchar *vertCode = vertexShaderSource.c_str();
-        glShaderSource(vertex_shader, 1, &vertCode, nullptr);
+        glShaderSource(vertex_shader, 1, &vertexShaderSource, NULL);
         //编译Shader
         glCompileShader(vertex_shader);
         //获取编译结果
@@ -24,13 +28,13 @@ namespace DivineBrush {
             GLchar message[256];
             glGetShaderInfoLog(vertex_shader, sizeof(message), 0, message);
             DEBUG_LOG_ERROR("compile vertex shader error:{}", message);
+            return;
         }
 
         //创建片段Shader
         auto fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
         //指定Shader源码
-        const GLchar *fragCode = fragmentShaderSource.c_str();
-        glShaderSource(fragment_shader, 1, &fragCode, nullptr);
+        glShaderSource(fragment_shader, 1, &fragmentShaderSource, nullptr);
         //编译Shader
         glCompileShader(fragment_shader);
         //获取编译结果
@@ -40,6 +44,7 @@ namespace DivineBrush {
             GLchar message[256];
             glGetShaderInfoLog(fragment_shader, sizeof(message), 0, message);
             DEBUG_LOG_ERROR("compile fragment shader error:{}", message);
+            return;
         }
         //创建GPU程序
         auto program_id = glCreateProgram();
@@ -55,6 +60,7 @@ namespace DivineBrush {
             GLchar message[256];
             glGetProgramInfoLog(program_id, sizeof(message), 0, message);
             DEBUG_LOG_ERROR("link shader error:{}", message);
+            return;
         }
 
         RenderPipeline::GetInstance().GetRenderProgramGenerater()->SetShader(shaderProgramHandle, program_id);
@@ -62,5 +68,8 @@ namespace DivineBrush {
 
     void CompileShaderHandler::Clear() {
         RenderCommandHandler::Clear();
+        free(vertexShaderSource);
+        free(fragmentShaderSource);
+        DivineBrush::ObjectPool<DivineBrush::CompileShaderHandler>::Release(this);
     }
 } // DivineBrush

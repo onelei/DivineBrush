@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include "DeleteTexturesHandler.h"
 #include "../RenderPipeline.h"
+#include "../../template/ObjectPool.h"
 
 namespace DivineBrush {
     void DeleteTexturesHandler::Run() {
@@ -16,5 +17,11 @@ namespace DivineBrush {
         }
         glDeleteTextures(textureCount, texture_id_array);
         delete[] texture_id_array;
+    }
+
+    void DeleteTexturesHandler::Clear() {
+        RenderCommandHandler::Clear();
+        free(textureHandleArray);
+        DivineBrush::ObjectPool<DivineBrush::DeleteTexturesHandler>::Release(this);
     }
 } // DivineBrush

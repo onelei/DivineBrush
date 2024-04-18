@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include <mutex>
 
 namespace DivineBrush {
     template<typename T>
@@ -18,21 +19,26 @@ namespace DivineBrush {
         size_t capacity;
         size_t size;
         bool full;
+        /// 互斥锁保护下面的所有成员
+        mutable std::mutex mtx;
 
     public:
         explicit RingBuffer(size_t capacity)
                 : buffer(capacity), head(0), tail(0), capacity(capacity), size(0), full(false) {}
 
         bool IsFull() const {
+            std::lock_guard<std::mutex> lock(mtx);
             return full;
         }
 
         bool IsEmpty() const {
+            std::lock_guard<std::mutex> lock(mtx);
             return size == 0;
         }
 
         void Enqueue(T item) {
-            if (IsFull()) {
+            std::lock_guard<std::mutex> lock(mtx);
+            if (full) {
                 throw std::runtime_error("Buffer is full");
             }
             buffer[tail] = item;
@@ -42,7 +48,8 @@ namespace DivineBrush {
         }
 
         T Dequeue() {
-            if (IsEmpty()) {
+            std::lock_guard<std::mutex> lock(mtx);
+            if (size == 0) {
                 throw std::runtime_error("Buffer is empty");
             }
             T item = buffer[head];
@@ -53,13 +60,15 @@ namespace DivineBrush {
         }
 
         T Peek() const {
-            if (IsEmpty()) {
+            std::lock_guard<std::mutex> lock(mtx);
+            if (size == 0) {
                 throw std::runtime_error("Buffer is empty");
             }
             return buffer[head];
         }
 
         size_t GetSize() const {
+            std::lock_guard<std::mutex> lock(mtx);
             return size;
         }
     };

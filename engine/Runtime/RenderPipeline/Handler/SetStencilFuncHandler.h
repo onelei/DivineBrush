@@ -15,11 +15,15 @@ namespace DivineBrush {
             renderCommand = RenderCommand::SetStencilFunc;
         }
 
-        ~SetStencilFuncHandler() = default;
+        ~SetStencilFuncHandler() override = default;
 
         unsigned int func = 0;
         int ref = 0;
         unsigned int mask = 0;
+
+        void Run() override;
+
+        void Clear() override;
     };
 
 } // DivineBrush

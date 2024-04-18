@@ -27,22 +27,18 @@ namespace DivineBrush {
 
         MeshFilter *GetMeshFilter() { return mesh_filter; }
 
-        void SetMVP(glm::mat4 mvp) { this->mvp = mvp; }
-
-        glm::mat4 GetMVP() { return mvp; }
-
         void Render();
 
     private:
         Material *material = nullptr;
         MeshFilter *mesh_filter = nullptr;
-        unsigned int program_id;
-        unsigned int vaoHandle;
-        unsigned int vboHandle;
-        glm::mat4 mvp;
-        GLuint kVBO, kEBO;
-        GLuint kVAO;
+        unsigned int shaderProgramHandle = 0;
+        unsigned int vaoHandle = 0;
+        unsigned int vboHandle = 0;
+
         void Prepare();
+
+        void SetGLEnabled(unsigned int state, bool enabled);
     };
 
 } // DivineBrush

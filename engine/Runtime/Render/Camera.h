@@ -154,7 +154,7 @@ namespace DivineBrush {
 
         static void RenderAll();
 
-        static Camera* GetCurrentCamera() {
+        static Camera *GetCurrentCamera() {
             return current_camera;
         }
 
@@ -175,13 +175,13 @@ namespace DivineBrush {
         float top;
 
         Transform *transform;
-        unsigned int clear_flag = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-        glm::vec4 clear_color;
+        unsigned int clear_flag = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
+        glm::vec4 clear_color = glm::vec4(49.f / 255, 77.f / 255, 121.f / 255, 1.f);
 
         glm::mat4 view;
         glm::mat4 projection;
         static std::vector<Camera *> cameras;
-        static Camera* current_camera;
+        static Camera *current_camera;
 
         static void SortByDepth();
     };

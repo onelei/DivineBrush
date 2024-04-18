@@ -5,9 +5,9 @@
 #ifndef ENGINE_SETUNIFORMMATRIX4FVHANDLER_H
 #define ENGINE_SETUNIFORMMATRIX4FVHANDLER_H
 
-#include <glm/mat4x4.hpp>
 #include "RenderCommandHandler.h"
 #include "cstdlib"
+#include <glm/mat4x4.hpp>
 
 namespace DivineBrush {
 
@@ -17,14 +17,16 @@ namespace DivineBrush {
             renderCommand = RenderCommand::SetUniformMatrix4fv;
         }
 
-        ~SetUniformMatrix4fvHandler() {
-            free(uniformName);
-        }
+        ~SetUniformMatrix4fvHandler() override = default;
 
         unsigned int shaderProgramHandle = 0;
         char *uniformName = nullptr;
         bool transpose = false;
-        glm::mat4 *matrix = nullptr;
+        glm::mat4 matrix = glm::mat4(0.0f);
+
+        void Run() override;
+
+        void Clear() override;
     };
 
 

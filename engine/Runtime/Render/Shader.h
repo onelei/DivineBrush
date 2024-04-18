@@ -19,11 +19,11 @@ namespace DivineBrush {
 
         void Parse(const std::string &shaderName);
 
-        void CreateProgram(const std::string &vertex_shader_text, const std::string &fragment_shader_text);
+        void CreateProgram(const char *vertex_shader_text, const char *fragment_shader_text);
 
-        void Use();
+        void Use() const;
 
-        unsigned int GetProgramId() const { return program_id; }
+        unsigned int GetProgramHandle() const { return shaderProgramHandle; }
 
         static Shader *Find(const std::string &shaderName);
 
@@ -31,7 +31,6 @@ namespace DivineBrush {
         std::string shader_name;
 
     private:
-        unsigned int program_id;
         unsigned int shaderProgramHandle = 0;
         static std::unordered_map<std::string, Shader *> shader_map;
     };

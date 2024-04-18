@@ -7,7 +7,11 @@
 #include "../Render/MeshFilter.h"
 #include "../Component/GameObject.h"
 #include "rttr/registration.h"
-#include "../render/RenderControl.h"
+#include "../RenderPipeline/Handler/SetStencilFuncHandler.h"
+#include "../../depends/template/ObjectPool.h"
+#include "../RenderPipeline/RenderPipeline.h"
+#include "../RenderPipeline/Handler/SetStencilOpHandler.h"
+#include "../RenderPipeline/Handler/SetStateEnableHandler.h"
 
 namespace DivineBrush::UI {
     using namespace rttr;
@@ -66,13 +70,26 @@ namespace DivineBrush::UI {
 
     void Image::OnPreprocessRender() {
         Component::OnPreprocessRender();
-        glStencilFunc(GL_EQUAL, 0x1, 0xFF);//等于1 通过测试 ,就是上次绘制的图 的范围 才通过测试。
-        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);//没有通过测试的，保留原来的，也就是保留上一次的值。
+        auto funcHandler = ObjectPool<SetStencilFuncHandler>::Get();
+        funcHandler->func = GL_EQUAL;
+        funcHandler->ref = 0x1;
+        funcHandler->mask = 0xFF;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(funcHandler);
+
+        //没有通过测试的，保留原来的，也就是保留上一次的值。
+        auto opHandler = ObjectPool<SetStencilOpHandler>::Get();
+        opHandler->fail = GL_KEEP;
+        opHandler->zFail = GL_KEEP;
+        opHandler->zPass = GL_KEEP;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(opHandler);
     }
 
     void Image::OnPostprocessRender() {
         Component::OnPostprocessRender();
-        RenderControl::Disable(RenderControl::RenderState::StencilTest);
+        auto opHandler = ObjectPool<SetStateEnableHandler>::Get();
+        opHandler->enable = false;
+        opHandler->state = GL_STENCIL_TEST;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(opHandler);
     }
 
 } // DivineBrush

@@ -14,7 +14,8 @@ namespace DivineBrush {
         registration::class_<MeshFilter>("MeshFilter")
                 .constructor<>()(rttr::policy::ctor::as_raw_ptr);
     }
-    MeshFilter::MeshFilter():mesh(nullptr) {
+
+    MeshFilter::MeshFilter() : mesh(nullptr) {
 
     }
 
@@ -26,7 +27,7 @@ namespace DivineBrush {
 
     void MeshFilter::LoadMesh(const char *mesh_file_path) {
         //读取 Mesh文件头
-        std::ifstream input_file_stream(Application::GetDataPath()+mesh_file_path, std::ios::in | std::ios::binary);
+        std::ifstream input_file_stream(Application::GetDataPath() + mesh_file_path, std::ios::in | std::ios::binary);
         MeshFileHead mesh_file_head;
         input_file_stream.read((char *) &mesh_file_head, sizeof(mesh_file_head));
         //读取顶点数据
@@ -45,7 +46,7 @@ namespace DivineBrush {
         mesh->vertex_index_data = vertex_index_data;
     }
 
-    void ExportMesh(char* mesh_file_path) {
+    void ExportMesh(char *mesh_file_path) {
 //        std::ofstream output_file_stream(Application::GetDataPath()+mesh_file_path, std::ios::out | std::ios::binary);
 //        MeshFilter::MeshFileHead mesh_file_head;
 //        mesh_file_head.type[0] = 'm';

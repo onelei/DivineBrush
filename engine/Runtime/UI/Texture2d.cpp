@@ -138,11 +138,13 @@ namespace DivineBrush {
         handler->width = texture2d->width;
         handler->height = texture2d->height;
         handler->textureFormat = texture2d->gl_texture_format;
-        handler->compressSize = fileHead.compressSize;
-        handler->data = data;
+        auto compressSize = fileHead.compressSize;
+        handler->compressSize = compressSize;
+        handler->data= static_cast<unsigned char *>(malloc(compressSize));
+        memcpy(handler->data, data, compressSize);
         RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
 
-        //delete (data);
+        free (data);
         return texture2d;
     }
 
@@ -190,7 +192,8 @@ namespace DivineBrush {
     }
 
     Texture2d *Texture2d::Create(unsigned short width, unsigned short height, unsigned int server_format,
-                                 unsigned int client_format, unsigned int data_type, unsigned char *data) {
+                                 unsigned int client_format, unsigned int data_type, unsigned char *data,
+                                 unsigned int data_size) {
         auto texture2d = new Texture2d();
         texture2d->gl_texture_format = server_format;
         texture2d->width = width;
@@ -203,7 +206,8 @@ namespace DivineBrush {
         handler->glTextureFormat = texture2d->gl_texture_format;
         handler->clientFormat = client_format;
         handler->dataType = data_type;
-        handler->data = data;
+        handler->data= static_cast<unsigned char *>(malloc(data_size));
+        memcpy(handler->data, data, data_size);
         RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
 
         return texture2d;

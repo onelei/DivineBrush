@@ -16,13 +16,15 @@ namespace DivineBrush {
             renderCommand = RenderCommand::UpdateVBOSubData;
         }
 
-        ~UpdateVBOSubDataHandler() {
-            free(vertexData);
-        }
+        ~UpdateVBOSubDataHandler() override = default;
 
         unsigned int vboHandle = 0;
         unsigned int vertexDataSize = 0;
         void *vertexData = nullptr;
+
+        void Run() override;
+
+        void Clear() override;
     };
 
 } // DivineBrush

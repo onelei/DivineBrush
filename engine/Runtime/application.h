@@ -11,9 +11,6 @@
 namespace DivineBrush {
     class Application {
     public:
-        static GLuint color_texture_id;//FBO 颜色纹理
-        static GLuint depth_texture_id;//FBO 深度纹理
-
         static const std::string &GetDataPath() {
             return data_path;
         }

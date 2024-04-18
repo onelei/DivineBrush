@@ -15,10 +15,14 @@ namespace DivineBrush {
             renderCommand = RenderCommand::SetStateEnable;
         }
 
-        ~SetStateEnableHandler() = default;
+        ~SetStateEnableHandler() override = default;
 
         unsigned int state = 0;
         bool enable = false;
+
+        void Run() override;
+
+        void Clear() override;
     };
 
 

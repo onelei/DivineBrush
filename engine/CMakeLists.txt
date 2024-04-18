@@ -24,6 +24,7 @@ list(APPEND CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/depends/easy_profiler/lib/cm
 find_package(easy_profiler CONFIG REQUIRED)
 find_package(sol2 CONFIG REQUIRED)
 find_package(Lua REQUIRED)
+find_package(SPSCQueue CONFIG REQUIRED)
 
 set(IMGUI_BACKENDS
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_glfw.cpp
@@ -157,7 +158,6 @@ set(IMGUI_BACKENDS
         Runtime/RenderPipeline/RenderProgramGenerater.h
         depends/template/Singleton.h
         depends/template/ObjectPool.h
-        depends/template/ObjectPool.cpp
         depends/template/SharedPTRObjectPool.cpp
         depends/template/SharedPTRObjectPool.h
         Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp
@@ -203,4 +203,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         spdlog::spdlog
         easy_profiler
         sol2
-        ${LUA_LIBRARIES})
+        ${LUA_LIBRARIES}
+        SPSCQueue::SPSCQueue)

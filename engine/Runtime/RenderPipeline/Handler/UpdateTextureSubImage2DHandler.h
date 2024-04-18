@@ -16,9 +16,7 @@ namespace DivineBrush {
             renderCommand = RenderCommand::UpdateTextureSubImage2D;
         }
 
-        ~UpdateTextureSubImage2DHandler() {
-            free(data);
-        }
+        ~UpdateTextureSubImage2DHandler() override = default;
 
         unsigned int textureHandle = 0;
         int x = 0;

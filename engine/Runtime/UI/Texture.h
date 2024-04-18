@@ -24,7 +24,11 @@ namespace DivineBrush {
 
         ~Texture();
 
-    public:
+        unsigned int GetTextureHandle() {
+            return textureHandle;
+        }
+
+    protected:
         GLint mipmapCount = 0;
         GLsizei width = 0;
         GLsizei height = 0;

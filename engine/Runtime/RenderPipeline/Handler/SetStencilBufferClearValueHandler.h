@@ -14,9 +14,13 @@ namespace DivineBrush {
             renderCommand = RenderCommand::SetStencilBufferClearValue;
         }
 
-        ~SetStencilBufferClearValueHandler() = default;
+        ~SetStencilBufferClearValueHandler() override = default;
 
         int clearValue = 0;
+
+        void Run() override;
+
+        void Clear() override;
     };
 
 } // DivineBrush

@@ -26,7 +26,8 @@ namespace DivineBrush {
         static void CompressFile(std::string imageFilePath, std::string targetImageFilePath);
 
         static Texture2d *Create(unsigned short width, unsigned short height, unsigned int server_format,
-                                 unsigned int client_format, unsigned int data_type, unsigned char *data);
+                                 unsigned int client_format, unsigned int data_type, unsigned char *data,
+                                 unsigned int data_size);
 
         int GetWidth() const {
             return width;

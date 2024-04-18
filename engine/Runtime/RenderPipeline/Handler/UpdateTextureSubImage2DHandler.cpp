@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include "UpdateTextureSubImage2DHandler.h"
 #include "../RenderPipeline.h"
+#include "../../template/ObjectPool.h"
 
 namespace DivineBrush {
     void UpdateTextureSubImage2DHandler::Run() {
@@ -18,5 +19,7 @@ namespace DivineBrush {
 
     void UpdateTextureSubImage2DHandler::Clear() {
         RenderCommandHandler::Clear();
+        free(data);
+        DivineBrush::ObjectPool<DivineBrush::UpdateTextureSubImage2DHandler>::Release(this);
     }
 } // DivineBrush

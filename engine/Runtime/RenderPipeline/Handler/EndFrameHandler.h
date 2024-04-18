@@ -6,6 +6,7 @@
 #define ENGINE_ENDFRAMEHANDLER_H
 
 #include "AsyncRenderCommandHandler.h"
+#include "imgui_impl_glfw.h"
 
 namespace DivineBrush {
 
@@ -15,9 +16,12 @@ namespace DivineBrush {
             renderCommand = RenderCommand::EndFrame;
         }
 
-        ~EndFrameHandler() = default;
+        ~EndFrameHandler() override = default;
+        GLFWwindow* window = nullptr;
 
         void Run() override;
+
+        void Clear() override;
     };
 
 } // DivineBrush

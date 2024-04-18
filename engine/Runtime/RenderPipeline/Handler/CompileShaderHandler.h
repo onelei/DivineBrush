@@ -13,17 +13,14 @@ namespace DivineBrush {
 
     class CompileShaderHandler : public RenderCommandHandler {
     public:
-        CompileShaderHandler(){
+        CompileShaderHandler() {
             renderCommand = RenderCommand::CompileShader;
         }
 
-        ~CompileShaderHandler() {
-            //free(vertexShaderSource);
-            //free(fragmentShaderSource);
-        }
+        ~CompileShaderHandler() override = default;
 
-        std::string vertexShaderSource;
-        std::string fragmentShaderSource;
+        char *vertexShaderSource{};
+        char *fragmentShaderSource{};
         unsigned int shaderProgramHandle = 0;
 
         void Run() override;

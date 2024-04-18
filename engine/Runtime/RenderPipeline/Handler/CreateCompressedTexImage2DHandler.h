@@ -17,9 +17,7 @@ namespace DivineBrush {
             renderCommand = RenderCommand::CreateCompressedTexImage2D;
         }
 
-        ~CreateCompressedTexImage2DHandler() {
-            free(data);
-        }
+        ~CreateCompressedTexImage2DHandler() override = default;
 
         unsigned int textureHandle = 0;
         int width = 0;

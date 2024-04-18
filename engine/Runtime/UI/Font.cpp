@@ -58,11 +58,12 @@ namespace DivineBrush {
         font->ft_face = ft_face;
         font_map[fontPath] = font;
         //创建空白的、仅Alpha通道纹理，用于生成文字。
-        auto *pixels = (unsigned char *) malloc(font->font_texture_size * font->font_texture_size);
+        auto dataSize = font->font_texture_size * font->font_texture_size;
+        auto *pixels = (unsigned char *) malloc(dataSize);
         memset(pixels, 0, font->font_texture_size * font->font_texture_size);
         font->font_texture = Texture2d::Create(font->font_texture_size, font->font_texture_size, GL_RED, GL_RED,
-                                               GL_UNSIGNED_BYTE, pixels);
-        delete pixels;
+                                               GL_UNSIGNED_BYTE, pixels, dataSize);
+        free(pixels);
         return font;
     }
 
@@ -89,21 +90,18 @@ namespace DivineBrush {
             return;
         }
         //glTexSubImage2D
-        glBindTexture(GL_TEXTURE_2D, font_texture->gl_texture_id);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexSubImage2D(GL_TEXTURE_2D, 0, font_texture_fill_x, font_texture_fill_y, ft_bitmap.width, ft_bitmap.rows,
-                        GL_RED, GL_UNSIGNED_BYTE,
-                        ft_bitmap.buffer);
         auto handler = ObjectPool<UpdateTextureSubImage2DHandler>::Get();
-        handler->textureHandle = font_texture->textureHandle;
+        handler->textureHandle = font_texture->GetTextureHandle();
         handler->x = font_texture_fill_x;
         handler->y = font_texture_fill_y;
         handler->width = ft_bitmap.width;
         handler->height = ft_bitmap.rows;
         handler->format = GL_RED;
         handler->type = GL_UNSIGNED_BYTE;
-        handler->data = ft_bitmap.buffer;
-        handler->dataSize = ft_bitmap.width * ft_bitmap.rows * sizeof(GL_UNSIGNED_BYTE);
+        auto dataSize = ft_bitmap.width * ft_bitmap.rows * sizeof(GL_UNSIGNED_BYTE);
+        handler->data= (unsigned char*)malloc(dataSize);
+        memcpy(handler->data, ft_bitmap.buffer, dataSize);
+        handler->dataSize = dataSize;
         RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
 
         character_map[ch] = new Character(font_texture_fill_x * 1.0f / font_texture_size,

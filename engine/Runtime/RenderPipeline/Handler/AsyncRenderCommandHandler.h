@@ -13,14 +13,16 @@ namespace DivineBrush {
     public:
         AsyncRenderCommandHandler() {
             renderCommand = RenderCommand::None;
-            //isNeedReturnResult = true;
+            isWait = true;
         }
 
-        ~AsyncRenderCommandHandler() = default;
+        ~AsyncRenderCommandHandler() override = default;
 
         virtual void Wait();
 
         void Run() override;
+
+        void Clear() override;
     };
 
 

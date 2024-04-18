@@ -15,10 +15,14 @@ namespace DivineBrush {
             renderCommand = RenderCommand::BindVAOAndDrawElements;
         }
 
-        ~BindVAOAndDrawElementsHandler() = default;
+        ~BindVAOAndDrawElementsHandler() override = default;
 
         unsigned int vaoHandle = 0;
         unsigned int vertexIndexCount = 0;
+
+        void Run() override;
+
+        void Clear() override;
     };
 } // DivineBrush
 

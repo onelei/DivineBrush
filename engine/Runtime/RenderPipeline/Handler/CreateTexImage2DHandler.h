@@ -16,9 +16,7 @@ namespace DivineBrush {
             renderCommand = RenderCommand::CreateTexImage2D;
         }
 
-        ~CreateTexImage2DHandler() {
-            free(data);
-        }
+        ~CreateTexImage2DHandler() override = default;
 
         unsigned int textureHandle = 0;
         int width = 0;
@@ -29,6 +27,7 @@ namespace DivineBrush {
         unsigned char *data = nullptr;
 
         void Run() override;
+
         void Clear() override;
     };
 

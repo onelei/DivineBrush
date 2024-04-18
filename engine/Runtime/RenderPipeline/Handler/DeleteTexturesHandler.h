@@ -9,20 +9,20 @@
 #include "cstdlib"
 
 namespace DivineBrush {
-
     class DeleteTexturesHandler : public RenderCommandHandler {
     public:
         DeleteTexturesHandler() {
             renderCommand = RenderCommand::DeleteTextures;
         }
 
-        ~DeleteTexturesHandler() {
-            free(textureHandleArray);
-        }
+        ~DeleteTexturesHandler() override = default;
 
         unsigned int *textureHandleArray = nullptr;
         int textureCount = 0;
+
         void Run() override;
+
+        void Clear() override;
     };
 
 } // DivineBrush

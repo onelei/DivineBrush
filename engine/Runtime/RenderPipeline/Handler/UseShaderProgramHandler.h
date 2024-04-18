@@ -5,7 +5,6 @@
 #ifndef ENGINE_USESHADERPROGRAMHANDLER_H
 #define ENGINE_USESHADERPROGRAMHANDLER_H
 
-#include "../RenderCommand.h"
 #include "RenderCommandHandler.h"
 
 namespace DivineBrush {
@@ -16,14 +15,14 @@ namespace DivineBrush {
             renderCommand = RenderCommand::UseShaderProgram;
         }
 
-        ~UseShaderProgramHandler() = default;
+        ~UseShaderProgramHandler() override = default;
 
         unsigned int shaderProgramHandle = 0;
 
         void Run() override;
+
+        void Clear() override;
     };
-
-
 } // DivineBrush
 
 #endif //ENGINE_USESHADERPROGRAMHANDLER_H

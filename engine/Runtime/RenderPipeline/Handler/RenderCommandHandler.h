@@ -17,8 +17,8 @@ namespace DivineBrush {
 
         RenderCommand renderCommand = RenderCommand::None;
 
-        //bool isNeedReturnResult = false;
-        //bool isReturnResultSet = false;
+        bool isWait = false;
+        bool isFinish = false;
         virtual void Run();
 
         virtual void Clear();

@@ -15,13 +15,17 @@ namespace DivineBrush {
             renderCommand = RenderCommand::SetClearFlagAndClearColorBuffer;
         }
 
-        ~SetClearFlagAndClearColorBufferHandler() = default;
+        ~SetClearFlagAndClearColorBufferHandler() override = default;
 
         unsigned int clearFlag = 0;
         float clearColorR = 0.0f;
         float clearColorG = 0.0f;
         float clearColorB = 0.0f;
         float clearColorA = 0.0f;
+
+        void Run() override;
+
+        void Clear() override;
     };
 
 

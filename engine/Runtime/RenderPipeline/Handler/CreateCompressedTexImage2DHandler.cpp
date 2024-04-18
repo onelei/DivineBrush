@@ -6,6 +6,7 @@
 #include <string>
 #include <GL/glew.h>
 #include "../RenderPipeline.h"
+#include "../../template/ObjectPool.h"
 
 namespace DivineBrush {
     void CreateCompressedTexImage2DHandler::Run() {
@@ -17,11 +18,12 @@ namespace DivineBrush {
         glCompressedTexImage2D(GL_TEXTURE_2D, 0, textureFormat, width, height, 0, compressSize, data);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        delete (data);
+        free (data);
         RenderPipeline::GetInstance().GetRenderProgramGenerater()->SetTexture(textureHandle, gl_texture_id);
     }
 
     void CreateCompressedTexImage2DHandler::Clear() {
         RenderCommandHandler::Clear();
+        DivineBrush::ObjectPool<DivineBrush::CreateCompressedTexImage2DHandler>::Release(this);
     }
 } // DivineBrush

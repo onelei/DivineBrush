@@ -15,11 +15,15 @@ namespace DivineBrush {
             renderCommand = RenderCommand::SetStencilOp;
         }
 
-        ~SetStencilOpHandler() = default;
+        ~SetStencilOpHandler() override = default;
 
         unsigned int fail = 0;
-        unsigned int zTestFail = 0;
-        unsigned int zTestPass = 0;
+        unsigned int zFail = 0;
+        unsigned int zPass = 0;
+
+        void Run() override;
+
+        void Clear() override;
     };
 
 } // DivineBrush

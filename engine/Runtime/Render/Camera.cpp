@@ -5,13 +5,14 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform2.hpp>
-#include <glm/gtx/euler_angles.hpp>
 #include "Camera.h"
 #include "../Component/GameObject.h"
 #include "rttr/registration.h"
 #include "easy/details/profiler_colors.h"
 #include "easy/profiler.h"
+#include "../RenderPipeline/Handler/SetClearFlagAndClearColorBufferHandler.h"
+#include "../../depends/template/ObjectPool.h"
+#include "../RenderPipeline/RenderPipeline.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -25,8 +26,6 @@ namespace DivineBrush {
     Camera *Camera::current_camera;
 
     Camera::Camera() {
-        clear_flag = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
-        clear_color = glm::vec4(49.f / 255, 77.f / 255, 121.f / 255, 1.f);
         cameras.emplace_back(this);
     }
 
@@ -38,8 +37,13 @@ namespace DivineBrush {
     }
 
     void Camera::Clear() {
-        glClear(clear_flag);
-        glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
+        auto handler = ObjectPool<SetClearFlagAndClearColorBufferHandler>::Get();
+        handler->clearFlag = clear_flag;
+        handler->clearColorR = clear_color.r;
+        handler->clearColorG = clear_color.g;
+        handler->clearColorB = clear_color.b;
+        handler->clearColorA = clear_color.a;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
     }
 
     void Camera::Render() {

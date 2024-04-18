@@ -16,10 +16,14 @@ namespace DivineBrush {
             renderCommand = RenderCommand::ActiveAndBindTexture;
         }
 
-        ~ActiveAndBindTextureHandler() = default;
+        ~ActiveAndBindTextureHandler() override = default;
 
         unsigned int textureUnit = 0;
         unsigned int textureHandle = 0;
+
+        void Run() override;
+
+        void Clear() override;
     };
 
 } // DivineBrush

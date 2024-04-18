@@ -6,7 +6,12 @@
 #include "rttr/registration.h"
 #include "../Render/MeshFilter.h"
 #include "../Component/GameObject.h"
-#include "../Render/RenderControl.h"
+#include "../RenderPipeline/Handler/SetStateEnableHandler.h"
+#include "../RenderPipeline/RenderPipeline.h"
+#include "../../depends/template/ObjectPool.h"
+#include "../RenderPipeline/Handler/SetStencilBufferClearValueHandler.h"
+#include "../RenderPipeline/Handler/SetStencilFuncHandler.h"
+#include "../RenderPipeline/Handler/SetStencilOpHandler.h"
 
 namespace DivineBrush::UI {
     using namespace rttr;
@@ -65,10 +70,28 @@ namespace DivineBrush::UI {
 
     void Mask::OnPreprocessRender() {
         Component::OnPreprocessRender();
-        RenderControl::Enable(RenderControl::RenderState::StencilTest);
-        glClearStencil(0);//设置默认模版值 0
-        glStencilFunc(GL_NEVER, 0x0, 0xFF);//通通不通过模版测试。
-        glStencilOp(GL_INCR, GL_INCR, GL_INCR);//像素的模版值 0+1 = 1
+        ///开启模版测试
+        auto opHandler = ObjectPool<SetStateEnableHandler>::Get();
+        opHandler->enable = true;
+        opHandler->state = GL_STENCIL_TEST;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(opHandler);
+        ///设置默认模版值 0
+        auto clearHandler = ObjectPool<SetStencilBufferClearValueHandler>::Get();
+        clearHandler->clearValue = 0;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(clearHandler);
+        ///通通不通过模版测试。
+        auto funcHandler = ObjectPool<SetStencilFuncHandler>::Get();
+        funcHandler->func = GL_NEVER;
+        funcHandler->ref = 0x0;
+        funcHandler->mask = 0xFF;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(funcHandler);
+
+        ///设置模版值为0+1 = 1
+        auto opHandler2 = ObjectPool<SetStencilOpHandler>::Get();
+        opHandler2->fail = GL_INCR;
+        opHandler2->zFail = GL_INCR;
+        opHandler2->zPass = GL_INCR;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(opHandler2);
     }
 
     void Mask::OnPostprocessRender() {
@@ -81,6 +104,10 @@ namespace DivineBrush::UI {
 
     void Mask::OnDisable() {
         Component::OnDisable();
-        RenderControl::Disable(RenderControl::RenderState::StencilTest);
+        ///关闭模版测试
+        auto opHandler = ObjectPool<SetStateEnableHandler>::Get();
+        opHandler->enable = false;
+        opHandler->state = GL_STENCIL_TEST;
+        RenderPipeline::GetInstance().AddRenderCommandHandler(opHandler);
     }
 } // DivineBrush

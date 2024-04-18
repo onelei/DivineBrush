@@ -6,6 +6,7 @@
 #define ENGINE_RENDER_H
 
 #include "MeshRender.h"
+#include "../RenderPipeline/RenderPipeline.h"
 
 namespace DivineBrush {
 
@@ -25,7 +26,9 @@ namespace DivineBrush {
         void Update();
 
     private:
-        GLFWwindow *window;
+        void UpdateScreenSize();
+        GLFWwindow *gameWindow;
+        GLFWwindow *editorWindow;
         static bool useImGui;
     };
 
