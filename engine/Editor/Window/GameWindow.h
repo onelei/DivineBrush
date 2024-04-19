@@ -18,7 +18,7 @@ namespace DivineBrush::Editor {
     public:
         GameWindow();
 
-        ~GameWindow();
+        ~GameWindow() override;
 
         void OnGUI() override;
 

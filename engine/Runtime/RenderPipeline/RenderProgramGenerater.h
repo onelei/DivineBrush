@@ -12,53 +12,29 @@ namespace DivineBrush {
 
     class RenderProgramGenerater {
     public:
-        unsigned int CreateShader() {
-            return ++shaderIndex;
-        }
+        unsigned int CreateShader();
 
-        unsigned int CreateVAO() {
-            return ++vaoIndex;
-        }
+        unsigned int CreateVAO();
 
-        unsigned int CreateVBO() {
-            return ++vboIndex;
-        }
+        unsigned int CreateVBO();
 
-        unsigned int CreateTexture() {
-            return ++textureIndex;
-        }
+        unsigned int CreateTexture();
 
-        void SetShader(unsigned int key, GLuint value) {
-            shaderMap[key] = value;
-        }
+        void SetShader(unsigned int key, GLuint value);
 
-        GLuint GetShader(unsigned int key) {
-            return shaderMap[key];
-        }
+        GLuint GetShader(unsigned int key);
 
-        void SetVAO(unsigned int key, GLuint value) {
-            vaoMap[key] = value;
-        }
+        void SetVAO(unsigned int key, GLuint value);
 
-        GLuint GetVAO(unsigned int key) {
-            return vaoMap[key];
-        }
+        GLuint GetVAO(unsigned int key);
 
-        void SetVBO(unsigned int key, GLuint value) {
-            vboMap[key] = value;
-        }
+        void SetVBO(unsigned int key, GLuint value);
 
-        GLuint GetVBO(unsigned int key) {
-            return vboMap[key];
-        }
+        GLuint GetVBO(unsigned int key);
 
-        void SetTexture(unsigned int key, GLuint value) {
-            textureMap[key] = value;
-        }
+        void SetTexture(unsigned int key, GLuint value);
 
-        GLuint GetTexture(unsigned int key) {
-            return textureMap[key];
-        }
+        GLuint GetTexture(unsigned int key);
 
     private:
         unsigned int shaderIndex;//Shader程序索引

@@ -162,7 +162,9 @@ set(IMGUI_BACKENDS
         depends/template/SharedPTRObjectPool.h
         Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp
         Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp
-        Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp)
+        Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp
+        depends/template/Singleton.cpp
+        depends/template/ObjectPool.cpp)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 

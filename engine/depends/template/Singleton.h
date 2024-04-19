@@ -17,12 +17,7 @@ namespace DivineBrush {
         Singleton &operator=(const Singleton &) = delete;
 
         // 提供一个静态方法来获取单例对象的引用
-        static T &GetInstance() {
-            // 局部静态变量的初始化是线程安全的，在C++11及更高版本中得到保证
-            static T instance;
-            return instance;
-        }
-
+        static T &GetInstance() ;
     protected:
         // 保护构造函数，防止外部构造
         Singleton() {}
