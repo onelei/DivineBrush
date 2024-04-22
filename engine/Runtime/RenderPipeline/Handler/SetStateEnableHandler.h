@@ -11,11 +11,9 @@ namespace DivineBrush {
 
     class SetStateEnableHandler : public RenderCommandHandler {
     public:
-        SetStateEnableHandler() {
-            renderCommand = RenderCommand::SetStateEnable;
-        }
+        SetStateEnableHandler();
 
-        ~SetStateEnableHandler() override = default;
+        ~SetStateEnableHandler();
 
         unsigned int state = 0;
         bool enable = false;

@@ -2,11 +2,19 @@
 // Created by onelei on 2024/4/11.
 //
 
-#include "SetStencilFuncHandler.h"
 #include "GL/glew.h"
-#include "../../template/ObjectPool.h"
+#include "SetStencilFuncHandler.h"
+#include "../../../depends/template/ObjectPool.h"
 
 namespace DivineBrush {
+    SetStencilFuncHandler::SetStencilFuncHandler() {
+        renderCommand = DivineBrush::RenderCommand::SetStencilFunc;
+    }
+
+    SetStencilFuncHandler::~SetStencilFuncHandler(){
+
+    }
+
     void SetStencilFuncHandler::Run() {
         RenderCommandHandler::Run();
         glStencilFunc(func, ref, mask);

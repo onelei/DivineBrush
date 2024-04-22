@@ -5,9 +5,18 @@
 #include <GL/glew.h>
 #include "UpdateScreenSizeHandler.h"
 #include "../../Screen/Screen.h"
-#include "../../template/ObjectPool.h"
+#include "../../../depends/template/ObjectPool.h"
 
 namespace DivineBrush {
+
+    UpdateScreenSizeHandler::UpdateScreenSizeHandler() {
+        renderCommand = DivineBrush::RenderCommand::UpdateScreenSize;
+    }
+
+    UpdateScreenSizeHandler::~UpdateScreenSizeHandler() {
+
+    }
+
     void UpdateScreenSizeHandler::Run() {
         RenderCommandHandler::Run();
         int width, height;

@@ -5,10 +5,18 @@
 #include "CompileShaderHandler.h"
 #include "../../../depends/debug/debug.h"
 #include <GL/glew.h>
-#include "../RenderPipeline.h"
-#include "../../template/ObjectPool.h"
+#include "../../../depends/template/ObjectPool.h"
+#include "../RenderGenerater.h"
 
 namespace DivineBrush {
+    CompileShaderHandler::CompileShaderHandler() {
+        renderCommand = DivineBrush::RenderCommand::CompileShader;
+    }
+
+    CompileShaderHandler::~CompileShaderHandler() {
+
+    }
+
     void CompileShaderHandler::Run() {
         RenderCommandHandler::Run();
         //创建顶点Shader
@@ -63,7 +71,7 @@ namespace DivineBrush {
             return;
         }
 
-        RenderPipeline::GetInstance().GetRenderProgramGenerater()->SetShader(shaderProgramHandle, program_id);
+        RenderGenerater::SetShader(shaderProgramHandle, program_id);
     }
 
     void CompileShaderHandler::Clear() {

@@ -19,6 +19,7 @@
 #include "../RenderPipeline/Handler/ActiveAndBindTextureHandler.h"
 #include "../RenderPipeline/Handler/SetUniform1iHandler.h"
 #include "../RenderPipeline/Handler/BindVAOAndDrawElementsHandler.h"
+#include "../RenderPipeline/RenderGenerater.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -37,8 +38,8 @@ namespace DivineBrush {
         if (!mesh_filter) {
             return;
         }
-        vaoHandle = RenderPipeline::GetInstance().GetRenderProgramGenerater()->CreateVAO();
-        vboHandle = RenderPipeline::GetInstance().GetRenderProgramGenerater()->CreateVBO();
+        vaoHandle = RenderGenerater::CreateVAO();
+        vboHandle = RenderGenerater::CreateVBO();
         auto handler = ObjectPool<CreateVAOHandler>::Get();
         auto mesh = mesh_filter->GetMesh();
         handler->vaoHandle = vaoHandle;

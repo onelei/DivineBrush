@@ -7,12 +7,13 @@
 //#include <sstream>
 #include <fstream>
 #include "Shader.h"
-#include "../application.h"
+#include "../Application.h"
 #include "../../depends/debug/debug.h"
 #include "../RenderPipeline/RenderPipeline.h"
 #include "../../depends/template/ObjectPool.h"
 #include "../RenderPipeline/Handler/CompileShaderHandler.h"
 #include "../RenderPipeline/Handler/UseShaderProgramHandler.h"
+#include "../RenderPipeline/RenderGenerater.h"
 
 namespace DivineBrush {
     std::unordered_map<std::string, Shader *> Shader::shader_map;
@@ -71,7 +72,7 @@ namespace DivineBrush {
     }
 
     void Shader::CreateProgram(const char* vertex_shader_text, const char* fragment_shader_text) {
-        shaderProgramHandle = RenderPipeline::GetInstance().GetRenderProgramGenerater()->CreateShader();
+        shaderProgramHandle = RenderGenerater::CreateShader();
         auto handler = ObjectPool<CompileShaderHandler>::Get();
         handler->vertexShaderSource= static_cast<char *>(malloc(strlen(vertex_shader_text) + 1));
         strcpy(handler->vertexShaderSource, vertex_shader_text);

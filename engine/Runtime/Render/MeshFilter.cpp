@@ -4,7 +4,7 @@
 
 #include <fstream>
 #include "MeshFilter.h"
-#include "../application.h"
+#include "../Application.h"
 #include "rttr/registration.h"
 
 namespace DivineBrush {

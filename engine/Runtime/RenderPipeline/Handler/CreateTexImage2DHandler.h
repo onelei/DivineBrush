@@ -12,11 +12,9 @@ namespace DivineBrush {
 
     class CreateTexImage2DHandler : public RenderCommandHandler {
     public:
-        CreateTexImage2DHandler() {
-            renderCommand = RenderCommand::CreateTexImage2D;
-        }
+        CreateTexImage2DHandler();
 
-        ~CreateTexImage2DHandler() override = default;
+        ~CreateTexImage2DHandler();
 
         unsigned int textureHandle = 0;
         int width = 0;

@@ -12,12 +12,11 @@ namespace DivineBrush {
 
     class EndFrameHandler : public AsyncRenderCommandHandler {
     public:
-        EndFrameHandler() {
-            renderCommand = RenderCommand::EndFrame;
-        }
+        EndFrameHandler();
 
-        ~EndFrameHandler() override = default;
-        GLFWwindow* window = nullptr;
+        ~EndFrameHandler();
+
+        GLFWwindow *window = nullptr;
 
         void Run() override;
 

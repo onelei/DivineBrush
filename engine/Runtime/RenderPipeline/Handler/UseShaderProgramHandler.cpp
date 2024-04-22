@@ -3,13 +3,22 @@
 //
 
 #include "UseShaderProgramHandler.h"
-#include "../RenderPipeline.h"
-#include "../../template/ObjectPool.h"
+#include "../../../depends/template/ObjectPool.h"
+#include "../RenderGenerater.h"
 
 namespace DivineBrush {
+
+    UseShaderProgramHandler::UseShaderProgramHandler() {
+        renderCommand = DivineBrush::RenderCommand::UseShaderProgram;
+    }
+
+    UseShaderProgramHandler::~UseShaderProgramHandler() {
+
+    }
+
     void UseShaderProgramHandler::Run() {
         RenderCommandHandler::Run();
-        auto shaderProgram = RenderPipeline::GetInstance().GetRenderProgramGenerater()->GetShader(shaderProgramHandle);
+        auto shaderProgram = RenderGenerater::GetShader(shaderProgramHandle);
         glUseProgram(shaderProgram);
     }
 

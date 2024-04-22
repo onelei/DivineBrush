@@ -2,8 +2,8 @@
 // Created by onelei on 2024/3/8.
 //
 
-#include "application.h"
-#include "render/Render.h"
+#include "Application.h"
+#include "Render/Render.h"
 
 namespace DivineBrush {
     std::string Application::data_path;

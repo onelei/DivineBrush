@@ -4,14 +4,22 @@
 
 #include "CreateVAOHandler.h"
 #include <GL/glew.h>
-#include "../RenderPipeline.h"
-#include "../../template/ObjectPool.h"
+#include "../../../depends/template/ObjectPool.h"
+#include "../RenderGenerater.h"
 
 namespace DivineBrush {
+    CreateVAOHandler::CreateVAOHandler() {
+        renderCommand = DivineBrush::RenderCommand::CreateVAO;
+    }
+
+    CreateVAOHandler::~CreateVAOHandler() {
+
+    }
+
     void CreateVAOHandler::Run() {
         RenderCommandHandler::Run();
 
-        auto program_id = RenderPipeline::GetInstance().GetRenderProgramGenerater()->GetShader(shaderProgramHandle);
+        auto program_id = RenderGenerater::GetShader(shaderProgramHandle);
         auto vpos_location = glGetAttribLocation(program_id, "a_pos");
         auto vcol_location = glGetAttribLocation(program_id, "a_color");
         auto a_uv_location = glGetAttribLocation(program_id, "a_uv");
@@ -25,7 +33,7 @@ namespace DivineBrush {
         glBindBuffer(GL_ARRAY_BUFFER, kVBO);
         //上传顶点数据到缓冲区对象
         glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, GL_STATIC_DRAW);
-        RenderPipeline::GetInstance().GetRenderProgramGenerater()->SetVBO(vboHandle, kVBO);
+        RenderGenerater::SetVBO(vboHandle, kVBO);
 
         //在GPU上创建缓冲区对象
         glGenBuffers(1, &kEBO);
@@ -56,7 +64,7 @@ namespace DivineBrush {
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-        RenderPipeline::GetInstance().GetRenderProgramGenerater()->SetVAO(vaoHandle, kVAO);
+        RenderGenerater::SetVAO(vaoHandle, kVAO);
     }
 
     void CreateVAOHandler::Clear() {

@@ -3,13 +3,21 @@
 //
 
 #include "BindVAOAndDrawElementsHandler.h"
-#include "../RenderPipeline.h"
-#include "../../template/ObjectPool.h"
+#include "../../../depends/template/ObjectPool.h"
+#include "../RenderGenerater.h"
 
 namespace DivineBrush {
+    BindVAOAndDrawElementsHandler::BindVAOAndDrawElementsHandler() {
+        renderCommand = DivineBrush::RenderCommand::BindVAOAndDrawElements;
+    }
+
+    BindVAOAndDrawElementsHandler::~BindVAOAndDrawElementsHandler() {
+
+    }
+
     void BindVAOAndDrawElementsHandler::Run() {
         RenderCommandHandler::Run();
-        auto kVAO = RenderPipeline::GetInstance().GetRenderProgramGenerater()->GetVAO(vaoHandle);
+        auto kVAO = RenderGenerater::GetVAO(vaoHandle);
         glBindVertexArray(kVAO);
         {
             //使用顶点索引进行绘制，最后的0表示数据偏移量。

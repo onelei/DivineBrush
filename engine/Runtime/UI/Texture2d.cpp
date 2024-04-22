@@ -5,12 +5,13 @@
 #include <iostream>
 #include <fstream>
 #include "Texture2d.h"
-#include "../application.h"
-#include "../RenderPipeline/RenderPipeline.h"
+#include "../Application.h"
 #include "../../depends/template/ObjectPool.h"
 #include "../RenderPipeline/Handler/CreateCompressedTexImage2DHandler.h"
 #include "../RenderPipeline/Handler/CreateTexImage2DHandler.h"
 #include "../RenderPipeline/Handler/DeleteTexturesHandler.h"
+#include "../RenderPipeline/RenderGenerater.h"
+#include "../RenderPipeline/RenderPipeline.h"
 
 namespace DivineBrush {
     static const unsigned int bytesPerPixel = 4;
@@ -131,7 +132,7 @@ namespace DivineBrush {
         texture2d->width = fileHead.width;
         texture2d->height = fileHead.height;
         texture2d->gl_texture_format = fileHead.textureFormat;
-        texture2d->textureHandle = RenderPipeline::GetInstance().GetRenderProgramGenerater()->CreateTexture();
+        texture2d->textureHandle = RenderGenerater::CreateTexture();
 
         auto handler = ObjectPool<CreateCompressedTexImage2DHandler>::Get();
         handler->textureHandle = texture2d->textureHandle;
@@ -200,7 +201,7 @@ namespace DivineBrush {
         texture2d->height = height;
 
         auto handler = ObjectPool<CreateTexImage2DHandler>::Get();
-        handler->textureHandle = RenderPipeline::GetInstance().GetRenderProgramGenerater()->CreateTexture();
+        handler->textureHandle = RenderGenerater::CreateTexture();
         handler->width = texture2d->width;
         handler->height = texture2d->height;
         handler->glTextureFormat = texture2d->gl_texture_format;

@@ -3,6 +3,7 @@
 //
 
 #include <GL/glew.h>
+#include <GL/gl.h>
 #include "imgui.h"
 #include "GameWindow.h"
 #include "../../runtime/Screen/Screen.h"

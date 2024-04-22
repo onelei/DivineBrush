@@ -11,13 +11,11 @@
 namespace DivineBrush {
     class UpdateScreenSizeHandler : public RenderCommandHandler {
     public:
-        UpdateScreenSizeHandler() {
-            renderCommand = RenderCommand::UpdateScreenSize;
-        }
+        UpdateScreenSizeHandler();
 
-        ~UpdateScreenSizeHandler() override = default;
+        ~UpdateScreenSizeHandler();
 
-        GLFWwindow* window = nullptr;
+        GLFWwindow *window = nullptr;
 
         void Run() override;
 

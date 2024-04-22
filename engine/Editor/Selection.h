@@ -5,7 +5,7 @@
 #ifndef ENGINE_SELECTION_H
 #define ENGINE_SELECTION_H
 
-#include "../depends/node/node.h"
+#include "../depends/node/Node.h"
 
 namespace DivineBrush {
 

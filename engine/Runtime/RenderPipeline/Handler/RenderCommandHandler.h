@@ -15,13 +15,24 @@ namespace DivineBrush {
 
         virtual ~RenderCommandHandler();
 
-        RenderCommand renderCommand = RenderCommand::None;
 
-        bool isWait = false;
-        bool isFinish = false;
         virtual void Run();
 
         virtual void Clear();
+
+        bool GetIsWait(){
+            return isWait;
+        };
+
+        RenderCommand GetRenderCommand(){
+            return renderCommand;
+        }
+
+    protected:
+        RenderCommand renderCommand = DivineBrush::RenderCommand::None;
+
+        bool isWait = false;
+        bool isFinish = false;
     };
 } // DivineBrush
 

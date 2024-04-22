@@ -10,11 +10,9 @@
 namespace DivineBrush {
     class SetStencilBufferClearValueHandler : public RenderCommandHandler {
     public:
-        SetStencilBufferClearValueHandler() {
-            renderCommand = RenderCommand::SetStencilBufferClearValue;
-        }
+        SetStencilBufferClearValueHandler();
 
-        ~SetStencilBufferClearValueHandler() override = default;
+        ~SetStencilBufferClearValueHandler();
 
         int clearValue = 0;
 

@@ -3,12 +3,19 @@
 //
 
 #include "CreateCompressedTexImage2DHandler.h"
-#include <string>
 #include <GL/glew.h>
-#include "../RenderPipeline.h"
-#include "../../template/ObjectPool.h"
+#include "../../../depends/template/ObjectPool.h"
+#include "../RenderGenerater.h"
 
 namespace DivineBrush {
+    CreateCompressedTexImage2DHandler::CreateCompressedTexImage2DHandler() {
+        renderCommand = DivineBrush::RenderCommand::CreateCompressedTexImage2D;
+    }
+
+    CreateCompressedTexImage2DHandler::~CreateCompressedTexImage2DHandler() {
+
+    }
+
     void CreateCompressedTexImage2DHandler::Run() {
         RenderCommandHandler::Run();
         // 创建纹理
@@ -19,7 +26,7 @@ namespace DivineBrush {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         free (data);
-        RenderPipeline::GetInstance().GetRenderProgramGenerater()->SetTexture(textureHandle, gl_texture_id);
+        RenderGenerater::SetTexture(textureHandle, gl_texture_id);
     }
 
     void CreateCompressedTexImage2DHandler::Clear() {

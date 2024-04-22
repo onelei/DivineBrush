@@ -5,19 +5,17 @@
 #ifndef ENGINE_CREATECOMPRESSEDTEXIMAGE2DHANDLER_H
 #define ENGINE_CREATECOMPRESSEDTEXIMAGE2DHANDLER_H
 
-#include "../RenderCommand.h"
+#include <cstdlib>
 #include "RenderCommandHandler.h"
-#include "cstdlib"
 
 namespace DivineBrush {
 
     class CreateCompressedTexImage2DHandler : public RenderCommandHandler {
-    public:
-        CreateCompressedTexImage2DHandler() {
-            renderCommand = RenderCommand::CreateCompressedTexImage2D;
-        }
 
-        ~CreateCompressedTexImage2DHandler() override = default;
+    public:
+        CreateCompressedTexImage2DHandler();
+
+        ~CreateCompressedTexImage2DHandler();
 
         unsigned int textureHandle = 0;
         int width = 0;

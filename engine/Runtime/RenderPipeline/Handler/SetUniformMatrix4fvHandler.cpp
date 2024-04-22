@@ -3,13 +3,21 @@
 //
 
 #include "SetUniformMatrix4fvHandler.h"
-#include "../RenderPipeline.h"
-#include "../../template/ObjectPool.h"
+#include "../../../depends/template/ObjectPool.h"
+#include "../RenderGenerater.h"
 
 namespace DivineBrush {
+    SetUniformMatrix4fvHandler::SetUniformMatrix4fvHandler() {
+        renderCommand = DivineBrush::RenderCommand::SetUniformMatrix4fv;
+    }
+
+    SetUniformMatrix4fvHandler::~SetUniformMatrix4fvHandler() {
+
+    }
+
     void SetUniformMatrix4fvHandler::Run() {
         RenderCommandHandler::Run();
-        auto shaderProgram = RenderPipeline::GetInstance().GetRenderProgramGenerater()->GetShader(shaderProgramHandle);
+        auto shaderProgram = RenderGenerater::GetShader(shaderProgramHandle);
         glUseProgram(shaderProgram);
         glUniformMatrix4fv(glGetUniformLocation(shaderProgram, uniformName), 1, transpose ? GL_TRUE : GL_FALSE,
                            &matrix[0][0]);

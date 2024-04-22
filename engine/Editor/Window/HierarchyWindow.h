@@ -7,7 +7,7 @@
 
 #include <imgui.h>
 #include "EditorWindow.h"
-#include "../../depends/node/node.h"
+#include "../../depends/node/Node.h"
 
 namespace DivineBrush::Editor {
     class EditorWindow;

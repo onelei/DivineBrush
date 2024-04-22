@@ -5,7 +5,7 @@
 #include "Material.h"
 #include <rapidxml/rapidxml.hpp>
 #include "rapidxml/rapidxml_utils.hpp"
-#include "../application.h"
+#include "../Application.h"
 #include <string>
 
 namespace DivineBrush {

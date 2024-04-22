@@ -2,8 +2,8 @@
 // Created by onelei on 2024/3/5.
 //
 
-#ifndef ENGINE_PROJECT_WINDOW_H
-#define ENGINE_PROJECT_WINDOW_H
+#ifndef ENGINE_PROJECTWINDOW_H
+#define ENGINE_PROJECTWINDOW_H
 
 #include <imgui.h>
 #include "EditorWindow.h"
@@ -26,4 +26,4 @@ namespace DivineBrush::Editor {
     };
 } // DivineBrush
 
-#endif //ENGINE_PROJECT_WINDOW_H
+#endif //ENGINE_PROJECTWINDOW_H

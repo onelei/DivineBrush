@@ -4,10 +4,18 @@
 
 #include "CreateTexImage2DHandler.h"
 #include <GL/glew.h>
-#include "../RenderPipeline.h"
-#include "../../template/ObjectPool.h"
+#include "../../../depends/template/ObjectPool.h"
+#include "../RenderGenerater.h"
 
 namespace DivineBrush {
+    CreateTexImage2DHandler::CreateTexImage2DHandler() {
+        renderCommand = DivineBrush::RenderCommand::CreateTexImage2D;
+    }
+
+    CreateTexImage2DHandler::~CreateTexImage2DHandler() {
+
+    }
+
     void CreateTexImage2DHandler::Run() {
         RenderCommandHandler::Run();
         GLuint gl_texture_id;
@@ -21,7 +29,7 @@ namespace DivineBrush {
         //4. 指定放大，缩小滤波方式，线性滤波，即放大缩小的插值方式;
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        RenderPipeline::GetInstance().GetRenderProgramGenerater()->SetTexture(textureHandle, gl_texture_id);
+        RenderGenerater::SetTexture(textureHandle, gl_texture_id);
     }
 
     void CreateTexImage2DHandler::Clear() {

@@ -2,7 +2,7 @@
 // Created by onelei on 2024/3/22.
 //
 
-#include "node.h"
+#include "Node.h"
 
 namespace DivineBrush {
     Node *Node::root_node = new Node();

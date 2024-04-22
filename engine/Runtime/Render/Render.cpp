@@ -9,7 +9,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "../../editor/window/EditorWindow.h"
-#include "../application.h"
+#include "../Application.h"
 #include "../Component/GameObject.h"
 #include "../Input/Input.h"
 #include "../Component/Scene.h"

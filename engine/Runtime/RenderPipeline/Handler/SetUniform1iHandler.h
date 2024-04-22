@@ -12,11 +12,9 @@ namespace DivineBrush {
 
     class SetUniform1iHandler : public RenderCommandHandler {
     public:
-        SetUniform1iHandler() {
-            renderCommand = RenderCommand::SetUniform1i;
-        }
+        SetUniform1iHandler();
 
-        ~SetUniform1iHandler() override = default;
+        ~SetUniform1iHandler();
 
         unsigned int shaderProgramHandle = 0;
         char *uniformName = nullptr;

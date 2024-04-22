@@ -11,11 +11,9 @@ namespace DivineBrush {
 
     class SetBlendFuncHandler : public RenderCommandHandler {
     public:
-        SetBlendFuncHandler() {
-            renderCommand = RenderCommand::SetBlendFunc;
-        }
+        SetBlendFuncHandler();
 
-        ~SetBlendFuncHandler() override = default;
+        ~SetBlendFuncHandler();
 
         unsigned int sFactor = 0;
         unsigned int dFactor = 0;

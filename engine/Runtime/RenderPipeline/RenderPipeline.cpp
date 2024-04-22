@@ -3,17 +3,13 @@
 //
 
 #include <iostream>
+#include <GL/glew.h>
 #include "RenderPipeline.h"
 
 namespace DivineBrush {
 
-    RenderPipeline::RenderPipeline() = default;
-
-    RenderPipeline::~RenderPipeline() = default;
-
     void RenderPipeline::Init(GLFWwindow *window) {
         this->window = window;
-        this->renderProgramGenerater = new RenderProgramGenerater();
         this->renderThread = std::thread(&RenderPipeline::Start, this);
         this->renderThread.detach();
     }
@@ -61,10 +57,10 @@ namespace DivineBrush {
         // 注意附加到GL_DEPTH_STENCIL_ATTACHMENT
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depth_texture_id, 0);
         //检测帧缓冲区完整性
-        GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        if (status != GL_FRAMEBUFFER_COMPLETE) {
+        //auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
             ///36055 = 0x8CD7 GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT 附着点没有东西
-            printf("BindFBO FBO Error,Status:{} !", status);
+            //printf("BindFBO FBO Error,Status:{} !", status);
             exit(EXIT_FAILURE);
         }
         //设置视口和清除缓冲区：设置合适的视口，并且清除颜色和深度缓冲区，为渲染做准备。
@@ -80,9 +76,9 @@ namespace DivineBrush {
                     continue;
                 }
                 auto renderCommand = (*ringBuffer.front());
-                auto isWait = renderCommand->isWait;
-                auto commandType = renderCommand->renderCommand;
-                if (commandType != RenderCommand::None) {
+                auto isWait = renderCommand->GetIsWait();
+                auto commandType = renderCommand->GetRenderCommand();
+                if (commandType != DivineBrush::RenderCommand::None) {
                     renderCommand->Run();
                 }
                 ringBuffer.pop();
@@ -90,7 +86,7 @@ namespace DivineBrush {
                     renderCommand->Clear();
                 }
 
-                if (commandType == RenderCommand::EndFrame) {
+                if (commandType == DivineBrush::RenderCommand::EndFrame) {
                     break;
                 }
             }

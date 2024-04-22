@@ -12,11 +12,9 @@ namespace DivineBrush {
 
     class UpdateVBOSubDataHandler : public RenderCommandHandler {
     public:
-        UpdateVBOSubDataHandler() {
-            renderCommand = RenderCommand::UpdateVBOSubData;
-        }
+        UpdateVBOSubDataHandler();
 
-        ~UpdateVBOSubDataHandler() override = default;
+        ~UpdateVBOSubDataHandler();
 
         unsigned int vboHandle = 0;
         unsigned int vertexDataSize = 0;

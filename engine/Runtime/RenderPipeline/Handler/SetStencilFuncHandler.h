@@ -11,11 +11,9 @@ namespace DivineBrush {
 
     class SetStencilFuncHandler : public RenderCommandHandler {
     public:
-        SetStencilFuncHandler() {
-            renderCommand = RenderCommand::SetStencilFunc;
-        }
+        SetStencilFuncHandler();
 
-        ~SetStencilFuncHandler() override = default;
+        ~SetStencilFuncHandler();
 
         unsigned int func = 0;
         int ref = 0;

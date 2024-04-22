@@ -8,7 +8,7 @@
 // - Introduction, links and more at the top of imgui.cpp
 
 
-#include "runtime/application.h"
+#include "runtime/Application.h"
 
 // Main code
 int main(int, char **) {

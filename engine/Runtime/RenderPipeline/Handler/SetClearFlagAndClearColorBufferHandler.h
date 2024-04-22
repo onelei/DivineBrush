@@ -11,11 +11,9 @@ namespace DivineBrush {
 
     class SetClearFlagAndClearColorBufferHandler : public RenderCommandHandler {
     public:
-        SetClearFlagAndClearColorBufferHandler() {
-            renderCommand = RenderCommand::SetClearFlagAndClearColorBuffer;
-        }
+        SetClearFlagAndClearColorBufferHandler();
 
-        ~SetClearFlagAndClearColorBufferHandler() override = default;
+        ~SetClearFlagAndClearColorBufferHandler();
 
         unsigned int clearFlag = 0;
         float clearColorR = 0.0f;

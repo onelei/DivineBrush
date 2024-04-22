@@ -2,11 +2,19 @@
 // Created by onelei on 2024/4/11.
 //
 
-#include "EndFrameHandler.h"
 #include <GLFW/glfw3.h>
-#include "../../template/ObjectPool.h"
+#include "EndFrameHandler.h"
+#include "../../../depends/template/ObjectPool.h"
 
 namespace DivineBrush {
+    EndFrameHandler::EndFrameHandler() {
+        renderCommand = DivineBrush::RenderCommand::EndFrame;
+    }
+
+    EndFrameHandler::~EndFrameHandler() {
+
+    }
+
     void EndFrameHandler::Run() {
         AsyncRenderCommandHandler::Run();
         glfwSwapBuffers(window);

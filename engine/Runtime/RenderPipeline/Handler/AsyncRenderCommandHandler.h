@@ -11,12 +11,9 @@ namespace DivineBrush {
 
     class AsyncRenderCommandHandler : public RenderCommandHandler {
     public:
-        AsyncRenderCommandHandler() {
-            renderCommand = RenderCommand::None;
-            isWait = true;
-        }
+        AsyncRenderCommandHandler();
 
-        ~AsyncRenderCommandHandler() override = default;
+        ~AsyncRenderCommandHandler();
 
         virtual void Wait();
 

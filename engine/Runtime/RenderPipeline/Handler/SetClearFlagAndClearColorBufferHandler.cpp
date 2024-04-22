@@ -2,11 +2,19 @@
 // Created by onelei on 2024/4/11.
 //
 
-#include "SetClearFlagAndClearColorBufferHandler.h"
 #include "GL/glew.h"
-#include "../../template/ObjectPool.h"
+#include "SetClearFlagAndClearColorBufferHandler.h"
+#include "../../../depends/template/ObjectPool.h"
 
 namespace DivineBrush {
+    SetClearFlagAndClearColorBufferHandler::SetClearFlagAndClearColorBufferHandler() {
+        renderCommand = DivineBrush::RenderCommand::SetClearFlagAndClearColorBuffer;
+    }
+
+    SetClearFlagAndClearColorBufferHandler::~SetClearFlagAndClearColorBufferHandler() {
+
+    }
+
     void SetClearFlagAndClearColorBufferHandler::Run() {
         RenderCommandHandler::Run();
         glClear(clearFlag);

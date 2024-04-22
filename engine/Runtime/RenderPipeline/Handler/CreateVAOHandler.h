@@ -12,11 +12,9 @@ namespace DivineBrush {
 
     class CreateVAOHandler : public RenderCommandHandler {
     public:
-        CreateVAOHandler() {
-            renderCommand = RenderCommand::CreateVAO;
-        }
+        CreateVAOHandler();
 
-        ~CreateVAOHandler() override = default;
+        ~CreateVAOHandler();
 
         unsigned int shaderProgramHandle = 0;
         unsigned int vaoHandle = 0;

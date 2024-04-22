@@ -11,11 +11,9 @@
 namespace DivineBrush {
     class DeleteTexturesHandler : public RenderCommandHandler {
     public:
-        DeleteTexturesHandler() {
-            renderCommand = RenderCommand::DeleteTextures;
-        }
+        DeleteTexturesHandler();
 
-        ~DeleteTexturesHandler() override = default;
+        ~DeleteTexturesHandler();
 
         unsigned int *textureHandleArray = nullptr;
         int textureCount = 0;

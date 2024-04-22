@@ -11,11 +11,9 @@ namespace DivineBrush {
 
     class SetStencilOpHandler : public RenderCommandHandler {
     public:
-        SetStencilOpHandler() {
-            renderCommand = RenderCommand::SetStencilOp;
-        }
+        SetStencilOpHandler();
 
-        ~SetStencilOpHandler() override = default;
+        ~SetStencilOpHandler();
 
         unsigned int fail = 0;
         unsigned int zFail = 0;

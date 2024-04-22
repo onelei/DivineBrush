@@ -4,7 +4,7 @@
 
 #include "Font.h"
 #include "freetype/ftbitmap.h"
-#include "../application.h"
+#include "../Application.h"
 #include <fstream>
 #include "../../depends/debug/debug.h"
 #include "../../depends/template/ObjectPool.h"

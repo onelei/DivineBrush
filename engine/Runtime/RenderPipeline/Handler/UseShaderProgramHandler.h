@@ -11,11 +11,9 @@ namespace DivineBrush {
 
     class UseShaderProgramHandler : public RenderCommandHandler {
     public:
-        UseShaderProgramHandler() {
-            renderCommand = RenderCommand::UseShaderProgram;
-        }
+        UseShaderProgramHandler();
 
-        ~UseShaderProgramHandler() override = default;
+        ~UseShaderProgramHandler();
 
         unsigned int shaderProgramHandle = 0;
 

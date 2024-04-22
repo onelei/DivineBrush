@@ -5,6 +5,15 @@
 #include "AsyncRenderCommandHandler.h"
 
 namespace DivineBrush {
+    AsyncRenderCommandHandler::AsyncRenderCommandHandler() {
+        renderCommand = DivineBrush::RenderCommand::None;
+        isWait = true;
+    }
+
+    AsyncRenderCommandHandler::~AsyncRenderCommandHandler() {
+
+    }
+
     void AsyncRenderCommandHandler::Wait() {
         while (!isFinish) {
 

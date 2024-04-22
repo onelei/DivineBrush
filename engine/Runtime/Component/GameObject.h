@@ -7,8 +7,8 @@
 
 #include "Object.h"
 #include "Component.h"
-#include "../render/Camera.h"
-#include "../../depends/node/node.h"
+#include "../Render/Camera.h"
+#include "../../depends/node/Node.h"
 
 namespace DivineBrush {
     class Component;

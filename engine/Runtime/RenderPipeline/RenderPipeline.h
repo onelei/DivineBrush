@@ -6,21 +6,17 @@
 #define ENGINE_RENDERPIPELINE_H
 
 #include <thread>
-#include "Handler/RenderCommandHandler.h"
-//#include "../../depends/template/RingBuffer.h"
-#include "RenderProgramGenerater.h"
-#include "../../depends/template/Singleton.h"
 #include <GLFW/glfw3.h>
 #include "rigtorp/SPSCQueue.h"
+#include "../../depends/template/Singleton.h"
+#include "Handler/RenderCommandHandler.h"
+//#include "../../depends/template/RingBuffer.h"
 
 namespace DivineBrush {
 
     class RenderPipeline : public Singleton<RenderPipeline> {
         /// 确保SingletonTemplate可以访问MyClass的构造函数
         friend class Singleton<RenderPipeline>;
-
-    protected:
-        ~RenderPipeline() override;
 
     public:
         void Init(GLFWwindow *window);
@@ -33,10 +29,6 @@ namespace DivineBrush {
 
         GLuint GetDepthTextureId() const {
             return depth_texture_id;
-        }
-
-        RenderProgramGenerater *GetRenderProgramGenerater() {
-            return renderProgramGenerater;
         }
 
         void AddRenderCommandHandler(RenderCommandHandler *handler) {
@@ -58,7 +50,6 @@ namespace DivineBrush {
         GLuint depth_texture_id = 0;
         std::thread renderThread;
         rigtorp::SPSCQueue<RenderCommandHandler*> ringBuffer = rigtorp::SPSCQueue<RenderCommandHandler *>(1024);
-        RenderProgramGenerater *renderProgramGenerater = nullptr;
     };
 
 } // DivineBrush

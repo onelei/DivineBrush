@@ -4,14 +4,22 @@
 
 #include <GL/glew.h>
 #include "UpdateTextureSubImage2DHandler.h"
-#include "../RenderPipeline.h"
-#include "../../template/ObjectPool.h"
+#include "../../../depends/template/ObjectPool.h"
+#include "../RenderGenerater.h"
 
 namespace DivineBrush {
+    UpdateTextureSubImage2DHandler::UpdateTextureSubImage2DHandler() {
+        renderCommand = DivineBrush::RenderCommand::UpdateTextureSubImage2D;
+    }
+
+    UpdateTextureSubImage2DHandler::~UpdateTextureSubImage2DHandler() {
+
+    }
+
     void UpdateTextureSubImage2DHandler::Run() {
         RenderCommandHandler::Run();
 
-        auto textureId = RenderPipeline::GetInstance().GetRenderProgramGenerater()->GetTexture(textureHandle);
+        auto textureId = RenderGenerater::GetTexture(textureHandle);
         glBindTexture(GL_TEXTURE_2D, textureId);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, width, height, format, type, data);

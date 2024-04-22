@@ -10,7 +10,7 @@
 #include "InspectorWindow.h"
 #include "SceneWindow.h"
 #include "GameWindow.h"
-#include "project_window.h"
+#include "ProjectWindow.h"
 #include "ConsoleWindow.h"
 
 namespace DivineBrush::Editor {

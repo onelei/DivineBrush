@@ -13,11 +13,9 @@ namespace DivineBrush {
 
     class SetUniformMatrix4fvHandler : public RenderCommandHandler {
     public:
-        SetUniformMatrix4fvHandler() {
-            renderCommand = RenderCommand::SetUniformMatrix4fv;
-        }
+        SetUniformMatrix4fvHandler();
 
-        ~SetUniformMatrix4fvHandler() override = default;
+        ~SetUniformMatrix4fvHandler();
 
         unsigned int shaderProgramHandle = 0;
         char *uniformName = nullptr;

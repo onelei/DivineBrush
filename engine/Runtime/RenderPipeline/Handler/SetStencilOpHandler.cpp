@@ -2,11 +2,19 @@
 // Created by onelei on 2024/4/11.
 //
 
-#include "SetStencilOpHandler.h"
 #include "GL/glew.h"
-#include "../../template/ObjectPool.h"
+#include "SetStencilOpHandler.h"
+#include "../../../depends/template/ObjectPool.h"
 
 namespace DivineBrush {
+    SetStencilOpHandler::SetStencilOpHandler() {
+        renderCommand = DivineBrush::RenderCommand::SetStencilOp;
+    }
+
+    SetStencilOpHandler::~SetStencilOpHandler() {
+
+    }
+
     void SetStencilOpHandler::Run() {
         RenderCommandHandler::Run();
         glStencilOp(fail, zFail, zPass);

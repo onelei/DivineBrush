@@ -5,19 +5,17 @@
 #ifndef ENGINE_COMPILESHADERHANDLER_H
 #define ENGINE_COMPILESHADERHANDLER_H
 
-#include "RenderCommandHandler.h"
 #include "cstdlib"
 #include <string>
+#include "RenderCommandHandler.h"
 
 namespace DivineBrush {
 
     class CompileShaderHandler : public RenderCommandHandler {
     public:
-        CompileShaderHandler() {
-            renderCommand = RenderCommand::CompileShader;
-        }
+        CompileShaderHandler();
 
-        ~CompileShaderHandler() override = default;
+        ~CompileShaderHandler();
 
         char *vertexShaderSource{};
         char *fragmentShaderSource{};

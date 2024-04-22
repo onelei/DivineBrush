@@ -11,11 +11,9 @@ namespace DivineBrush {
 
     class BindVAOAndDrawElementsHandler : public RenderCommandHandler {
     public:
-        BindVAOAndDrawElementsHandler() {
-            renderCommand = RenderCommand::BindVAOAndDrawElements;
-        }
+        BindVAOAndDrawElementsHandler();
 
-        ~BindVAOAndDrawElementsHandler() override = default;
+        ~BindVAOAndDrawElementsHandler();
 
         unsigned int vaoHandle = 0;
         unsigned int vertexIndexCount = 0;
