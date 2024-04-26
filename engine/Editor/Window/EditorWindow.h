@@ -5,10 +5,10 @@
 #ifndef ENGINE_EDITORWINDOW_H
 #define ENGINE_EDITORWINDOW_H
 
-#include "../../Runtime/Serialize/ScriptableObject.h"
 #include <string>
 #include <unordered_map>
 #include <imgui.h>
+#include "../../Runtime/Serialize/ScriptableObject.h"
 
 namespace DivineBrush::Editor {
     class HierarchyWindow;

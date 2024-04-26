@@ -3,9 +3,9 @@
 //
 
 #include <fstream>
+#include "rttr/registration.h"
 #include "MeshFilter.h"
 #include "../Application.h"
-#include "rttr/registration.h"
 
 namespace DivineBrush {
     using namespace rttr;

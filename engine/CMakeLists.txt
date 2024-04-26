@@ -6,9 +6,10 @@ set(CMAKE_CXX_STANDARD 17)
 #more warning
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-if (WIN32)
-    #ignore warning unicode
-    add_compile_options(/wd4819)
+if (MSVC)
+    add_compile_options(/bigobj)
+    add_compile_options(/wd4819)#忽略保存为unicode警告
+    add_compile_options(/utf-8)  # 设置 MSVC 编译器使用 UTF-8 编码
 endif ()
 
 find_package(glfw3 CONFIG REQUIRED)
@@ -164,7 +165,7 @@ set(IMGUI_BACKENDS
         Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp
         Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp
         depends/template/Singleton.cpp
-        depends/template/ObjectPool.cpp)
+)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
@@ -190,7 +191,10 @@ add_executable(${PROJECT_NAME}
         Runtime/Component/Component.h
         Runtime/Component/GameObject.cpp
         Runtime/Component/GameObject.h
-        Runtime/Component/GameObject.h)
+        Runtime/Component/GameObject.h
+        Runtime/RenderPipeline/RenderCommandBuffer.cpp
+        Runtime/RenderPipeline/RenderCommandBuffer.h
+        Runtime/RenderPipeline/RenderCommandBuffer.h)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw
@@ -199,6 +203,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         glm::glm
         RTTR::Core
         imgui::imgui
+        d3d12
+        dxgi
         freeimage::FreeImage freeimage::FreeImagePlus
         GLEW::GLEW
         Freetype::Freetype
@@ -207,3 +213,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         sol2
         ${LUA_LIBRARIES}
         SPSCQueue::SPSCQueue)
+
+
+#if (MSVC)
+#    set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+#else()
+#    add_definitions(-D _DEBUG)
+#endif ()

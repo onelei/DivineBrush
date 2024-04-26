@@ -9,7 +9,7 @@
 
 namespace DivineBrush {
 
-    class ScriptableObject : Object {
+    class ScriptableObject : public Object {
 
     };
 

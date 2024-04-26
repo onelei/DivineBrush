@@ -20,7 +20,7 @@ namespace DivineBrush {
 
         virtual void Clear();
 
-        bool GetIsWait(){
+        bool GetIsWait() const{
             return isWait;
         };
 

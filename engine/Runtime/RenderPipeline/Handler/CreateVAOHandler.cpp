@@ -71,6 +71,6 @@ namespace DivineBrush {
         RenderCommandHandler::Clear();
         free(vertexData);
         free(vertexIndexData);
-        ObjectPool<CreateVAOHandler>().Release(this);
+        DivineBrush::ObjectPool<DivineBrush::CreateVAOHandler>::Release(this);
     }
 } // DivineBrush

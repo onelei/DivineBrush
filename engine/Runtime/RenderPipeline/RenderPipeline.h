@@ -10,46 +10,36 @@
 #include "rigtorp/SPSCQueue.h"
 #include "../../depends/template/Singleton.h"
 #include "Handler/RenderCommandHandler.h"
-//#include "../../depends/template/RingBuffer.h"
 
 namespace DivineBrush {
 
-    class RenderPipeline : public Singleton<RenderPipeline> {
-        /// 确保SingletonTemplate可以访问MyClass的构造函数
-        friend class Singleton<RenderPipeline>;
+    class RenderPipeline {
 
     public:
-        void Init(GLFWwindow *window);
+        static void Init(GLFWwindow *window);
 
-        void Dispose();
+        static void Dispose();
 
-        GLuint GetColorTextureId() const {
+        static GLuint GetColorTextureId() {
             return color_texture_id;
         }
 
-        GLuint GetDepthTextureId() const {
+        static GLuint GetDepthTextureId() {
             return depth_texture_id;
         }
 
-        void AddRenderCommandHandler(RenderCommandHandler *handler) {
-            ringBuffer.push(handler);
-        }
-
-        RenderPipeline();
-
     private:
-        void Start();
+        static void Start();
 
-        void Prepare();
+        static void Prepare();
 
-        GLFWwindow *window = nullptr;
-        bool isDispose = false;
+        static GLFWwindow *window;
+        static bool isDispose;
         ///FBO 颜色纹理
-        GLuint color_texture_id = 0;
+        static GLuint color_texture_id;
         ///FBO 深度纹理
-        GLuint depth_texture_id = 0;
-        std::thread renderThread;
-        rigtorp::SPSCQueue<RenderCommandHandler*> ringBuffer = rigtorp::SPSCQueue<RenderCommandHandler *>(1024);
+        static GLuint depth_texture_id;
+        static std::thread renderThread;
     };
 
 } // DivineBrush

@@ -5,13 +5,13 @@
 #include <glm/ext/matrix_transform.hpp>
 #include "sample_scene.h"
 #include "rttr/registration.h"
-#include "../../runtime/Screen/Screen.h"
-#include "../../runtime/ui/Font.h"
-#include "../../runtime/input/Input.h"
-#include "../../runtime/ui/Image.h"
-#include "../../runtime/ui/Mask.h"
-#include "../../runtime/ui/Text.h"
-#include "../../runtime/ui/Button.h"
+#include "../../Runtime/Screen/Screen.h"
+#include "../../Runtime/UI/Font.h"
+#include "../../Runtime/Input/Input.h"
+#include "../../Runtime/UI/Image.h"
+#include "../../Runtime/UI/Mask.h"
+#include "../../Runtime/UI/Text.h"
+#include "../../Runtime/UI/Button.h"
 #include "../../Runtime/Binder/LuaBinder.h"
 
 namespace DivineBrush {

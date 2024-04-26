@@ -29,7 +29,7 @@ namespace DivineBrush::Editor {
             //                    DivineBrush::UI::Image::LoadImageToTextureID("../samples/image/sample.png");
             //            }
             //使用FBO的纹理在ImGui中渲染：现在，你可以使用FBO的纹理作为源，通过ImGui渲染图像。
-            textureID = RenderPipeline::GetInstance().GetColorTextureId();
+            textureID = RenderPipeline::GetColorTextureId();
             // ImGui绘制Image，使用FBO Attach Texture id
             // 第一个参数：生成的纹理的id
             // 第2个参数：Image的大小

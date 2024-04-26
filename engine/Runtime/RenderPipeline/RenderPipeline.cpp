@@ -5,19 +5,27 @@
 #include <iostream>
 #include <GL/glew.h>
 #include "RenderPipeline.h"
+#include "RenderCommandBuffer.h"
 
 namespace DivineBrush {
+    GLFWwindow *RenderPipeline::window;
+    bool RenderPipeline::isDispose = false;
+    ///FBO 颜色纹理
+    GLuint RenderPipeline::color_texture_id = 0;
+    ///FBO 深度纹理
+    GLuint RenderPipeline::depth_texture_id = 0;
+    std::thread RenderPipeline::renderThread;
 
-    void RenderPipeline::Init(GLFWwindow *window) {
-        this->window = window;
-        this->renderThread = std::thread(&RenderPipeline::Start, this);
-        this->renderThread.detach();
+    void RenderPipeline::Init(GLFWwindow *_window) {
+        window = _window;
+        renderThread = std::thread(&RenderPipeline::Start);
+        renderThread.detach();
     }
 
     void RenderPipeline::Dispose() {
-        this->isDispose = true;
-        if (this->renderThread.joinable()) {
-            this->renderThread.join();
+        isDispose = true;
+        if (renderThread.joinable()) {
+            renderThread.join();
         }
     }
 
@@ -71,17 +79,17 @@ namespace DivineBrush {
         Prepare();
         while (!isDispose) {
             while (true) {
-                if (ringBuffer.empty()) {
+                if (RenderCommandBuffer::IsEmpty()) {
                     std::this_thread::sleep_for(std::chrono::nanoseconds(1));
                     continue;
                 }
-                auto renderCommand = (*ringBuffer.front());
+                auto renderCommand = RenderCommandBuffer::Peek();
                 auto isWait = renderCommand->GetIsWait();
                 auto commandType = renderCommand->GetRenderCommand();
                 if (commandType != DivineBrush::RenderCommand::None) {
                     renderCommand->Run();
                 }
-                ringBuffer.pop();
+                RenderCommandBuffer::Dequeue();
                 if (!isWait) {
                     renderCommand->Clear();
                 }
@@ -90,7 +98,7 @@ namespace DivineBrush {
                     break;
                 }
             }
-            std::cout << "task in queue:" << ringBuffer.size() << std::endl;
+            std::cout << "task in queue:" << RenderCommandBuffer::GetCount() << std::endl;
         }
     }
 

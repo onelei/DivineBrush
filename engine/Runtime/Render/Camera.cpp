@@ -10,9 +10,7 @@
 #include "rttr/registration.h"
 #include "easy/details/profiler_colors.h"
 #include "easy/profiler.h"
-#include "../RenderPipeline/Handler/SetClearFlagAndClearColorBufferHandler.h"
-#include "../../depends/template/ObjectPool.h"
-#include "../RenderPipeline/RenderPipeline.h"
+#include "../RenderPipeline/RenderCommandBuffer.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -37,13 +35,8 @@ namespace DivineBrush {
     }
 
     void Camera::Clear() {
-        auto handler = ObjectPool<SetClearFlagAndClearColorBufferHandler>::Get();
-        handler->clearFlag = clear_flag;
-        handler->clearColorR = clear_color.r;
-        handler->clearColorG = clear_color.g;
-        handler->clearColorB = clear_color.b;
-        handler->clearColorA = clear_color.a;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+        RenderCommandBuffer::SetClearFlagAndClearColorBufferHandler(clear_flag, clear_color.r, clear_color.g,
+                                                                    clear_color.b, clear_color.a);
     }
 
     void Camera::Render() {

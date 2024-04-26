@@ -9,16 +9,13 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "../../editor/window/EditorWindow.h"
-#include "../Application.h"
 #include "../Component/GameObject.h"
 #include "../Input/Input.h"
 #include "../Component/Scene.h"
 #include "../Screen/Screen.h"
 #include <easy/profiler.h>
 #include "../../depends/debug/debug.h"
-#include "../RenderPipeline/Handler/EndFrameHandler.h"
-#include "../../depends/template/ObjectPool.h"
-#include "../RenderPipeline/Handler/UpdateScreenSizeHandler.h"
+#include "../RenderPipeline/RenderCommandBuffer.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -139,7 +136,7 @@ namespace DivineBrush {
 
         InitImGui();
 
-        RenderPipeline::GetInstance().Init(gameWindow);
+        RenderPipeline::Init(gameWindow);
 
         return 0;
     }
@@ -293,19 +290,15 @@ namespace DivineBrush {
 
                 Camera::RenderAll();
 
-                auto handler = DivineBrush::ObjectPool<DivineBrush::EndFrameHandler>::Get();
-                handler->window = gameWindow;
-                RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
-                ///等待渲染结束任务，说明渲染线程渲染完了这一帧所有的东西。
-                handler->Wait();
-                handler->Clear();
+                RenderCommandBuffer::EndFrameHandler(gameWindow);
+
             }
             EASY_END_BLOCK;
         }
 #ifdef __EMSCRIPTEN__
         EMSCRIPTEN_MAINLOOP_END;
 #endif
-        RenderPipeline::GetInstance().Dispose();
+        RenderPipeline::Dispose();
         profiler::stopListen(); // 停止profiler服务器
         // Cleanup
         ImGui_ImplOpenGL3_Shutdown();
@@ -324,9 +317,7 @@ namespace DivineBrush {
     }
 
     void Render::UpdateScreenSize() {
-        auto handler = DivineBrush::ObjectPool<DivineBrush::UpdateScreenSizeHandler>::Get();
-        handler->window = gameWindow;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+        RenderCommandBuffer::UpdateScreenSizeHandler(gameWindow);
     }
 
 } // DivineBrush

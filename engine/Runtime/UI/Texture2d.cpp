@@ -9,9 +9,8 @@
 #include "../../depends/template/ObjectPool.h"
 #include "../RenderPipeline/Handler/CreateCompressedTexImage2DHandler.h"
 #include "../RenderPipeline/Handler/CreateTexImage2DHandler.h"
-#include "../RenderPipeline/Handler/DeleteTexturesHandler.h"
 #include "../RenderPipeline/RenderGenerater.h"
-#include "../RenderPipeline/RenderPipeline.h"
+#include "../RenderPipeline/RenderCommandBuffer.h"
 
 namespace DivineBrush {
     static const unsigned int bytesPerPixel = 4;
@@ -20,18 +19,13 @@ namespace DivineBrush {
 
     Texture2d::~Texture2d() {
         if (textureHandle > 0) {
-            auto handler = ObjectPool<DeleteTexturesHandler>::Get();
-            handler->textureCount = 1;
-            auto size = sizeof(unsigned int) * handler->textureCount;
-            handler->textureHandleArray = (unsigned int *) malloc(size);
-            memcpy(handler->textureHandleArray, &textureHandle, size);
-            RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+            RenderCommandBuffer::DeleteTexturesHandler(&textureHandle, 1);
         }
     }
 
     void Texture2d::LoadGLFWimage(const char *path, GLFWimage *image) {
         // 图像格式
-        FREE_IMAGE_FORMAT format = FreeImage_GetFileType( path);
+        FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path);
         if (format == -1) {
             std::cerr << "Could not find pTexture2D: " << path <<
                       std::endl;
@@ -123,7 +117,7 @@ namespace DivineBrush {
     Texture2d *Texture2d::LoadCompressFile(std::string path) {
         auto *texture2d = new Texture2d();
         //读取 cpt 压缩纹理文件
-        std::ifstream fileStream(Application::GetDataPath()+path, std::ios::in | std::ios::binary);
+        std::ifstream fileStream(Application::GetDataPath() + path, std::ios::in | std::ios::binary);
         CompressFileHead fileHead;
         fileStream.read((char *) &fileHead, sizeof(CompressFileHead));
         auto *data = (unsigned char *) malloc(fileHead.compressSize);
@@ -134,18 +128,11 @@ namespace DivineBrush {
         texture2d->gl_texture_format = fileHead.textureFormat;
         texture2d->textureHandle = RenderGenerater::CreateTexture();
 
-        auto handler = ObjectPool<CreateCompressedTexImage2DHandler>::Get();
-        handler->textureHandle = texture2d->textureHandle;
-        handler->width = texture2d->width;
-        handler->height = texture2d->height;
-        handler->textureFormat = texture2d->gl_texture_format;
-        auto compressSize = fileHead.compressSize;
-        handler->compressSize = compressSize;
-        handler->data= static_cast<unsigned char *>(malloc(compressSize));
-        memcpy(handler->data, data, compressSize);
-        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+        RenderCommandBuffer::CreateCompressedTexImage2DHandler(texture2d->textureHandle, texture2d->width,
+                                                               texture2d->height, texture2d->gl_texture_format,
+                                                               fileHead.compressSize, data);
 
-        free (data);
+        free(data);
         return texture2d;
     }
 
@@ -174,7 +161,7 @@ namespace DivineBrush {
         glGetCompressedTexImage(GL_TEXTURE_2D, 0, texture);
 
         //5. 保存为文件
-        std::ofstream fileStream(Application::GetDataPath()+targetImageFilePath, std::ios::out | std::ios::binary);
+        std::ofstream fileStream(Application::GetDataPath() + targetImageFilePath, std::ios::out | std::ios::binary);
 
         CompressFileHead fileHead;
         //glCompressedTexImage2D -> glt
@@ -200,16 +187,11 @@ namespace DivineBrush {
         texture2d->width = width;
         texture2d->height = height;
 
-        auto handler = ObjectPool<CreateTexImage2DHandler>::Get();
-        handler->textureHandle = RenderGenerater::CreateTexture();
-        handler->width = texture2d->width;
-        handler->height = texture2d->height;
-        handler->glTextureFormat = texture2d->gl_texture_format;
-        handler->clientFormat = client_format;
-        handler->dataType = data_type;
-        handler->data= static_cast<unsigned char *>(malloc(data_size));
-        memcpy(handler->data, data, data_size);
-        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+        auto textureHandle = RenderGenerater::CreateTexture();
+
+        RenderCommandBuffer::CreateTexImage2DHandler(textureHandle, texture2d->width, texture2d->height,
+                                                     texture2d->gl_texture_format, client_format, data_type, data,
+                                                     data_size);
 
         return texture2d;
     }

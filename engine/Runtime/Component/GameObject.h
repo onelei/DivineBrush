@@ -5,6 +5,7 @@
 #ifndef ENGINE_GAMEOBJECT_H
 #define ENGINE_GAMEOBJECT_H
 
+#include "vector"
 #include "Object.h"
 #include "Component.h"
 #include "../Render/Camera.h"

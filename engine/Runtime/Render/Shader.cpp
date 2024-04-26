@@ -9,11 +9,11 @@
 #include "Shader.h"
 #include "../Application.h"
 #include "../../depends/debug/debug.h"
-#include "../RenderPipeline/RenderPipeline.h"
 #include "../../depends/template/ObjectPool.h"
 #include "../RenderPipeline/Handler/CompileShaderHandler.h"
 #include "../RenderPipeline/Handler/UseShaderProgramHandler.h"
 #include "../RenderPipeline/RenderGenerater.h"
+#include "../RenderPipeline/RenderCommandBuffer.h"
 
 namespace DivineBrush {
     std::unordered_map<std::string, Shader *> Shader::shader_map;
@@ -71,23 +71,15 @@ namespace DivineBrush {
         CreateProgram(vertex_shader_text.c_str(), fragment_shader_text.c_str());
     }
 
-    void Shader::CreateProgram(const char* vertex_shader_text, const char* fragment_shader_text) {
+    void Shader::CreateProgram(const char *vertex_shader_text, const char *fragment_shader_text) {
         shaderProgramHandle = RenderGenerater::CreateShader();
-        auto handler = ObjectPool<CompileShaderHandler>::Get();
-        handler->vertexShaderSource= static_cast<char *>(malloc(strlen(vertex_shader_text) + 1));
-        strcpy(handler->vertexShaderSource, vertex_shader_text);
 
-        handler->fragmentShaderSource= static_cast<char *>(malloc(strlen(fragment_shader_text) + 1));
-        strcpy(handler->fragmentShaderSource, fragment_shader_text);
-
-        handler->shaderProgramHandle = shaderProgramHandle;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+        RenderCommandBuffer::CompileShaderHandler(const_cast<char *>(vertex_shader_text),
+                                                  const_cast<char *>(fragment_shader_text), shaderProgramHandle);
     }
 
     void Shader::Use() const {
-        auto handler = ObjectPool<UseShaderProgramHandler>::Get();
-        handler->shaderProgramHandle = shaderProgramHandle;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+        RenderCommandBuffer::UseShaderProgramHandler(shaderProgramHandle);
     }
 
 } // DivineBrush

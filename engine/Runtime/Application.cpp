@@ -6,6 +6,8 @@
 #include "Render/Render.h"
 
 namespace DivineBrush {
+    class Render;
+
     std::string Application::data_path;
     std::string Application::persistent_data_path;
     Render *render;

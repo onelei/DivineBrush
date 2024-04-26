@@ -29,6 +29,17 @@ namespace DivineBrush {
         key_action_map[key] = action;
     }
 
+    void Input::Update() {
+        for (auto it = key_action_map.begin(); it != key_action_map.end(); /* 不在这里增加it */) {
+            if (it->second == GLFW_RELEASE) {
+                it = key_action_map.erase(it); // 使用正确的迭代器操作，并适当更新迭代器
+            } else {
+                ++it; // 仅在不删除元素时增加迭代器
+            }
+        }
+        mouse_scroll = 0;
+    }
+
     bool Input::GetKeyDown(int key) {
         if (key_action_map.count(key) == 0) {
             return false;
@@ -45,17 +56,6 @@ namespace DivineBrush {
 
     bool Input::GetKey(int key) {
         return key_action_map.count(key) > 0;
-    }
-
-    void Input::Update() {
-        for (auto it = key_action_map.begin(); it != key_action_map.end(); /* 不在这里增加it */) {
-            if (it->second == GLFW_RELEASE) {
-                it = key_action_map.erase(it); // 使用正确的迭代器操作，并适当更新迭代器
-            } else {
-                ++it; // 仅在不删除元素时增加迭代器
-            }
-        }
-        mouse_scroll = 0;
     }
 
     bool Input::GetMouseButtonDown(int button) {

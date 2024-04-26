@@ -9,7 +9,7 @@
 #include "../../depends/debug/debug.h"
 #include "../../depends/template/ObjectPool.h"
 #include "../RenderPipeline/Handler/UpdateTextureSubImage2DHandler.h"
-#include "../RenderPipeline/RenderPipeline.h"
+#include "../RenderPipeline/RenderCommandBuffer.h"
 
 namespace DivineBrush {
     std::unordered_map<std::string, Font *> Font::font_map;
@@ -90,19 +90,17 @@ namespace DivineBrush {
             return;
         }
         //glTexSubImage2D
-        auto handler = ObjectPool<UpdateTextureSubImage2DHandler>::Get();
-        handler->textureHandle = font_texture->GetTextureHandle();
-        handler->x = font_texture_fill_x;
-        handler->y = font_texture_fill_y;
-        handler->width = ft_bitmap.width;
-        handler->height = ft_bitmap.rows;
-        handler->format = GL_RED;
-        handler->type = GL_UNSIGNED_BYTE;
+        auto textureHandle = font_texture->GetTextureHandle();
+        auto x = font_texture_fill_x;
+        auto y = font_texture_fill_y;
+        auto width = ft_bitmap.width;
+        auto height = ft_bitmap.rows;
+        auto format = GL_RED;
+        auto type = GL_UNSIGNED_BYTE;
+        auto data = ft_bitmap.buffer;
         auto dataSize = ft_bitmap.width * ft_bitmap.rows * sizeof(GL_UNSIGNED_BYTE);
-        handler->data= (unsigned char*)malloc(dataSize);
-        memcpy(handler->data, ft_bitmap.buffer, dataSize);
-        handler->dataSize = dataSize;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+        RenderCommandBuffer::UpdateTextureSubImage2DHandler(textureHandle, x, y, width, height, format, type, data,
+                                                            dataSize);
 
         character_map[ch] = new Character(font_texture_fill_x * 1.0f / font_texture_size,
                                           font_texture_fill_y * 1.0f / font_texture_size,

@@ -7,8 +7,10 @@
 
 #include "MeshRender.h"
 #include "../RenderPipeline/RenderPipeline.h"
+#include "../Application.h"
 
 namespace DivineBrush {
+    class Application;
 
     class Render {
     public:

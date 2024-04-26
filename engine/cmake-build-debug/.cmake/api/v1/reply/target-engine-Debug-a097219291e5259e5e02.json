@@ -1,0 +1,1912 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "engine.exe"
+		},
+		{
+			"path" : "engine.pdb"
+		}
+	],
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"_add_executable",
+			"add_executable",
+			"target_link_libraries",
+			"set_target_properties",
+			"include",
+			"_find_package",
+			"find_package",
+			"find_dependency",
+			"add_compile_options",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/scripts/buildsystems/vcpkg.cmake",
+			"CMakeLists.txt",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/freeimage/freeimage-targets.cmake",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/freeimage/freeimage-config.cmake",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/WebP/WebPTargets.cmake",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/WebP/WebPConfig.cmake",
+			"C:/Program Files/JetBrains/CLion 2023.2.3/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeFindDependencyMacro.cmake",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/openexr/OpenEXRTargets.cmake",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/openexr/OpenEXRConfig.cmake",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/freetype/freetype-targets.cmake",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/freetype/freetype-config.cmake",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/freetype/vcpkg-cmake-wrapper.cmake",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/spdlog/spdlogConfigTargets.cmake",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/spdlog/spdlogConfig.cmake",
+			"depends/easy_profiler/lib/cmake/easy_profiler/easy_profilerTargets.cmake",
+			"depends/easy_profiler/lib/cmake/easy_profiler/easy_profilerConfig.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 177,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 598,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 199,
+				"parent" : 0
+			},
+			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 20,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 859,
+				"parent" : 4
+			},
+			{
+				"file" : 3,
+				"parent" : 5
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 12,
+				"parent" : 6
+			},
+			{
+				"file" : 2,
+				"parent" : 7
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 61,
+				"parent" : 8
+			},
+			{
+				"command" : 7,
+				"file" : 3,
+				"line" : 7,
+				"parent" : 6
+			},
+			{
+				"command" : 6,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 10
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 859,
+				"parent" : 11
+			},
+			{
+				"file" : 5,
+				"parent" : 12
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 36,
+				"parent" : 13
+			},
+			{
+				"file" : 4,
+				"parent" : 14
+			},
+			{
+				"command" : 3,
+				"file" : 4,
+				"line" : 75,
+				"parent" : 15
+			},
+			{
+				"command" : 7,
+				"file" : 3,
+				"line" : 10,
+				"parent" : 6
+			},
+			{
+				"command" : 6,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 17
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 859,
+				"parent" : 18
+			},
+			{
+				"file" : 8,
+				"parent" : 19
+			},
+			{
+				"command" : 4,
+				"file" : 8,
+				"line" : 42,
+				"parent" : 20
+			},
+			{
+				"file" : 7,
+				"parent" : 21
+			},
+			{
+				"command" : 3,
+				"file" : 7,
+				"line" : 114,
+				"parent" : 22
+			},
+			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 22,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 813,
+				"parent" : 24
+			},
+			{
+				"file" : 11,
+				"parent" : 25
+			},
+			{
+				"command" : 5,
+				"file" : 11,
+				"line" : 6,
+				"parent" : 26
+			},
+			{
+				"file" : 10,
+				"parent" : 27
+			},
+			{
+				"command" : 4,
+				"file" : 10,
+				"line" : 3,
+				"parent" : 28
+			},
+			{
+				"file" : 9,
+				"parent" : 29
+			},
+			{
+				"command" : 3,
+				"file" : 9,
+				"line" : 67,
+				"parent" : 30
+			},
+			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 23,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 859,
+				"parent" : 32
+			},
+			{
+				"file" : 13,
+				"parent" : 33
+			},
+			{
+				"command" : 4,
+				"file" : 13,
+				"line" : 42,
+				"parent" : 34
+			},
+			{
+				"file" : 12,
+				"parent" : 35
+			},
+			{
+				"command" : 3,
+				"file" : 12,
+				"line" : 60,
+				"parent" : 36
+			},
+			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 25,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 859,
+				"parent" : 38
+			},
+			{
+				"file" : 15,
+				"parent" : 39
+			},
+			{
+				"command" : 4,
+				"file" : 15,
+				"line" : 27,
+				"parent" : 40
+			},
+			{
+				"file" : 14,
+				"parent" : 41
+			},
+			{
+				"command" : 3,
+				"file" : 14,
+				"line" : 56,
+				"parent" : 42
+			},
+			{
+				"command" : 8,
+				"file" : 1,
+				"line" : 10,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 1,
+				"line" : 11,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 1,
+				"line" : 12,
+				"parent" : 0
+			},
+			{
+				"command" : 9,
+				"file" : 1,
+				"line" : 172,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "/DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -std:c++17 -MDd -Zi"
+				},
+				{
+					"backtrace" : 44,
+					"fragment" : "/bigobj"
+				},
+				{
+					"backtrace" : 45,
+					"fragment" : "/wd4819"
+				},
+				{
+					"backtrace" : 46,
+					"fragment" : "/utf-8"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "/EHsc"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "/wd4251"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "/wd4275"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_CHRONO_STEADY_CLOCK=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_CHRONO_HIGHRES_CLOCK=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_START_LISTEN_ON_STARTUP=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_MEASURE_STORAGE_EXPAND=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_STORAGE_EXPAND_BLOCKS_ON=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_TRUNCATE_LONG_RUNTIME_NAMES=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_CHECK_MAX_VALUE_DATA_SIZE=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_IMPLICIT_THREAD_REGISTRATION=1"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_EVENT_TRACING_ENABLED=1"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_LOW_PRIORITY_EVENT_TRACING=1"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_LOG_ENABLED=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_PRETTY_PRINT_FUNCTIONS=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_BUILTIN_COLORS=1"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "BUILD_WITH_EASY_PROFILER=1"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "EASY_DEFAULT_PORT=28077"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "EASY_PROFILER_VERSION_MAJOR=2"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "EASY_PROFILER_VERSION_MINOR=1"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "EASY_PROFILER_VERSION_PATCH=0"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "FMT_SHARED"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "GLFW_DLL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "IMATH_DLL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "LUA_BUILD_AS_DLL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "OPENEXR_DLL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "RTTR_DLL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "SPDLOG_COMPILED_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "SPDLOG_FMT_EXTERNAL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "SPDLOG_SHARED_LIB"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 47,
+					"path" : "E:/Projects/DivineBrush/engine/depends/imgui/backends"
+				},
+				{
+					"backtrace" : 47,
+					"isSystem" : true,
+					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include"
+				},
+				{
+					"backtrace" : 47,
+					"isSystem" : true,
+					"path" : "E:/Projects/DivineBrush/engine/depends/easy_profiler/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include/webp"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include/OpenEXR"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include/Imath"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					3
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				10,
+				12,
+				14,
+				16,
+				18,
+				20,
+				24,
+				26,
+				28,
+				30,
+				32,
+				35,
+				37,
+				39,
+				41,
+				43,
+				45,
+				47,
+				49,
+				51,
+				53,
+				58,
+				60,
+				62,
+				64,
+				66,
+				69,
+				71,
+				73,
+				76,
+				78,
+				80,
+				82,
+				84,
+				86,
+				88,
+				90,
+				92,
+				94,
+				96,
+				98,
+				100,
+				102,
+				104,
+				106,
+				108,
+				110,
+				112,
+				114,
+				116,
+				118,
+				120,
+				123,
+				127,
+				129,
+				130,
+				132,
+				134,
+				136,
+				138,
+				140
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-DWIN32 -D_DEBUG"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_CHRONO_STEADY_CLOCK=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_CHRONO_HIGHRES_CLOCK=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_START_LISTEN_ON_STARTUP=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_MEASURE_STORAGE_EXPAND=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_STORAGE_EXPAND_BLOCKS_ON=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_TRUNCATE_LONG_RUNTIME_NAMES=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_CHECK_MAX_VALUE_DATA_SIZE=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_IMPLICIT_THREAD_REGISTRATION=1"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_EVENT_TRACING_ENABLED=1"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_LOW_PRIORITY_EVENT_TRACING=1"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_LOG_ENABLED=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_PRETTY_PRINT_FUNCTIONS=0"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DEASY_OPTION_BUILTIN_COLORS=1"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "BUILD_WITH_EASY_PROFILER=1"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "EASY_DEFAULT_PORT=28077"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "EASY_PROFILER_VERSION_MAJOR=2"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "EASY_PROFILER_VERSION_MINOR=1"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "EASY_PROFILER_VERSION_PATCH=0"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "FMT_SHARED"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "GLFW_DLL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "IMATH_DLL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "LUA_BUILD_AS_DLL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "OPENEXR_DLL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "RTTR_DLL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "SPDLOG_COMPILED_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "SPDLOG_FMT_EXTERNAL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "SPDLOG_SHARED_LIB"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 47,
+					"path" : "E:/Projects/DivineBrush/engine/depends/imgui/backends"
+				},
+				{
+					"backtrace" : 47,
+					"isSystem" : true,
+					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include"
+				},
+				{
+					"backtrace" : 47,
+					"isSystem" : true,
+					"path" : "E:/Projects/DivineBrush/engine/depends/easy_profiler/include"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include/webp"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include/OpenEXR"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include/Imath"
+				}
+			],
+			"language" : "RC",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"id" : "engine::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "/DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "/machine:x64 /debug /INCREMENTAL /subsystem:console",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\glfw3dll.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\glad.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "opengl32.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\glm.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\rttr_core_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\imguid.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "d3d12.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "dxgi.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\FreeImagePlusd.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\glew32d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\spdlogd.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\Projects\\DivineBrush\\engine\\depends\\easy_profiler\\lib\\easy_profiler.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\lua.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\FreeImaged.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\zlibd.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\jpeg.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\tiffd.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\libpng16d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\zlibd.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\jpeg.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\tiffd.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\libpng16d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\openjp2.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\libwebpdemux.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\libwebpmux.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\libwebp.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\libsharpyuv.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\libwebpdecoder.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "shlwapi.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "ole32.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "windowscodecs.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\jxrglued.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\jpegxrd.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\manual-link\\rawd.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\OpenEXR-3_1_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 23,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\IlmThread-3_1_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 23,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\Iex-3_1_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 23,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\zlibd.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\Imath-3_1_d.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "opengl32.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "glu32.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 31,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\freetyped.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 37,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\fmtd.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 43,
+				"fragment" : "ws2_32.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 43,
+				"fragment" : "psapi.lib",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "engine",
+	"nameOnDisk" : "engine.exe",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				5,
+				7,
+				8,
+				10,
+				12,
+				14,
+				16,
+				18,
+				20,
+				24,
+				26,
+				28,
+				30,
+				32,
+				35,
+				37,
+				39,
+				41,
+				43,
+				45,
+				47,
+				49,
+				51,
+				53,
+				58,
+				60,
+				62,
+				64,
+				66,
+				69,
+				71,
+				73,
+				76,
+				78,
+				80,
+				82,
+				84,
+				86,
+				88,
+				90,
+				92,
+				94,
+				96,
+				98,
+				100,
+				102,
+				104,
+				106,
+				108,
+				110,
+				112,
+				114,
+				116,
+				118,
+				120,
+				123,
+				127,
+				129,
+				130,
+				132,
+				134,
+				136,
+				138,
+				140
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				4,
+				6,
+				9,
+				11,
+				13,
+				15,
+				17,
+				19,
+				21,
+				22,
+				23,
+				25,
+				27,
+				29,
+				31,
+				33,
+				34,
+				36,
+				38,
+				40,
+				42,
+				44,
+				46,
+				48,
+				50,
+				52,
+				54,
+				55,
+				56,
+				57,
+				59,
+				61,
+				63,
+				65,
+				67,
+				68,
+				70,
+				72,
+				74,
+				75,
+				77,
+				79,
+				81,
+				83,
+				85,
+				87,
+				89,
+				91,
+				93,
+				95,
+				97,
+				99,
+				101,
+				103,
+				105,
+				107,
+				109,
+				111,
+				113,
+				115,
+				117,
+				119,
+				121,
+				122,
+				124,
+				125,
+				126,
+				128,
+				131,
+				133,
+				135,
+				137,
+				139,
+				141
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 1,
+			"path" : "Resources/app_icon.rc",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "depends/imgui/backends/imgui_impl_glfw.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "depends/imgui/backends/imgui_impl_opengl3.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Editor/Window/EditorWindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Editor/Window/HierarchyWindow.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Editor/Window/HierarchyWindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Editor/Window/EditorWindow.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Serialize/ScriptableObject.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Serialize/ScriptableObject.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Editor/Window/InspectorWindow.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Editor/Window/InspectorWindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Editor/Window/SceneWindow.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Editor/Window/SceneWindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Editor/Window/ConsoleWindow.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Editor/Window/ConsoleWindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Editor/Window/GameWindow.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Editor/Window/GameWindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Editor/Window/ProjectWindow.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Editor/Window/ProjectWindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/UI/UIBehaviour.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/UI/UIBehaviour.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/template/ArrayPool.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/template/DynamicArrayPool.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/UI/Texture.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/UI/Texture.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/UI/Texture2d.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/UI/Texture2d.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Render/Render.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Render/Render.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Application.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Application.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Render/Shader.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Render/Shader.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/time/stop_watch.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Render/MeshFilter.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Render/MeshFilter.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Render/Material.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Render/Material.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Render/MeshRender.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Render/MeshRender.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Render/Camera.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Render/Camera.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Input/Input.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Input/Input.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Screen/Screen.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Screen/Screen.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "samples/scene/sample_scene.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "samples/scene/sample_scene.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Component/Scene.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Component/Scene.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "depends/debug/debug.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/debug/debug.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/UI/Font.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/UI/Font.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/vector/vector2f.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/vector/vector3f.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/vector/vector4f.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Render/RenderControl.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Render/RenderControl.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/UI/Mask.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/UI/Mask.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "depends/node/Node.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/node/Node.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/UI/Text.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/UI/Text.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/UI/Button.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/UI/Button.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/vector/rect_int.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Editor/Selection.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Editor/Selection.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Audio/Audio.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Audio/Audio.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Binder/LuaBinder.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Binder/LuaBinder.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/RenderCommand.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/RenderPipeline.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/RenderPipeline.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/AsyncRenderCommandHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/AsyncRenderCommandHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/RenderCommandHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/RenderCommandHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/UpdateScreenSizeHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/UpdateScreenSizeHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/CompileShaderHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/UseShaderProgramHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/UseShaderProgramHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/CreateCompressedTexImage2DHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/CreateCompressedTexImage2DHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/CreateTexImage2DHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/CreateTexImage2DHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/DeleteTexturesHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/DeleteTexturesHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/UpdateTextureSubImage2DHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/UpdateTextureSubImage2DHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/CreateVAOHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/CreateVAOHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/UpdateVBOSubDataHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/UpdateVBOSubDataHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/SetStateEnableHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/SetStateEnableHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/SetBlendFuncHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/SetBlendFuncHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/SetUniformMatrix4fvHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/SetUniformMatrix4fvHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/ActiveAndBindTextureHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/ActiveAndBindTextureHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/SetUniform1iHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/SetUniform1iHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/BindVAOAndDrawElementsHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/BindVAOAndDrawElementsHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/SetClearFlagAndClearColorBufferHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/SetClearFlagAndClearColorBufferHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/SetStencilFuncHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/SetStencilFuncHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/SetStencilOpHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/SetStencilOpHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/SetStencilBufferClearValueHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/SetStencilBufferClearValueHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/Handler/EndFrameHandler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/Handler/EndFrameHandler.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/template/RingBuffer.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/RenderGenerater.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/RenderGenerater.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/template/Singleton.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/template/ObjectPool.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "depends/template/SharedPTRObjectPool.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "depends/template/SharedPTRObjectPool.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "depends/template/Singleton.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Component/Object.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Component/Object.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/UI/Image.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/UI/Image.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Component/Transform.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Component/Transform.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Component/Component.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Component/Component.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Component/GameObject.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Component/GameObject.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/RenderPipeline/RenderCommandBuffer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/RenderPipeline/RenderCommandBuffer.h",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "EXECUTABLE"
+}

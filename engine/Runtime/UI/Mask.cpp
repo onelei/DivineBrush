@@ -6,12 +6,7 @@
 #include "rttr/registration.h"
 #include "../Render/MeshFilter.h"
 #include "../Component/GameObject.h"
-#include "../RenderPipeline/Handler/SetStateEnableHandler.h"
-#include "../RenderPipeline/RenderPipeline.h"
-#include "../../depends/template/ObjectPool.h"
-#include "../RenderPipeline/Handler/SetStencilBufferClearValueHandler.h"
-#include "../RenderPipeline/Handler/SetStencilFuncHandler.h"
-#include "../RenderPipeline/Handler/SetStencilOpHandler.h"
+#include "../RenderPipeline/RenderCommandBuffer.h"
 
 namespace DivineBrush::UI {
     using namespace rttr;
@@ -41,7 +36,7 @@ namespace DivineBrush::UI {
         if (mesh_filter != nullptr) {
             return;
         }
-            //创建 MeshFilter
+        //创建 MeshFilter
         //生成顶点数据
         std::vector<MeshFilter::Vertex> vertex_vector = {
                 {{0.f,                   0.0f,                   0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
@@ -71,27 +66,13 @@ namespace DivineBrush::UI {
     void Mask::OnPreprocessRender() {
         Component::OnPreprocessRender();
         ///开启模版测试
-        auto opHandler = ObjectPool<SetStateEnableHandler>::Get();
-        opHandler->enable = true;
-        opHandler->state = GL_STENCIL_TEST;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(opHandler);
+        RenderCommandBuffer::SetStateEnableHandler(GL_STENCIL_TEST, true);
         ///设置默认模版值 0
-        auto clearHandler = ObjectPool<SetStencilBufferClearValueHandler>::Get();
-        clearHandler->clearValue = 0;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(clearHandler);
+        RenderCommandBuffer::SetStencilBufferClearValueHandler(0);
         ///通通不通过模版测试。
-        auto funcHandler = ObjectPool<SetStencilFuncHandler>::Get();
-        funcHandler->func = GL_NEVER;
-        funcHandler->ref = 0x0;
-        funcHandler->mask = 0xFF;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(funcHandler);
-
+        RenderCommandBuffer::SetStencilFuncHandler(GL_NEVER, 0x0, 0xFF);
         ///设置模版值为0+1 = 1
-        auto opHandler2 = ObjectPool<SetStencilOpHandler>::Get();
-        opHandler2->fail = GL_INCR;
-        opHandler2->zFail = GL_INCR;
-        opHandler2->zPass = GL_INCR;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(opHandler2);
+        RenderCommandBuffer::SetStencilOpHandler(GL_INCR, GL_INCR, GL_INCR);
     }
 
     void Mask::OnPostprocessRender() {
@@ -105,9 +86,6 @@ namespace DivineBrush::UI {
     void Mask::OnDisable() {
         Component::OnDisable();
         ///关闭模版测试
-        auto opHandler = ObjectPool<SetStateEnableHandler>::Get();
-        opHandler->enable = false;
-        opHandler->state = GL_STENCIL_TEST;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(opHandler);
+        RenderCommandBuffer::SetStateEnableHandler(GL_STENCIL_TEST, false);
     }
 } // DivineBrush

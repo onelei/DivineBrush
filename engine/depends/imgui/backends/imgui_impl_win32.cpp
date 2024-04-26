@@ -2,7 +2,7 @@
 // This needs to be used along with a Renderer (e.g. DirectX11, OpenGL3, Vulkan..)
 
 // Implemented features:
-//  [X] Platform: Clipboard support (for Win32 this is actually part of component dear imgui)
+//  [X] Platform: Clipboard support (for Win32 this is actually part of core dear imgui)
 //  [X] Platform: Mouse support. Can discriminate Mouse/TouchScreen/Pen.
 //  [X] Platform: Keyboard support. Since 1.87 we are using the io.AddKeyEvent() function. Pass ImGuiKey values to all key functions e.g. ImGui::IsKeyPressed(ImGuiKey_Space). [Legacy VK_* values will also be supported unless IMGUI_DISABLE_OBSOLETE_KEYIO is set]
 //  [X] Platform: Gamepad support. Enabled with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.

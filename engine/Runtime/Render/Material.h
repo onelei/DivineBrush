@@ -6,6 +6,7 @@
 #define ENGINE_MATERIAL_H
 
 #include <string>
+#include <vector>
 #include "Shader.h"
 #include "../ui/Texture2d.h"
 

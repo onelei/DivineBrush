@@ -9,17 +9,8 @@
 #include "MeshRender.h"
 #include "rttr/registration.h"
 #include "../Component/GameObject.h"
-#include "../RenderPipeline/Handler/CreateVAOHandler.h"
-#include "../../depends/template/ObjectPool.h"
-#include "../RenderPipeline/RenderPipeline.h"
-#include "../RenderPipeline/Handler/UpdateVBOSubDataHandler.h"
-#include "../RenderPipeline/Handler/SetStateEnableHandler.h"
-#include "../RenderPipeline/Handler/SetBlendFuncHandler.h"
-#include "../RenderPipeline/Handler/SetUniformMatrix4fvHandler.h"
-#include "../RenderPipeline/Handler/ActiveAndBindTextureHandler.h"
-#include "../RenderPipeline/Handler/SetUniform1iHandler.h"
-#include "../RenderPipeline/Handler/BindVAOAndDrawElementsHandler.h"
 #include "../RenderPipeline/RenderGenerater.h"
+#include "../RenderPipeline/RenderCommandBuffer.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -40,24 +31,14 @@ namespace DivineBrush {
         }
         vaoHandle = RenderGenerater::CreateVAO();
         vboHandle = RenderGenerater::CreateVBO();
-        auto handler = ObjectPool<CreateVAOHandler>::Get();
         auto mesh = mesh_filter->GetMesh();
-        handler->vaoHandle = vaoHandle;
-        handler->vboHandle = vboHandle;
         auto vertexDataSize = mesh->vertex_num * sizeof(MeshFilter::Vertex);
-        handler->vertexDataSize = vertexDataSize;
-        handler->vertexTypeSize = sizeof(MeshFilter::Vertex);
-
-        handler->vertexData= (unsigned char*)malloc(vertexDataSize);
-        memcpy(handler->vertexData, mesh->vertex_data, vertexDataSize);
-
+        auto vertexTypeSize = sizeof(MeshFilter::Vertex);
+        auto vertexData = mesh->vertex_data;
         auto vertexIndexDataSize = mesh->vertex_index_num * sizeof(unsigned short);
-        handler->vertexIndexDataSize = vertexIndexDataSize;
-        handler->vertexIndexData= (unsigned char*)malloc(vertexIndexDataSize);
-        memcpy(handler->vertexIndexData, mesh->vertex_index_data, vertexIndexDataSize);
-
-        handler->shaderProgramHandle = shaderProgramHandle;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+        auto vertexIndexData = mesh->vertex_index_data;
+        RenderCommandBuffer::CreateVAOHandler(shaderProgramHandle, vaoHandle, vboHandle, vertexDataSize, vertexTypeSize,
+                                              vertexData, vertexIndexDataSize, vertexIndexData);
     }
 
     void MeshRender::Render() {
@@ -92,7 +73,7 @@ namespace DivineBrush {
 //            handler->vertexDataSize = vertexDataSize;
 //            handler->vertexData= (unsigned char*)malloc(vertexDataSize);
 //            memcpy(handler->vertexData, mesh->vertex_data, vertexDataSize);
-//            RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+//            RenderCommandBuffer::Enqueue(handler);
         }
 
         //进行实际的渲染调用：这里你绘制你的场景，包括提到的立方体渲染。
@@ -122,10 +103,7 @@ namespace DivineBrush {
         //GL_BLEND:开启混合
         SetGLEnabled(GL_BLEND, true);
         //设置混合函数
-        auto handler = ObjectPool<SetBlendFuncHandler>::Get();
-        handler->sFactor = GL_SRC_ALPHA;
-        handler->dFactor = GL_ONE_MINUS_SRC_ALPHA;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+        RenderCommandBuffer::SetBlendFuncHandler(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         //上传mvp矩阵
         //SetUniformMatrix4fv(shaderProgramHandle, "u_model", false, model);
         //SetUniformMatrix4fv(shaderProgramHandle, "u_view", false, camera->GetView());
@@ -135,25 +113,17 @@ namespace DivineBrush {
         //拿到保存的Texture
         auto textures = material->GetTextures();
         for (int texture_index = 0; texture_index < textures.size(); ++texture_index) {
-            auto textureHandler = ObjectPool<ActiveAndBindTextureHandler>::Get();
-            textureHandler->textureUnit = GL_TEXTURE0 + texture_index;
-            textureHandler->textureHandle = textures[texture_index].second->GetTextureHandle();
-            RenderPipeline::GetInstance().AddRenderCommandHandler(textureHandler);
+            auto textureUnit = GL_TEXTURE0 + texture_index;
+            auto textureHandle = textures[texture_index].second->GetTextureHandle();
+            RenderCommandBuffer::ActiveAndBindTextureHandler(textureUnit, textureHandle);
 
             //设置Shader程序从纹理单元读取颜色数据
-            auto uniformHandler = ObjectPool<SetUniform1iHandler>::Get();
-            uniformHandler->shaderProgramHandle = shaderProgramHandle;
             auto uniformName = textures[texture_index].first.c_str();
-            uniformHandler->uniformName = new char[strlen(uniformName) + 1];  // 加1因为需要为结尾的空字符腾出空间
-            strcpy(uniformHandler->uniformName, uniformName);
-            uniformHandler->value = texture_index;
-            RenderPipeline::GetInstance().AddRenderCommandHandler(uniformHandler);
+            RenderCommandBuffer::SetUniform1iHandler(shaderProgramHandle, const_cast<char *>(uniformName),
+                                                     texture_index);
         }
 
-        auto bindHandler = ObjectPool<BindVAOAndDrawElementsHandler>::Get();
-        bindHandler->vaoHandle = vaoHandle;
-        bindHandler->vertexIndexCount = mesh->vertex_index_num;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(bindHandler);
+        RenderCommandBuffer::BindVAOAndDrawElementsHandler(vaoHandle, mesh->vertex_index_num);
 
         GetGameObject()->ForeachComponent([](Component *component) {
             component->OnPostprocessRender();
@@ -161,21 +131,12 @@ namespace DivineBrush {
     }
 
     void MeshRender::SetGLEnabled(unsigned int state, bool enabled) {
-        auto handler = ObjectPool<SetStateEnableHandler>::Get();
-        handler->enable = enabled;
-        handler->state = state;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+        RenderCommandBuffer::SetStateEnableHandler(state, enabled);
     }
 
-    void MeshRender::SetUniformMatrix4fv(unsigned int shader_program_handle, const char *uniformName, bool transpose,
+    void MeshRender::SetUniformMatrix4fv(unsigned int shaderProgramHandle, const char *uniformName, bool transpose,
                                          glm::mat4 &matrix) {
-        auto handler = ObjectPool<SetUniformMatrix4fvHandler>::Get();
-        handler->shaderProgramHandle = shaderProgramHandle;
-        handler->uniformName= static_cast<char *>(malloc(strlen(uniformName) + 1));
-        strcpy(handler->uniformName, uniformName);
-        handler->transpose = transpose;
-        handler->matrix = matrix;
-        RenderPipeline::GetInstance().AddRenderCommandHandler(handler);
+        RenderCommandBuffer::SetUniformMatrix4fvHandler(shaderProgramHandle, uniformName, transpose, matrix);
     }
 
 } // DivineBrush
