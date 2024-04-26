@@ -22,7 +22,7 @@ Windows:
 6. vcpkg install glew
 7. vcpkg install glm
 8. vcpkg install rttr
-9. vcpkg install imgui
+9. vcpkg install imgui[core,glfw-binding,opengl3-binding,sdl2-binding,dx11-binding]
 10. vcpkg install rapidxml
 11. vcpkg install freetype
 12. vcpkg install sol2
