@@ -26,6 +26,7 @@ find_package(easy_profiler CONFIG REQUIRED)
 find_package(sol2 CONFIG REQUIRED)
 find_package(Lua REQUIRED)
 find_package(SPSCQueue CONFIG REQUIRED)
+find_package(unofficial-omniverse-physx-sdk CONFIG REQUIRED)
 
 set(IMGUI_BACKENDS
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_glfw.cpp
@@ -165,6 +166,26 @@ set(IMGUI_BACKENDS
         Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp
         Runtime/RenderPipeline/Handler/CompileShaderHandler.cpp
         depends/template/Singleton.cpp
+        Runtime/Physics/Collider.cpp
+        Runtime/Physics/Collider.h
+        Runtime/Physics/Collider.h
+        Runtime/Physics/PhysicMaterial.cpp
+        Runtime/Physics/PhysicMaterial.h
+        Runtime/Physics/PhysicMaterial.h
+        Runtime/Physics/Physics.cpp
+        Runtime/Physics/Physics.h
+        Runtime/Physics/SimulationEventCallback.cpp
+        Runtime/Physics/SimulationEventCallback.h
+        Runtime/Physics/RaycastHit.cpp
+        Runtime/Physics/RaycastHit.h
+        Runtime/Physics/RaycastHit.h
+        Runtime/Physics/RaycastHit.h
+        Runtime/Physics/RigidBody.cpp
+        Runtime/Physics/RigidBody.h
+        Runtime/Physics/RigidBody.h
+        Runtime/Physics/BoxCollider.cpp
+        Runtime/Physics/BoxCollider.h
+        Runtime/Physics/BoxCollider.h
 )
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
@@ -194,7 +215,8 @@ add_executable(${PROJECT_NAME}
         Runtime/Component/GameObject.h
         Runtime/RenderPipeline/RenderCommandBuffer.cpp
         Runtime/RenderPipeline/RenderCommandBuffer.h
-        Runtime/RenderPipeline/RenderCommandBuffer.h)
+        Runtime/RenderPipeline/RenderCommandBuffer.h
+        Runtime/Physics/RaycastHit.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw
@@ -212,7 +234,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         easy_profiler
         sol2
         ${LUA_LIBRARIES}
-        SPSCQueue::SPSCQueue)
+        SPSCQueue::SPSCQueue
+        unofficial::omniverse-physx-sdk::sdk)
 
 
 #if (MSVC)
@@ -220,3 +243,26 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 #else()
 #    add_definitions(-D _DEBUG)
 #endif ()
+
+## Optional: import the defined target to copy over the GPU acceleration libraries (3rd party provided by NVIDIA)
+#if(TARGET unofficial::omniverse-physx-sdk::gpu-library)
+#    if(UNIX)
+#        # Add rpath setting to find .so libraries on unix based systems
+#        set_target_properties(main PROPERTIES
+#                BUILD_WITH_INSTALL_RPATH TRUE
+#                INSTALL_RPATH "$ORIGIN"
+#        )
+#    endif()
+#    add_custom_command(TARGET main POST_BUILD
+#            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#            $<TARGET_FILE:unofficial::omniverse-physx-sdk::gpu-library>
+#            $<TARGET_FILE_DIR:main>)
+#    if(WIN32)
+#        add_custom_command(TARGET main POST_BUILD
+#                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#                $<TARGET_FILE:unofficial::omniverse-physx-sdk::gpu-device-library>
+#                $<TARGET_FILE_DIR:main>)
+#    endif()
+#else()
+#    message(WARNING "GPU acceleration library target not defined - GPU acceleration will NOT be available!")
+#endif()

@@ -1502,6 +1502,310 @@
 			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/lib/raw_r.lib"
 		},
 		{
+			"name" : "OMNIVERSE-PHYSX-SDK-GPU_DEVICE_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a file."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/tools/PhysXDevice64.dll"
+		},
+		{
+			"name" : "OMNIVERSE-PHYSX-SDK-GPU_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a file."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/tools/PhysXGpu_64.dll"
+		},
+		{
+			"name" : "OMNIVERSE-PHYSX-SDK_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/debug/lib/PhysX_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE-PHYSX-SDK_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/lib/PhysX_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXCharacterKinematic_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/debug/lib/PhysXCharacterKinematic_static_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXCharacterKinematic_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/lib/PhysXCharacterKinematic_static_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXCommon_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/debug/lib/PhysXCommon_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXCommon_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/lib/PhysXCommon_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXCooking_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/debug/lib/PhysXCooking_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXCooking_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/lib/PhysXCooking_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXExtensions_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/debug/lib/PhysXExtensions_static_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXExtensions_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/lib/PhysXExtensions_static_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXFoundation_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/debug/lib/PhysXFoundation_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXFoundation_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/lib/PhysXFoundation_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXPvdSDK_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/debug/lib/PhysXPvdSDK_static_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXPvdSDK_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/lib/PhysXPvdSDK_static_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXVehicle2_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/debug/lib/PhysXVehicle2_static_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXVehicle2_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/lib/PhysXVehicle2_static_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXVehicle_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/debug/lib/PhysXVehicle_static_64.lib"
+		},
+		{
+			"name" : "OMNIVERSE_PhysXVehicle_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/lib/PhysXVehicle_static_64.lib"
+		},
+		{
 			"name" : "OpenEXR_DIR",
 			"properties" : 
 			[
@@ -3228,6 +3532,18 @@
 			],
 			"type" : "PATH",
 			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/unofficial-lua"
+		},
+		{
+			"name" : "unofficial-omniverse-physx-sdk_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "The directory containing a CMake configuration file for unofficial-omniverse-physx-sdk."
+				}
+			],
+			"type" : "PATH",
+			"value" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/unofficial-omniverse-physx-sdk"
 		}
 	],
 	"kind" : "cache",

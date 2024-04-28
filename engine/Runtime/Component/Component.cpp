@@ -22,6 +22,10 @@ namespace DivineBrush {
         ExecuteLuaComponent("OnUpdate");
     }
 
+    void Component::OnFixUpdate() {
+        ExecuteLuaComponent("OnFixUpdate");
+    }
+
     void Component::OnDestroy() {
         ExecuteLuaComponent("OnDestroy");
     }
@@ -42,7 +46,19 @@ namespace DivineBrush {
         ExecuteLuaComponent("OnDisable");
     }
 
-    void Component::ExecuteLuaComponent(const char *function_name) {
+    void Component::OnTriggerEnter(GameObject *other) {
+        ExecuteLuaComponent("OnTriggerEnter", other);
+    }
+
+    void Component::OnTriggerStay(GameObject *other) {
+        ExecuteLuaComponent("OnTriggerStay", other);
+    }
+
+    void Component::OnTriggerExit(GameObject *other) {
+        ExecuteLuaComponent("OnTriggerExit", other);
+    }
+
+    void Component::ExecuteLuaComponent(const char *function_name, GameObject *other) {
         if (!luaComponent.valid()) {
             return;
         }
@@ -50,7 +66,7 @@ namespace DivineBrush {
         if (!function_awake.valid()) {
             return;
         }
-        auto result = function_awake();
+        auto result = function_awake(luaComponent, other);
         if (!result.valid()) {
             sol::error err = result;
             //type t = type::get(this);

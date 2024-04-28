@@ -780,6 +780,15 @@
 		{
 			"isExternal" : true,
 			"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/spscqueue/SPSCQueueConfig.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/unofficial-omniverse-physx-sdk/unofficial-omniverse-physx-sdk-config.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "C:/Program Files/JetBrains/CLion 2023.2.3/bin/cmake/win/x64/share/cmake-3.26/Modules/SelectLibraryConfigurations.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",

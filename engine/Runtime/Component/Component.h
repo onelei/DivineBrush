@@ -23,19 +23,21 @@ namespace DivineBrush {
 
         ~Component() override = default;
 
-        GameObject* GetGameObject();
+        GameObject *GetGameObject();
 
-        void SetGameObject(GameObject* gameObject);
+        void SetGameObject(GameObject *gameObject);
 
-        void SetLuaComponent(sol::table lua_component){
+        void SetLuaComponent(sol::table lua_component) {
             this->luaComponent = lua_component;
         }
 
-        void ExecuteLuaComponent(const char* function_name);
+        void ExecuteLuaComponent(const char *function_name, GameObject *other = nullptr);
 
         virtual void OnAwake();
 
         virtual void OnUpdate();
+
+        virtual void OnFixUpdate();
 
         virtual void OnDestroy();
 
@@ -47,9 +49,15 @@ namespace DivineBrush {
 
         virtual void OnDisable();
 
+        virtual void OnTriggerEnter(GameObject *other);
+
+        virtual void OnTriggerStay(GameObject *other);
+
+        virtual void OnTriggerExit(GameObject *other);
+
     protected:
         bool is_dirty = true;
-        GameObject* gameObject = nullptr;
+        GameObject *gameObject = nullptr;
         sol::table luaComponent;
     };
 

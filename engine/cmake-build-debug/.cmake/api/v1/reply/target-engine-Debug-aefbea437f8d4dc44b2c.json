@@ -21,6 +21,7 @@
 			"_find_package",
 			"find_package",
 			"find_dependency",
+			"set_property",
 			"add_compile_options",
 			"include_directories"
 		],
@@ -41,7 +42,8 @@
 			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/spdlog/spdlogConfigTargets.cmake",
 			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/spdlog/spdlogConfig.cmake",
 			"depends/easy_profiler/lib/cmake/easy_profiler/easy_profilerTargets.cmake",
-			"depends/easy_profiler/lib/cmake/easy_profiler/easy_profilerConfig.cmake"
+			"depends/easy_profiler/lib/cmake/easy_profiler/easy_profilerConfig.cmake",
+			"E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/share/unofficial-omniverse-physx-sdk/unofficial-omniverse-physx-sdk-config.cmake"
 		],
 		"nodes" : 
 		[
@@ -51,7 +53,7 @@
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 177,
+				"line" : 198,
 				"parent" : 0
 			},
 			{
@@ -63,7 +65,7 @@
 			{
 				"command" : 2,
 				"file" : 1,
-				"line" : 199,
+				"line" : 221,
 				"parent" : 0
 			},
 			{
@@ -281,27 +283,91 @@
 				"parent" : 42
 			},
 			{
+				"command" : 6,
+				"file" : 1,
+				"line" : 29,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 859,
+				"parent" : 44
+			},
+			{
+				"file" : 16,
+				"parent" : 45
+			},
+			{
 				"command" : 8,
+				"file" : 16,
+				"line" : 88,
+				"parent" : 46
+			},
+			{
+				"command" : 8,
+				"file" : 16,
+				"line" : 88,
+				"parent" : 46
+			},
+			{
+				"command" : 8,
+				"file" : 16,
+				"line" : 88,
+				"parent" : 46
+			},
+			{
+				"command" : 8,
+				"file" : 16,
+				"line" : 88,
+				"parent" : 46
+			},
+			{
+				"command" : 8,
+				"file" : 16,
+				"line" : 88,
+				"parent" : 46
+			},
+			{
+				"command" : 8,
+				"file" : 16,
+				"line" : 88,
+				"parent" : 46
+			},
+			{
+				"command" : 8,
+				"file" : 16,
+				"line" : 88,
+				"parent" : 46
+			},
+			{
+				"command" : 8,
+				"file" : 16,
+				"line" : 88,
+				"parent" : 46
+			},
+			{
+				"command" : 9,
 				"file" : 1,
 				"line" : 10,
 				"parent" : 0
 			},
 			{
-				"command" : 8,
+				"command" : 9,
 				"file" : 1,
 				"line" : 11,
 				"parent" : 0
 			},
 			{
-				"command" : 8,
+				"command" : 9,
 				"file" : 1,
 				"line" : 12,
 				"parent" : 0
 			},
 			{
-				"command" : 9,
+				"command" : 10,
 				"file" : 1,
-				"line" : 172,
+				"line" : 193,
 				"parent" : 0
 			}
 		]
@@ -315,15 +381,15 @@
 					"fragment" : "/DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -std:c++17 -MDd -Zi"
 				},
 				{
-					"backtrace" : 44,
+					"backtrace" : 55,
 					"fragment" : "/bigobj"
 				},
 				{
-					"backtrace" : 45,
+					"backtrace" : 56,
 					"fragment" : "/wd4819"
 				},
 				{
-					"backtrace" : 46,
+					"backtrace" : 57,
 					"fragment" : "/utf-8"
 				},
 				{
@@ -448,21 +514,25 @@
 				{
 					"backtrace" : 3,
 					"define" : "SPDLOG_SHARED_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_DEBUG"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 47,
+					"backtrace" : 58,
 					"path" : "E:/Projects/DivineBrush/engine/depends/imgui/backends"
 				},
 				{
-					"backtrace" : 47,
+					"backtrace" : 58,
 					"isSystem" : true,
 					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include"
 				},
 				{
-					"backtrace" : 47,
+					"backtrace" : 58,
 					"isSystem" : true,
 					"path" : "E:/Projects/DivineBrush/engine/depends/easy_profiler/include"
 				},
@@ -480,6 +550,11 @@
 					"backtrace" : 3,
 					"isSystem" : true,
 					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include/Imath"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include/physx"
 				}
 			],
 			"language" : "CXX",
@@ -559,7 +634,14 @@
 				134,
 				136,
 				138,
-				140
+				140,
+				142,
+				144,
+				146,
+				148,
+				150,
+				152,
+				154
 			]
 		},
 		{
@@ -678,21 +760,25 @@
 				{
 					"backtrace" : 3,
 					"define" : "SPDLOG_SHARED_LIB"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_DEBUG"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 47,
+					"backtrace" : 58,
 					"path" : "E:/Projects/DivineBrush/engine/depends/imgui/backends"
 				},
 				{
-					"backtrace" : 47,
+					"backtrace" : 58,
 					"isSystem" : true,
 					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include"
 				},
 				{
-					"backtrace" : 47,
+					"backtrace" : 58,
 					"isSystem" : true,
 					"path" : "E:/Projects/DivineBrush/engine/depends/easy_profiler/include"
 				},
@@ -710,6 +796,11 @@
 					"backtrace" : 3,
 					"isSystem" : true,
 					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include/Imath"
+				},
+				{
+					"backtrace" : 3,
+					"isSystem" : true,
+					"path" : "E:/DownLoad/vcpkg-2024.02.14/vcpkg-2024.02.14/installed/x64-windows/include/physx"
 				}
 			],
 			"language" : "RC",
@@ -795,6 +886,11 @@
 			{
 				"backtrace" : 3,
 				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\lua.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\PhysX_64.lib",
 				"role" : "libraries"
 			},
 			{
@@ -957,6 +1053,46 @@
 				"role" : "libraries"
 			},
 			{
+				"backtrace" : 47,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\PhysXExtensions_static_64.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 48,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\PhysXPvdSDK_static_64.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 49,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\PhysXCharacterKinematic_static_64.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 50,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\PhysXCooking_64.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 51,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\PhysXCommon_64.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 52,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\PhysXFoundation_64.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 53,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\PhysXVehicle_static_64.lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 54,
+				"fragment" : "E:\\DownLoad\\vcpkg-2024.02.14\\vcpkg-2024.02.14\\installed\\x64-windows\\debug\\lib\\PhysXVehicle2_static_64.lib",
+				"role" : "libraries"
+			},
+			{
 				"fragment" : "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
 				"role" : "libraries"
 			}
@@ -1043,7 +1179,14 @@
 				134,
 				136,
 				138,
-				140
+				140,
+				142,
+				144,
+				146,
+				148,
+				150,
+				152,
+				154
 			]
 		},
 		{
@@ -1123,7 +1266,14 @@
 				135,
 				137,
 				139,
-				141
+				141,
+				143,
+				145,
+				147,
+				149,
+				151,
+				153,
+				155
 			]
 		}
 	],
@@ -1840,6 +1990,83 @@
 			"compileGroupIndex" : 0,
 			"path" : "depends/template/Singleton.cpp",
 			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Physics/Collider.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Physics/Collider.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Physics/PhysicMaterial.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Physics/PhysicMaterial.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Physics/Physics.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Physics/Physics.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Physics/SimulationEventCallback.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Physics/SimulationEventCallback.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Physics/RaycastHit.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Physics/RaycastHit.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Physics/RigidBody.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Physics/RigidBody.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "Runtime/Physics/BoxCollider.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "Runtime/Physics/BoxCollider.h",
+			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 2,
