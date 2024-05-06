@@ -16,6 +16,8 @@
 #include <easy/profiler.h>
 #include "../../depends/debug/debug.h"
 #include "../RenderPipeline/RenderCommandBuffer.h"
+#include "../Physics/Physics.h"
+#include "../Time/Time.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -138,6 +140,8 @@ namespace DivineBrush {
 
         RenderPipeline::Init(gameWindow);
 
+        Physics::Init();
+
         return 0;
     }
 
@@ -216,8 +220,8 @@ namespace DivineBrush {
             EASY_END_BLOCK;
 
             if (useImGui) {
-                    //解绑FBO：完成FBO的渲染后，你通常会绑定回默认的帧缓冲区，继续渲染你的UI或其它画面内容。
-                    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                //解绑FBO：完成FBO的渲染后，你通常会绑定回默认的帧缓冲区，继续渲染你的UI或其它画面内容。
+                //glBindFramebuffer(GL_FRAMEBUFFER, 0);
                 // Start the Dear ImGui frame
                 ImGui_ImplOpenGL3_NewFrame();
                 ImGui_ImplGlfw_NewFrame();
@@ -288,6 +292,13 @@ namespace DivineBrush {
             {
                 Update();
 
+                // Fix Update
+                auto deltaTime = Time::GetDeltaTime();
+                while (deltaTime >= Time::GetFixDeltaTime()) {
+                    FixUpdate();
+                    deltaTime -= Time::GetFixDeltaTime();
+                }
+
                 Camera::RenderAll();
 
                 RenderCommandBuffer::EndFrameHandler(gameWindow);
@@ -318,6 +329,12 @@ namespace DivineBrush {
 
     void Render::UpdateScreenSize() {
         RenderCommandBuffer::UpdateScreenSizeHandler(gameWindow);
+    }
+
+    void Render::FixUpdate() {
+        EASY_FUNCTION(profiler::colors::Magenta); // 标记函数
+        Physics::FixUpdate();
+        GameObject::FixUpdateAll();
     }
 
 } // DivineBrush

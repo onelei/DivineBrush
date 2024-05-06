@@ -19,6 +19,8 @@ namespace DivineBrush {
 
         void OnAwake() override;
 
+        void OnFixUpdate() override;
+
         virtual void BindCollider(Collider *collider);
 
         virtual void UnbindCollider(Collider *collider);
@@ -27,8 +29,18 @@ namespace DivineBrush {
 
         physx::PxRigidActor *GetRigidActor();
 
+        void SetEnableCCD(bool enableCCD);
+
+        bool GetEnableCCD() const;
+
+        void SetDynamic(bool isDynamic);
+
+        bool GetDynamic() const;
+
     private:
         physx::PxRigidActor *pxRigidActor = nullptr;
+        bool enableCCD = false;
+        bool isDynamic = false;
     };
 
 } // DivineBrush

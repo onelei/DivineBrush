@@ -20,9 +20,9 @@ namespace DivineBrush {
 
         static physx::PxScene *CreatPxScene();
 
-        static physx::PxRigidDynamic *CreatePxRigidDynamic(glm::vec3 position, char *name);
+        static physx::PxRigidDynamic *CreatePxRigidDynamic(glm::vec3 position, const char *name);
 
-        static physx::PxRigidStatic *CreatePxRigidStatic(glm::vec3 position, char *name);
+        static physx::PxRigidStatic *CreatePxRigidStatic(glm::vec3 position, const char *name);
 
         static physx::PxMaterial *CreatePxMaterial(float staticFriction, float dynamicFriction, float restitution);
 

@@ -4,7 +4,7 @@
 
 #include "RigidBody.h"
 #include "rttr/registration.h"
-#include "../Component/GameObject.h"
+#include "Physics.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -23,10 +23,26 @@ namespace DivineBrush {
     }
 
     void RigidBody::OnAwake() {
+        if (isDynamic) {
+            auto pxRigidDynamic = Physics::CreatePxRigidDynamic(transform->GetPosition(), gameObject->GetName());
+            pxRigidActor = dynamic_cast<physx::PxRigidActor *>(pxRigidDynamic);
+        } else {
+            auto pxRigidStatic = Physics::CreatePxRigidStatic(transform->GetPosition(), gameObject->GetName());
+            pxRigidActor = dynamic_cast<physx::PxRigidActor *>(pxRigidStatic);
+        }
+        // Component::OnAwake();
         Component::OnAwake();
         auto component = gameObject->GetComponent("Collider");
         auto collider = dynamic_cast<Collider *>(component);
         BindCollider(collider);
+    }
+
+    void RigidBody::OnFixUpdate() {
+        Component::OnFixUpdate();
+        if (isDynamic) {
+            auto pose = pxRigidActor->getGlobalPose();
+            transform->SetPosition(glm::vec3(pose.p.x, pose.p.y, pose.p.z));
+        }
     }
 
     void RigidBody::BindCollider(Collider *collider) {
@@ -53,4 +69,25 @@ namespace DivineBrush {
     physx::PxRigidActor *RigidBody::GetRigidActor() {
         return pxRigidActor;
     }
+
+    void RigidBody::SetEnableCCD(bool _enableCCD) {
+        enableCCD = _enableCCD;
+        if (isDynamic) {
+            auto pxRigidDynamic = dynamic_cast<physx::PxRigidDynamic *>(pxRigidActor);
+            pxRigidDynamic->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, enableCCD);
+        }
+    }
+
+    bool RigidBody::GetEnableCCD() const {
+        return enableCCD;
+    }
+
+    void RigidBody::SetDynamic(bool _isDynamic) {
+        isDynamic = _isDynamic;
+    }
+
+    bool RigidBody::GetDynamic() const {
+        return isDynamic;
+    }
+
 } // DivineBrush

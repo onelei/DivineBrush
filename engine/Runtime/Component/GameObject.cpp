@@ -88,6 +88,17 @@ namespace DivineBrush {
         });
     }
 
+    void GameObject::FixUpdateAll() {
+        ForeachGameObject([](GameObject *gameObject) {
+            if (!gameObject->IsActive()) {
+                return;
+            }
+            gameObject->ForeachComponent([](Component *component) {
+                component->OnFixUpdate();
+            });
+        });
+    }
+
     void GameObject::ForeachComponent(std::function<void(Component *)> func) {
         for (auto &v: component_map) {
             for (auto &component: v.second) {

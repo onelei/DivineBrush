@@ -3,6 +3,7 @@
 //
 
 #include "Component.h"
+#include "GameObject.h"
 #include "../../depends/debug/debug.h"
 
 namespace DivineBrush {
@@ -12,6 +13,8 @@ namespace DivineBrush {
 
     void Component::SetGameObject(GameObject *gameObject) {
         this->gameObject = gameObject;
+        auto component = gameObject->GetComponent("Transform");
+        transform = dynamic_cast<Transform *>(component);
     }
 
     void Component::OnAwake() {

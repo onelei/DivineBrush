@@ -27,6 +27,8 @@ namespace DivineBrush {
 
         void Update();
 
+        void FixUpdate();
+
     private:
         void UpdateScreenSize();
         GLFWwindow *gameWindow;

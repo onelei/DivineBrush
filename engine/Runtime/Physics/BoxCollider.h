@@ -24,7 +24,7 @@ namespace DivineBrush {
         void CreatePxShape() override;
 
     private:
-        glm::vec3 size;
+        glm::vec3 size = glm::vec3(1, 1, 1);
     };
 
 } // DivineBrush

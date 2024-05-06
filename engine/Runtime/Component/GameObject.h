@@ -29,6 +29,8 @@ namespace DivineBrush {
 
         static void UpdateAll();
 
+        static void FixUpdateAll();
+
         static void ForeachGameObject(std::function<void(GameObject *)> func);
 
         static GameObject*Find(std::string name);

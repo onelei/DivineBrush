@@ -56,7 +56,6 @@ namespace DivineBrush {
         }
 
         if (pxMaterial == nullptr) {
-
             pxMaterial = Physics::CreatePxMaterial(physicMaterial->GetStaticFriction(),
                                                    physicMaterial->GetDynamicFriction(),
                                                    physicMaterial->GetRestitution());

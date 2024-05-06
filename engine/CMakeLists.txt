@@ -186,6 +186,11 @@ set(IMGUI_BACKENDS
         Runtime/Physics/BoxCollider.cpp
         Runtime/Physics/BoxCollider.h
         Runtime/Physics/BoxCollider.h
+        Runtime/Physics/SphereCollider.cpp
+        Runtime/Physics/SphereCollider.h
+        Runtime/Physics/SphereCollider.h
+        Runtime/Time/Time.cpp
+        Runtime/Time/Time.h
 )
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")

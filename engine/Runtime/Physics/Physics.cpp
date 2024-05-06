@@ -50,7 +50,7 @@ namespace DivineBrush {
         return _pxScene;
     }
 
-    physx::PxRigidDynamic *Physics::CreatePxRigidDynamic(glm::vec3 position, char *name) {
+    physx::PxRigidDynamic *Physics::CreatePxRigidDynamic(glm::vec3 position, const char *name) {
         auto pxRigidDynamic = pxPhysics->createRigidDynamic(
                 physx::PxTransform(physx::PxVec3(position.x, position.y, position.z)));
         pxRigidDynamic->setName(name);
@@ -58,7 +58,7 @@ namespace DivineBrush {
         return pxRigidDynamic;
     }
 
-    physx::PxRigidStatic *Physics::CreatePxRigidStatic(glm::vec3 position, char *name) {
+    physx::PxRigidStatic *Physics::CreatePxRigidStatic(glm::vec3 position, const char *name) {
         auto pxRigidStatic = pxPhysics->createRigidStatic(
                 physx::PxTransform(physx::PxVec3(position.x, position.y, position.z)));
         pxRigidStatic->setName(name);
