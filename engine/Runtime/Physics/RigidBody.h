@@ -23,7 +23,7 @@ namespace DivineBrush {
 
         virtual void BindCollider(Collider *collider);
 
-        virtual void UnbindCollider(Collider *collider);
+        virtual void UnbindCollider();
 
         void SetRigidActor(physx::PxRigidActor *pxRigidActor);
 
@@ -38,7 +38,11 @@ namespace DivineBrush {
         bool GetDynamic() const;
 
     private:
+
+        void CreatePxRigidActor();
+
         physx::PxRigidActor *pxRigidActor = nullptr;
+        Collider *collider = nullptr;
         bool enableCCD = false;
         bool isDynamic = false;
     };

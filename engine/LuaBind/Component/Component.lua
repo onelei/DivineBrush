@@ -12,7 +12,7 @@ function Component:ctor()
     ---@type GameObject
     self.gameObject = nil
     self:SetCpp()
-    self.cpp:SetLuaComponent(self)
+    self:GetCpp():SetLuaComponent(self)
 end
 
 function Component:SetCpp()
@@ -27,11 +27,11 @@ end
 
 --- OnAwake
 function Component:OnAwake()
-    print("Component:OnAwake")
+    ---print("Component:OnAwake")
 end
 
 function Component:OnUpdate()
-    print("Component:OnUpdate")
+    ---print("Component:OnUpdate")
 end
 
 function Component:OnPreRender()
@@ -54,7 +54,7 @@ end
 --- @param gameObject GameObject
 function Component:SetGameObject(gameObject)
     self.gameObject = gameObject
-    gameObject:GetCpp():AddComponent(self.cppComponent)
+    gameObject:GetCpp():AddComponentByLua(self.__cname, self.cpp)
     self.cpp:OnAwake()
 end
 

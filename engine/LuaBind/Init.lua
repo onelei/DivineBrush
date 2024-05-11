@@ -4,9 +4,17 @@
 --- DateTime: 2024/4/1 16:51
 ---
 require("Function")
-GameObject = require("Component/GameObject")
-Component = require("Component/Component")
-Transform = require("Component/Transform")
+GameObject = require("Component.GameObject")
+Component = require("Component.Component")
+Transform = require("Component.Transform")
+---Physics
+RaycastHit = require("Physics.RaycastHit")
+Collider = require("Physics.Collider")
+Physics = require("Physics.Physics")
+RigidBody = require("Physics.RigidBody")
+BoxCollider = require("Physics.BoxCollider")
+SphereCollider = require("Physics.SphereCollider")
+PhysicMaterial = require("Physics.PhysicMaterial")
 
 function main()
     print("Hello World!")
@@ -14,4 +22,24 @@ function main()
     print("gameObject:" .. tostring(gameObject))
     gameObject:SetName("Lua-GameObject2")
     print("gameObject name:" .. gameObject:GetName())
+
+    ---Physics
+    ---@type GameObject
+    local ground = GameObject.new("ground")
+    ---@type Transform
+    print("2")
+    local groundTransform = ground:GetTransform()
+    print("1")
+    groundTransform:SetPosition(Cpp.Vector3(0, -2, 0))
+    ground:AddComponent(RigidBody):SetDynamic(false)
+    --TODO Collider::BindRigidBody() 会报错, 所以后添加 BoxCollider
+    ground:AddComponent(BoxCollider):SetTrigger(false)
+    ---@type GameObject
+    local sphere = GameObject.new("sphere")
+    ---@type Transform
+    local sphereTransform = sphere:GetTransform()
+    sphereTransform:SetPosition(Cpp.Vector3(0, 2, 0))
+    sphere:AddComponent(RigidBody):SetDynamic(true)
+    sphere:AddComponent(SphereCollider):SetTrigger(false)
+    print("6")
 end

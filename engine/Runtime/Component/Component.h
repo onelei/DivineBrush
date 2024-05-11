@@ -14,8 +14,6 @@
 namespace DivineBrush {
     class GameObject;
 
-    class Transform;
-
     class Component : public Object {
 
     public:
@@ -58,7 +56,6 @@ namespace DivineBrush {
     protected:
         bool is_dirty = true;
         GameObject *gameObject = nullptr;
-        Transform *transform = nullptr;
         sol::table luaComponent;
     };
 

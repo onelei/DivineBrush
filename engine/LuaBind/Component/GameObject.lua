@@ -11,15 +11,25 @@ function GameObject:ctor(name)
     self.componentMap = {}
     ---C++组件实例
     self.cpp = nil
+    ---@type Transform
+    self.transform = nil
+    self.transform_cpp = nil
     self:SetCpp(name)
 end
 
 function GameObject:SetCpp(...)
     self.cpp = Cpp.GameObject(...)
+    self.transform_cpp = self:GetCpp():GetTransform()
+    self.transform = Transform.new(this, self.transform_cpp)
 end
 
 function GameObject:GetCpp()
     return self.cpp
+end
+
+---@return Transform
+function GameObject:GetTransform()
+    return self.transform
 end
 
 function GameObject:GetName()

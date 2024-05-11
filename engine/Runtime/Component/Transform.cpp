@@ -17,10 +17,12 @@ namespace DivineBrush {
                 .property("scale", &Transform::GetScale, &Transform::SetScale);
     }
 
-    Transform::Transform() : position(0.f), rotation(0.f), scale(1.f) {
+    Transform::Transform() {
 
     }
 
-    Transform::~Transform() = default;
+    Transform::~Transform() {
+
+    }
 
 } // DivineBrush

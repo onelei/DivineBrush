@@ -13,8 +13,6 @@ namespace DivineBrush {
 
     void Component::SetGameObject(GameObject *gameObject) {
         this->gameObject = gameObject;
-        auto component = gameObject->GetComponent("Transform");
-        transform = dynamic_cast<Transform *>(component);
     }
 
     void Component::OnAwake() {

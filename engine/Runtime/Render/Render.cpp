@@ -322,6 +322,7 @@ namespace DivineBrush {
 
     void Render::Update() {
         EASY_FUNCTION(profiler::colors::Magenta); // 标记函数
+        Time::Update();
         UpdateScreenSize();
         GameObject::UpdateAll();
         Input::Update();

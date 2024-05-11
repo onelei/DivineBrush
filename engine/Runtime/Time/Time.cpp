@@ -9,7 +9,7 @@ namespace DivineBrush {
     float Time::deltaTime = 0.0f;
     float Time::time = 0.0f;
     float Time::timeSinceStartup = 0.0f;
-    float Time::fixDeltaTime = 1.0 / 30;
+    float Time::fixDeltaTime = 1.0 / 60.0f;
     float Time::timeScale = 1.0f;
 
     void Time::Init() {
@@ -17,10 +17,13 @@ namespace DivineBrush {
     }
 
     void Time::Update() {
-        auto timeSinceStartupNow = std::chrono::duration_cast<std::chrono::seconds>(
-                std::chrono::steady_clock::now() - startTime).count();
-        deltaTime = (timeSinceStartupNow - timeSinceStartup) * timeScale;
-        time += deltaTime;
+        auto now = std::chrono::steady_clock::now();
+        auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now - startTime).count();
+        auto timeSinceStartupNow = milliseconds / 1000.0f;
+        if (timeSinceStartup > 0) {
+            deltaTime = (timeSinceStartupNow - timeSinceStartup) * timeScale;
+            time += deltaTime;
+        }
         timeSinceStartup = timeSinceStartupNow;
     }
 

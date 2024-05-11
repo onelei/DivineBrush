@@ -23,39 +23,32 @@ namespace DivineBrush {
     }
 
     void RigidBody::OnAwake() {
-        if (isDynamic) {
-            auto pxRigidDynamic = Physics::CreatePxRigidDynamic(transform->GetPosition(), gameObject->GetName());
-            pxRigidActor = dynamic_cast<physx::PxRigidActor *>(pxRigidDynamic);
-        } else {
-            auto pxRigidStatic = Physics::CreatePxRigidStatic(transform->GetPosition(), gameObject->GetName());
-            pxRigidActor = dynamic_cast<physx::PxRigidActor *>(pxRigidStatic);
-        }
         // Component::OnAwake();
         Component::OnAwake();
-        auto component = gameObject->GetComponent("Collider");
-        auto collider = dynamic_cast<Collider *>(component);
-        BindCollider(collider);
+        CreatePxRigidActor();
     }
 
     void RigidBody::OnFixUpdate() {
         Component::OnFixUpdate();
         if (isDynamic) {
             auto pose = pxRigidActor->getGlobalPose();
+            auto transform = gameObject->GetTransform();
             transform->SetPosition(glm::vec3(pose.p.x, pose.p.y, pose.p.z));
         }
     }
 
-    void RigidBody::BindCollider(Collider *collider) {
-        if (collider == nullptr) {
+    void RigidBody::BindCollider(Collider *_collider) {
+        if (_collider == nullptr) {
             return;
         }
+        collider = _collider;
         auto pxShape = collider->GetPxShape();
         pxRigidActor->attachShape(*pxShape);
         pxShape->release();
     }
 
-    void RigidBody::UnbindCollider(Collider *collider) {
-        if (collider == nullptr) {
+    void RigidBody::UnbindCollider() {
+        if (collider == nullptr || pxRigidActor == nullptr) {
             return;
         }
         auto pxShape = collider->GetPxShape();
@@ -83,11 +76,29 @@ namespace DivineBrush {
     }
 
     void RigidBody::SetDynamic(bool _isDynamic) {
+        if (isDynamic == _isDynamic)
+            return;
         isDynamic = _isDynamic;
+        CreatePxRigidActor();
     }
 
     bool RigidBody::GetDynamic() const {
         return isDynamic;
+    }
+
+    void RigidBody::CreatePxRigidActor() {
+        UnbindCollider();
+        auto transform = gameObject->GetTransform();
+        if (isDynamic) {
+            auto pxRigidDynamic = Physics::CreatePxRigidDynamic(transform->GetPosition(), gameObject->GetName());
+            pxRigidActor = dynamic_cast<physx::PxRigidActor *>(pxRigidDynamic);
+        } else {
+            auto pxRigidStatic = Physics::CreatePxRigidStatic(transform->GetPosition(), gameObject->GetName());
+            pxRigidActor = dynamic_cast<physx::PxRigidActor *>(pxRigidStatic);
+        }
+        auto component = gameObject->GetComponent("Collider");
+        auto _collider = dynamic_cast<Collider *>(component);
+        BindCollider(_collider);
     }
 
 } // DivineBrush

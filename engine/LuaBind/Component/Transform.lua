@@ -6,15 +6,23 @@
 ---@class Transform:Component
 local Transform = class("Transform", Component)
 
-function Transform:ctor()
+---@param gameObject GameObject
+---@return Transform
+function Transform:ctor(gameObject, cpp)
     ---self.position = { x = 0, y = 0, z = 0 }
     ---self.rotation = { x = 0, y = 0, z = 0 }
     ---self.scale = { x = 1, y = 1, z = 1 }
-    Component.ctor(self)
+    self.gameObject = gameObject
+    self.cpp = cpp
+    ---Component.ctor(self)
 end
 
 function Transform:SetCpp()
-    self.cpp = Cpp.Transform()
+    ---self.cpp = Cpp.Transform()
+end
+
+function Transform:GetCpp()
+    return self.cpp
 end
 
 function Transform:GetPosition()

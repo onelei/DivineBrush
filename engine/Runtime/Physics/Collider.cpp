@@ -73,11 +73,11 @@ namespace DivineBrush {
     }
 
     void Collider::BindRigidBody() {
-        rigidBody->BindCollider(this);
+        GetRigidBody()->BindCollider(this);
     }
 
     void Collider::UnbindRigidBody() {
-        rigidBody->UnbindCollider(this);
+        GetRigidBody()->UnbindCollider();
         pxShape = nullptr;
     }
 

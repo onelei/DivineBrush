@@ -13,10 +13,7 @@
 
 namespace DivineBrush {
     class Component;
-}
-
-namespace DivineBrush {
-
+    class Transform;
     class GameObject : public Object, public Node {
     public:
         GameObject(const char * name);
@@ -70,14 +67,20 @@ namespace DivineBrush {
             return this->is_active;
         }
 
+        Transform *GetTransform() {
+            return this->transform;
+        }
+
         Component *AddComponentByName(const std::string &componentName);
-        Component *AddComponent(Component * component);
+        Component *AddComponentByLua(std::string componentName, Component * component);
         Component *GetComponent(const std::string &componentName);
 
         std::unordered_map<std::string, std::vector<Component *>> GetComponents() {
             return component_map;
         }
 
+    protected:
+        Transform *transform;
     private:
         const char * name;
         std::unordered_map<std::string, std::vector<Component *>> component_map;

@@ -11,7 +11,11 @@ namespace DivineBrush {
 
     GameObject::GameObject(const char *name) {
         this->SetName(name);
+        // 添加Transform组件
         AddComponentByName("Transform");
+        auto component = this->GetComponent("Transform");
+        transform = dynamic_cast<Transform *>(component);
+        // 添加到根节点
         GetRootNode()->AddChild(this);
     }
 
@@ -35,11 +39,10 @@ namespace DivineBrush {
         return component;
     }
 
-    Component *GameObject::AddComponent(Component *component) {
+    Component *GameObject::AddComponentByLua(std::string componentName, Component *component) {
         if (component == nullptr) {
             return nullptr;
         }
-        std::string componentName = type::get(*component).get_name().to_string();
         component->SetGameObject(this);
         if (component_map.find(componentName) == component_map.end()) {
             std::vector<Component *> componentVec;
@@ -48,7 +51,7 @@ namespace DivineBrush {
         } else {
             component_map[componentName].push_back(component);
         }
-        component->OnAwake();
+        //component->OnAwake();
         return component;
     }
 
