@@ -10,7 +10,7 @@ function SphereCollider:ctor()
     Collider.ctor(self)
 end
 
-function SphereCollider:SetCpp()
+function SphereCollider:SetCpp(...)
     ---C++组件实例
     self.cpp = Cpp.SphereCollider()
 end

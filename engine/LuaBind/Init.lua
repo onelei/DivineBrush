@@ -3,7 +3,8 @@
 --- Created by onelei.
 --- DateTime: 2024/4/1 16:51
 ---
-require("Function")
+require("Base.Function")
+BaseCpp = require("Base.BaseCpp")
 GameObject = require("Component.GameObject")
 Component = require("Component.Component")
 Transform = require("Component.Transform")
@@ -15,6 +16,9 @@ RigidBody = require("Physics.RigidBody")
 BoxCollider = require("Physics.BoxCollider")
 SphereCollider = require("Physics.SphereCollider")
 PhysicMaterial = require("Physics.PhysicMaterial")
+---Light
+Environment = require("Lighting.Environment")
+Light = require("Lighting.Light")
 
 function main()
     print("Hello World!")
@@ -42,4 +46,48 @@ function main()
     sphere:AddComponent(RigidBody):SetDynamic(true)
     sphere:AddComponent(SphereCollider):SetTrigger(false)
     print("6")
+
+    ---创建灯光
+    local environment = Environment.new()
+    environment:SetAmbientColor(Cpp.Vector3(1.0, 1.0, 1.0))
+    environment:SetAmbientIntensity(0.3)
+    print("Environment")
+    ---创建DirectionalLight
+    local directionalLight1 = GameObject.new("directionalLight1")
+    directionalLight1:GetTransform():SetRotation(Cpp.Vector3(0, 60, 0))
+    ---@type Light
+    local light1 = directionalLight1:AddComponent(Light)
+    light1:SetColor(Cpp.Vector3(1.0, 1.0, 1.0))
+    light1:SetIntensity(1.0)
+    print("directionalLight1")
+    ---创建DirectionalLight
+    local directionalLight2 = GameObject.new("directionalLight1")
+    directionalLight2:GetTransform():SetRotation(Cpp.Vector3(240, 0, 0))
+    ---@type Light
+    local light2 = directionalLight2:AddComponent(Light)
+    light2:SetColor(Cpp.Vector3(1.0, 1.0, 1.0))
+    light2:SetIntensity(1.0)
+    print("directionalLight2")
+    ---创建PointLight
+    local pointLight1 = GameObject.new("pointLight1")
+    pointLight1:GetTransform():SetPosition(Cpp.Vector3(-2, 0, 5))
+    ---@type Light
+    local light3 = pointLight1:AddComponent(Light)
+    light3:SetColor(Cpp.Vector3(1.0, 0.0, 0.0))
+    light3:SetIntensity(1.0)
+    light3:SetAttenuationConst(1.0)
+    light3:SetAttenuationLinear(0.35)
+    light3:SetAttenuationQuadratic(0.44)
+    print("PointLight1")
+    ---创建PointLight
+    local pointLight2 = GameObject.new("pointLight2")
+    pointLight2:GetTransform():SetPosition(Cpp.Vector3(2, 0, 5))
+    ---@type Light
+    local light4 = pointLight2:AddComponent(Light)
+    light4:SetColor(Cpp.Vector3(0.0, 1.0, 0.0))
+    light4:SetIntensity(1.0)
+    light4:SetAttenuationConst(1.0)
+    light4:SetAttenuationLinear(0.35)
+    light4:SetAttenuationQuadratic(0.44)
+    print("PointLight2")
 end

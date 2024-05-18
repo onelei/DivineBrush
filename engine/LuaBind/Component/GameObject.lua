@@ -4,27 +4,18 @@
 --- DateTime: 2024/4/1 16:24
 ---
 ---@class GameObject
-local GameObject = class("GameObject")
+local GameObject = class("GameObject", BaseCpp)
 
 function GameObject:ctor(name)
     ---@type table[string,Component[]]
     self.componentMap = {}
-    ---C++组件实例
-    self.cpp = nil
-    ---@type Transform
-    self.transform = nil
-    self.transform_cpp = nil
-    self:SetCpp(name)
+    BaseCpp.ctor(self, name)
 end
 
 function GameObject:SetCpp(...)
     self.cpp = Cpp.GameObject(...)
     self.transform_cpp = self:GetCpp():GetTransform()
     self.transform = Transform.new(this, self.transform_cpp)
-end
-
-function GameObject:GetCpp()
-    return self.cpp
 end
 
 ---@return Transform

@@ -4,25 +4,20 @@
 --- DateTime: 2024/4/1 16:48
 ---
 ---@class Component
-local Component = class("Component")
+local Component = class("Component", BaseCpp)
 
 function Component:ctor()
     ---@type table[string,Component[]]
     self.components = {}
     ---@type GameObject
     self.gameObject = nil
-    self:SetCpp()
+    BaseCpp.ctor(self)
     self:GetCpp():SetLuaComponent(self)
 end
 
-function Component:SetCpp()
+function Component:SetCpp(...)
     ---C++组件实例
     self.cpp = Cpp.Component()
-end
-
---- GetCpp
-function Component:GetCpp()
-    return self.cpp
 end
 
 --- OnAwake

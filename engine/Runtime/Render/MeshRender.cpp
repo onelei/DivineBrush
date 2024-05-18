@@ -67,7 +67,7 @@ namespace DivineBrush {
         if (vaoHandle == 0) {
             Prepare();
         } else {
-//            auto handler = ObjectPool<UpdateVBOSubDataHandler>::Get();
+//            auto handler = ObjectPool<UpdateVBODataHandler>::Get();
 //            handler->vboHandle = vboHandle;
 //            auto vertexDataSize = mesh->vertex_num * sizeof(MeshFilter::Vertex);
 //            handler->vertexDataSize = vertexDataSize;

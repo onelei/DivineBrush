@@ -4,20 +4,15 @@
 --- DateTime: 2024/5/8 11:07
 ---
 ---@class RaycastHit
-local RaycastHit = class("RaycastHit")
+local RaycastHit = class("RaycastHit", BaseCpp)
 
 function RaycastHit:ctor()
-    self:SetCpp()
+    BaseCpp.ctor(self)
 end
 
-function RaycastHit:SetCpp()
+function RaycastHit:SetCpp(...)
     ---C++组件实例
     self.cpp = Cpp.RaycastHit()
-end
-
----GetCpp
-function RaycastHit:GetCpp()
-    return self.cpp
 end
 
 function RaycastHit:GetPosition()

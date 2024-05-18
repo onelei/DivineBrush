@@ -3,29 +3,29 @@
 //
 
 #include <GL/glew.h>
-#include "UpdateVBOSubDataHandler.h"
+#include "UpdateVBODataHandler.h"
 #include "../../../depends/template/ObjectPool.h"
 #include "../RenderGenerater.h"
 
 namespace DivineBrush {
-    UpdateVBOSubDataHandler::UpdateVBOSubDataHandler() {
-        renderCommand = DivineBrush::RenderCommand::UpdateVBOSubData;
+    UpdateVBODataHandler::UpdateVBODataHandler() {
+        renderCommand = DivineBrush::RenderCommand::UpdateVBOData;
     }
 
-    UpdateVBOSubDataHandler::~UpdateVBOSubDataHandler() {
+    UpdateVBODataHandler::~UpdateVBODataHandler() {
 
     }
 
-    void UpdateVBOSubDataHandler::Run() {
+    void UpdateVBODataHandler::Run() {
         RenderCommandHandler::Run();
         auto vbo = RenderGenerater::GetShader(vboHandle);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertexDataSize, vertexData);
     }
 
-    void UpdateVBOSubDataHandler::Clear() {
+    void UpdateVBODataHandler::Clear() {
         RenderCommandHandler::Clear();
         free(vertexData);
-        DivineBrush::ObjectPool<DivineBrush::UpdateVBOSubDataHandler>::Release(this);
+        DivineBrush::ObjectPool<DivineBrush::UpdateVBODataHandler>::Release(this);
     }
 } // DivineBrush

@@ -127,8 +127,7 @@ namespace DivineBrush {
         glfwSetWindowIcon(this->editorWindow, 1, &image); // 设置窗口图标
 
         glfwMakeContextCurrent(editorWindow);
-        /// Enable vsync
-        glfwSwapInterval(1);
+
         // 强制GLEW获取所有功能
         // 去掉也可
         glewExperimental = GL_TRUE;

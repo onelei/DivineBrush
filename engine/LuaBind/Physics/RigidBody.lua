@@ -10,7 +10,7 @@ function RigidBody:ctor()
     Component.ctor(self)
 end
 
-function RigidBody:SetCpp()
+function RigidBody:SetCpp(...)
     self.cpp = Cpp.RigidBody()
 end
 

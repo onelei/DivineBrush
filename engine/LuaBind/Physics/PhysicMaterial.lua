@@ -5,21 +5,16 @@
 ---
 ---@class PhysicMaterial
 ---@alias float number
-local PhysicMaterial = class("PhysicMaterial")
+local PhysicMaterial = class("PhysicMaterial", BaseCpp)
 
 function PhysicMaterial:ctor()
-    self:SetCpp()
+    BaseCpp.ctor(self)
     self.cpp:SetLuaComponent(self)
 end
 
-function PhysicMaterial:SetCpp()
+function PhysicMaterial:SetCpp(...)
     ---C++组件实例
     self.cpp = Cpp.PhysicMaterial()
-end
-
---- GetCpp
-function PhysicMaterial:GetCpp()
-    return self.cpp
 end
 
 ---@param dynamicFriction float

@@ -131,8 +131,8 @@ set(IMGUI_BACKENDS
         Runtime/RenderPipeline/Handler/UpdateTextureSubImage2DHandler.h
         Runtime/RenderPipeline/Handler/CreateVAOHandler.cpp
         Runtime/RenderPipeline/Handler/CreateVAOHandler.h
-        Runtime/RenderPipeline/Handler/UpdateVBOSubDataHandler.cpp
-        Runtime/RenderPipeline/Handler/UpdateVBOSubDataHandler.h
+        Runtime/RenderPipeline/Handler/UpdateVBODataHandler.cpp
+        Runtime/RenderPipeline/Handler/UpdateVBODataHandler.h
         Runtime/RenderPipeline/Handler/SetStateEnableHandler.cpp
         Runtime/RenderPipeline/Handler/SetStateEnableHandler.h
         Runtime/RenderPipeline/Handler/SetBlendFuncHandler.cpp
@@ -191,6 +191,16 @@ set(IMGUI_BACKENDS
         Runtime/Physics/SphereCollider.h
         Runtime/Time/Time.cpp
         Runtime/Time/Time.h
+        Runtime/Lighting/Environment.cpp
+        Runtime/Lighting/Environment.h
+        Runtime/Lighting/Environment.h
+        Runtime/Lighting/Light.cpp
+        Runtime/Lighting/Light.h
+        Runtime/Lighting/Light.h
+        Runtime/Render/UniformBufferManager.cpp
+        Runtime/Render/UniformBufferManager.h
+        Runtime/RenderPipeline/Handler/UpdateUBODataHandler.cpp
+        Runtime/RenderPipeline/Handler/UpdateUBODataHandler.h
 )
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")

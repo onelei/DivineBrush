@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 #include "RenderPipeline.h"
 #include "RenderCommandBuffer.h"
+#include "../Render/UniformBufferManager.h"
 
 namespace DivineBrush {
     GLFWwindow *RenderPipeline::window;
@@ -33,6 +34,11 @@ namespace DivineBrush {
         glfwMakeContextCurrent(window);
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
+        // Enable vsync
+        glfwSwapInterval(1);
+        //创建UBO
+        UniformBufferManager::Init();
+
         //绑定FBO进行渲染：在你的渲染循环中，当你想将内容渲染到离屏缓冲区（即FBO）时，你应该先绑定FBO。
         //创建全局FBO，将整个游戏渲染到FBO，提供给编辑器，作为Game视图显示
         GLuint frame_buffer_object_id = 0;
@@ -98,7 +104,7 @@ namespace DivineBrush {
                     break;
                 }
             }
-            std::cout << "task in queue:" << RenderCommandBuffer::GetCount() << std::endl;
+            //std::cout << "task in queue:" << RenderCommandBuffer::GetCount() << std::endl;
         }
     }
 

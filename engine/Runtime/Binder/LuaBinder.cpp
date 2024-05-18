@@ -17,6 +17,8 @@
 #include "../Physics/SphereCollider.h"
 #include "../Physics/RaycastHit.h"
 #include "../Physics/Collider.h"
+#include "../Lighting/Environment.h"
+#include "../Lighting/Light.h"
 
 namespace DivineBrush {
     void LuaBinder::Init() {
@@ -89,6 +91,35 @@ namespace DivineBrush {
                 "GetGameObject", &DivineBrush::Component::GetGameObject,
                 "SetGameObject", &DivineBrush::Component::SetGameObject
         );
+
+        //绑定Environment
+        cpp_ns_table.new_usertype<DivineBrush::Environment>(
+                "Environment", sol::call_constructor,
+                sol::constructors<DivineBrush::Environment()>(),
+                "SetAmbientColor", &DivineBrush::Environment::SetAmbientColor,
+                "SetAmbientIntensity", &DivineBrush::Environment::SetAmbientIntensity,
+                "GetAmbientColor", &DivineBrush::Environment::GetAmbientColor,
+                "GetAmbientIntensity", &DivineBrush::Environment::GetAmbientIntensity
+        );
+
+        //绑定Light
+        cpp_ns_table.new_usertype<DivineBrush::Light>(
+                "Light", sol::call_constructor,
+                sol::constructors<DivineBrush::Light()>(),
+                sol::base_classes, sol::bases<Component>(),
+                "SetLightType", &DivineBrush::Light::SetLightType,
+                "SetColor", &DivineBrush::Light::SetColor,
+                "GetColor", &DivineBrush::Light::GetColor,
+                "SetIntensity", &DivineBrush::Light::SetIntensity,
+                "GetIntensity", &DivineBrush::Light::GetIntensity,
+                "SetAttenuationConst", &DivineBrush::Light::SetAttenuationConst,
+                "GetAttenuationConst", &DivineBrush::Light::GetAttenuationConst,
+                "SetAttenuationLinear", &DivineBrush::Light::SetAttenuationLinear,
+                "GetAttenuationLinear", &DivineBrush::Light::GetAttenuationLinear,
+                "SetAttenuationQuadratic", &DivineBrush::Light::SetAttenuationQuadratic,
+                "GetAttenuationQuadratic", &DivineBrush::Light::GetAttenuationQuadratic
+        );
+
 
         //绑定Physics
         cpp_ns_table.new_usertype<DivineBrush::Physics>(

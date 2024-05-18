@@ -10,7 +10,7 @@ function BoxCollider:ctor()
     Collider.ctor(self)
 end
 
-function BoxCollider:SetCpp()
+function BoxCollider:SetCpp(...)
     ---C++组件实例
     self.cpp = Cpp.BoxCollider()
 end

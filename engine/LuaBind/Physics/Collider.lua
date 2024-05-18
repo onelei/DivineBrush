@@ -10,7 +10,7 @@ function Collider:ctor()
     Component.ctor(self)
 end
 
-function Collider:SetCpp()
+function Collider:SetCpp(...)
     ---C++组件实例
     self.cpp = Cpp.Collider()
 end

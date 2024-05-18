@@ -2,19 +2,19 @@
 // Created by onelei on 2024/4/11.
 //
 
-#ifndef ENGINE_UPDATEVBOSUBDATAHANDLER_H
-#define ENGINE_UPDATEVBOSUBDATAHANDLER_H
+#ifndef ENGINE_UPDATEVBODATAHANDLER_H
+#define ENGINE_UPDATEVBODATAHANDLER_H
 
 #include "RenderCommandHandler.h"
 #include "cstdlib"
 
 namespace DivineBrush {
 
-    class UpdateVBOSubDataHandler : public RenderCommandHandler {
+    class UpdateVBODataHandler : public RenderCommandHandler {
     public:
-        UpdateVBOSubDataHandler();
+        UpdateVBODataHandler();
 
-        ~UpdateVBOSubDataHandler();
+        ~UpdateVBODataHandler();
 
         unsigned int vboHandle = 0;
         unsigned int vertexDataSize = 0;
@@ -27,4 +27,4 @@ namespace DivineBrush {
 
 } // DivineBrush
 
-#endif //ENGINE_UPDATEVBOSUBDATAHANDLER_H
+#endif //ENGINE_UPDATEVBODATAHANDLER_H

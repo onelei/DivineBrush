@@ -54,7 +54,13 @@ namespace DivineBrush {
                                      unsigned int vertexIndexDataSize,
                                      void *vertexIndexData);
 
-        static void UpdateVBOSubDataHandler(unsigned int shaderProgramHandle);
+        static void UpdateVBODataHandler(unsigned int vboHandle,
+                                         unsigned int vertexDataSize,
+                                         void *vertexData);
+
+        static void UpdateUBODataHandler(std::string name,
+                                         std::string memberName,
+                                         void *data);
 
         static void SetStateEnableHandler(unsigned int state, bool enabled);
 
@@ -93,6 +99,7 @@ namespace DivineBrush {
                                                    unsigned int type,
                                                    unsigned char *data,
                                                    unsigned int dataSize);
+
 
         static bool IsEmpty();
 

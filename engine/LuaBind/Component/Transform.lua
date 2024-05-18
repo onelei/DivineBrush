@@ -17,12 +17,8 @@ function Transform:ctor(gameObject, cpp)
     ---Component.ctor(self)
 end
 
-function Transform:SetCpp()
+function Transform:SetCpp(...)
     ---self.cpp = Cpp.Transform()
-end
-
-function Transform:GetCpp()
-    return self.cpp
 end
 
 function Transform:GetPosition()

@@ -3,8 +3,8 @@
 //
 
 #include "RenderCommandBuffer.h"
-#include "Handler/CreateCompressedTexImage2DHandler.h"
 #include "../../depends/template/ObjectPool.h"
+#include "Handler/CreateCompressedTexImage2DHandler.h"
 #include "Handler/DeleteTexturesHandler.h"
 #include "Handler/CreateTexImage2DHandler.h"
 #include "RenderGenerater.h"
@@ -24,9 +24,12 @@
 #include "Handler/SetStencilOpHandler.h"
 #include "Handler/SetClearFlagAndClearColorBufferHandler.h"
 #include "Handler/UpdateTextureSubImage2DHandler.h"
+#include "Handler/UpdateVBODataHandler.h"
+#include "Handler/UpdateUBODataHandler.h"
 
 namespace DivineBrush {
-    rigtorp::SPSCQueue<RenderCommandHandler *> RenderCommandBuffer::ringBuffer = rigtorp::SPSCQueue<RenderCommandHandler *>(1024);
+    rigtorp::SPSCQueue<RenderCommandHandler *> RenderCommandBuffer::ringBuffer = rigtorp::SPSCQueue<RenderCommandHandler *>(
+            1024);
 
     void RenderCommandBuffer::Enqueue(RenderCommandHandler *handler) {
         ringBuffer.push(handler);
@@ -153,8 +156,25 @@ namespace DivineBrush {
         RenderCommandBuffer::Enqueue(handler);
     }
 
-    void RenderCommandBuffer::UpdateVBOSubDataHandler(unsigned int shaderProgramHandle) {
+    void RenderCommandBuffer::UpdateVBODataHandler(unsigned int vboHandle,
+                                                   unsigned int vertexDataSize,
+                                                   void *vertexData) {
+        auto handler = ObjectPool<DivineBrush::UpdateVBODataHandler>::Get();
+        handler->vboHandle = vboHandle;
+        handler->vertexDataSize = vertexDataSize;
+        handler->vertexData = (unsigned char *) malloc(vertexDataSize);
+        memcpy(handler->vertexData, vertexData, vertexDataSize);
+        RenderCommandBuffer::Enqueue(handler);
+    }
 
+    void RenderCommandBuffer::UpdateUBODataHandler(std::string name,
+                                                   std::string memberName,
+                                                   void *data) {
+        auto handler = ObjectPool<DivineBrush::UpdateUBODataHandler>::Get();
+        handler->name = name;
+        handler->memberName = memberName;
+        handler->data = data;
+        RenderCommandBuffer::Enqueue(handler);
     }
 
     void RenderCommandBuffer::SetStateEnableHandler(unsigned int state, bool enabled) {
@@ -268,5 +288,6 @@ namespace DivineBrush {
         handler->dataSize = dataSize;
         RenderCommandBuffer::Enqueue(handler);
     }
+
 
 } // DivineBrush
