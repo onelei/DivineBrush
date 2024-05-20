@@ -47,6 +47,10 @@ function main()
     sphere:AddComponent(SphereCollider):SetTrigger(false)
     print("6")
 
+    ---@type Material
+    --self.material_ = Material.new()
+    --self.material_:Parse("material/light.mat")
+
     ---创建灯光
     local environment = Environment.new()
     environment:SetAmbientColor(Cpp.Vector3(1.0, 1.0, 1.0))
