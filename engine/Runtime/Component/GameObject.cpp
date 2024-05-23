@@ -3,9 +3,7 @@
 //
 
 #include "GameObject.h"
-#include "rttr/registration.h"
 
-using namespace rttr;
 namespace DivineBrush {
     std::string GameObject::kTagMainCamera = "MainCamera";
 
@@ -68,11 +66,11 @@ namespace DivineBrush {
             if (!gameObject->IsActive()) {
                 return;
             }
-            auto mesh_render_component = gameObject->GetComponent("MeshRender");
+            auto mesh_render_component = gameObject->GetComponent("MeshRenderer");
             if (!mesh_render_component) {
                 return;
             }
-            auto mesh_render = dynamic_cast<MeshRender *>(mesh_render_component);
+            auto mesh_render = dynamic_cast<MeshRenderer *>(mesh_render_component);
             if (!mesh_render) {
                 return;
             }
@@ -125,5 +123,6 @@ namespace DivineBrush {
         }, reinterpret_cast<Node **>(&result));
         return result;
     }
+
 
 } // DivineBrush

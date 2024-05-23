@@ -9,6 +9,7 @@
 #include <vector>
 #include "Shader.h"
 #include "../ui/Texture2d.h"
+#include "glm/vec3.hpp"
 
 namespace DivineBrush {
     class Material {
@@ -19,9 +20,11 @@ namespace DivineBrush {
 
         void Parse(const std::string &materialPath);
 
-        void SetUniformMatrix4fv(const std::string &shaderPropertyName, float *pointer);
+        void SetUniformInt(const std::string &shaderPropertyName, int value);
 
-        void SetUniform1i(const std::string &shaderPropertyName, int value);
+        void SetUniformFloat(const std::string &shaderPropertyName, float value);
+
+        void SetUniformVector3(const std::string &shaderPropertyName, glm::vec3 &value);
 
         void SetTexture(const std::string &shaderPropertyName, Texture2d *texture);
 
@@ -32,8 +35,9 @@ namespace DivineBrush {
     private:
         Shader *shader = nullptr;
         std::vector<std::pair<std::string, Texture2d *>> textures;
-        std::vector<std::pair<std::string, float *>> uniform_matrix4fv_vec;
-        std::vector<std::pair<std::string, int>> uniform_1i_vec;
+        std::unordered_map<std::string, int> uniformIntMap;
+        std::unordered_map<std::string, float> uniformFloatMap;
+        std::unordered_map<std::string, glm::vec3> uniformVector3Map;
     };
 
 } // DivineBrush

@@ -14,7 +14,7 @@
 #include <utility>
 #include "../Component/Component.h"
 #include "../Component/transform.h"
-#include "MeshRender.h"
+#include "MeshRenderer.h"
 
 namespace DivineBrush {
     class Camera : public Component {

@@ -36,7 +36,7 @@ namespace DivineBrush {
         auto material = new Material();
         material->Parse("material/cube.mat");
 
-        auto mesh_render = dynamic_cast<MeshRender *>(gameObject->AddComponentByName("MeshRender"));
+        auto mesh_render = dynamic_cast<MeshRenderer *>(gameObject->AddComponentByName("MeshRenderer"));
         mesh_render->SetMeshFilter(mesh_filter);
         mesh_render->SetMaterial(material);
 
@@ -159,8 +159,8 @@ namespace DivineBrush {
             //创建 Material
             auto material = new Material();//设置材质
             material->Parse("material/font.mat");
-            //挂上 MeshRender 组件
-            auto mesh_renderer = dynamic_cast<MeshRender *>(go->AddComponentByName("MeshRender"));
+            //挂上 MeshRenderer 组件
+            auto mesh_renderer = dynamic_cast<MeshRenderer *>(go->AddComponentByName("MeshRenderer"));
             mesh_renderer->SetMaterial(material);
             mesh_renderer->SetMeshFilter(mesh_filter);
             //使用文字贴图

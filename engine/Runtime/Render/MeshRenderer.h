@@ -2,8 +2,8 @@
 // Created by onelei on 2024/3/15.
 //
 
-#ifndef ENGINE_MESHRENDER_H
-#define ENGINE_MESHRENDER_H
+#ifndef ENGINE_MESHRENDERER_H
+#define ENGINE_MESHRENDERER_H
 
 #include <string>
 #include <glm/detail/type_mat4x4.hpp>
@@ -13,11 +13,11 @@
 
 namespace DivineBrush {
 
-    class MeshRender : public Component {
+    class MeshRenderer : public Component {
     public:
-        MeshRender() = default;
+        MeshRenderer() = default;
 
-        ~MeshRender() = default;
+        ~MeshRenderer() = default;
 
         void SetMaterial(Material *material) { this->material = material; }
 
@@ -27,7 +27,7 @@ namespace DivineBrush {
 
         MeshFilter *GetMeshFilter() { return mesh_filter; }
 
-        void Render();
+        virtual void Render();
 
     private:
         Material *material = nullptr;
@@ -46,4 +46,4 @@ namespace DivineBrush {
 
 } // DivineBrush
 
-#endif //ENGINE_MESHRENDER_H
+#endif //ENGINE_MESHRENDERER_H

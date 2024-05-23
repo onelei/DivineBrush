@@ -10,13 +10,17 @@
 #include "Component.h"
 #include "../Render/Camera.h"
 #include "../../depends/node/Node.h"
+#include "rttr/registration.h"
+using namespace rttr;
 
 namespace DivineBrush {
     class Component;
+
     class Transform;
+
     class GameObject : public Object, public Node {
     public:
-        GameObject(const char * name);
+        GameObject(const char *name);
 
         ~GameObject();
 
@@ -30,16 +34,16 @@ namespace DivineBrush {
 
         static void ForeachGameObject(std::function<void(GameObject *)> func);
 
-        static GameObject*Find(std::string name);
+        static GameObject *Find(std::string name);
 
         void ForeachComponent(std::function<void(Component *)> func);
 
     public:
-        const char * GetName() {
+        const char *GetName() {
             return this->name;
         }
 
-        void SetName(const char * name) {
+        void SetName(const char *name) {
             this->name = name;
         }
 
@@ -72,8 +76,21 @@ namespace DivineBrush {
         }
 
         Component *AddComponentByName(const std::string &componentName);
-        Component *AddComponentByLua(std::string componentName, Component * component);
+
+        Component *AddComponentByLua(std::string componentName, Component *component);
+
         Component *GetComponent(const std::string &componentName);
+
+        template<class T = Component>
+        T *GetComponent(){
+            type t = type::get<T>();
+            auto componentName = t.get_name().to_string();
+            auto component = GetComponent(componentName);
+            if (component == nullptr) {
+                return nullptr;
+            }
+            return dynamic_cast<T *>(component);
+        }
 
         std::unordered_map<std::string, std::vector<Component *>> GetComponents() {
             return component_map;
@@ -82,7 +99,7 @@ namespace DivineBrush {
     protected:
         Transform *transform;
     private:
-        const char * name;
+        const char *name;
         std::unordered_map<std::string, std::vector<Component *>> component_map;
         std::string tag;
         unsigned char layer = 0x01;

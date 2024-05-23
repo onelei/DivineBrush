@@ -70,8 +70,8 @@ set(IMGUI_BACKENDS
         Runtime/Render/MeshFilter.h
         Runtime/Render/Material.cpp
         Runtime/Render/Material.h
-        Runtime/Render/MeshRender.cpp
-        Runtime/Render/MeshRender.h
+        Runtime/Render/MeshRenderer.cpp
+        Runtime/Render/MeshRenderer.h
         Runtime/Render/Camera.cpp
         Runtime/Render/Camera.h
         Runtime/Input/Input.cpp
@@ -201,6 +201,12 @@ set(IMGUI_BACKENDS
         Runtime/Render/UniformBufferManager.h
         Runtime/RenderPipeline/Handler/UpdateUBODataHandler.cpp
         Runtime/RenderPipeline/Handler/UpdateUBODataHandler.h
+        Runtime/Animation/AnimationClip.cpp
+        Runtime/Animation/AnimationClip.h
+        Runtime/Animation/Animation.cpp
+        Runtime/Animation/Animation.h
+        Runtime/Render/SkinnedMeshRenderer.cpp
+        Runtime/Render/SkinnedMeshRenderer.h
 )
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")

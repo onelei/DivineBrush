@@ -48,8 +48,11 @@ function main()
     print("6")
 
     ---@type Material
-    --self.material_ = Material.new()
-    --self.material_:Parse("material/light.mat")
+    --local material = Material.new()
+    --material:Parse("material/light.mat")
+    --material:SetUniformVector3("u_view_pos",camera_position)
+    --设置物体反射度、高光强度
+    --material:SetUniformFloat("u_specular_highlight_shininess",32.0)
 
     ---创建灯光
     local environment = Environment.new()
@@ -94,4 +97,5 @@ function main()
     light4:SetAttenuationLinear(0.35)
     light4:SetAttenuationQuadratic(0.44)
     print("PointLight2")
+
 end

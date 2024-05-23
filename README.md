@@ -31,6 +31,10 @@ Windows:
 15. vcpkg install spscqueue
 16. vcpkg install physx
 
+17. 下载FBX的SDK
+
+https://damassets.autodesk.net/content/dam/autodesk/www/adn/fbx/2020-2-1/fbx202021_fbxsdk_vs2019_win.exe
+
 
 
 Compile:

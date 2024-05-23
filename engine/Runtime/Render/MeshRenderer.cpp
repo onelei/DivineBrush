@@ -6,7 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform2.hpp>
 #include <glm/gtx/euler_angles.hpp>
-#include "MeshRender.h"
+#include "MeshRenderer.h"
 #include "rttr/registration.h"
 #include "../Component/GameObject.h"
 #include "../RenderPipeline/RenderGenerater.h"
@@ -16,11 +16,11 @@ namespace DivineBrush {
     using namespace rttr;
 
     RTTR_REGISTRATION {
-        registration::class_<MeshRender>("MeshRender")
+        registration::class_<MeshRenderer>("MeshRenderer")
                 .constructor<>()(rttr::policy::ctor::as_raw_ptr);
     }
 
-    void MeshRender::Prepare() {
+    void MeshRenderer::Prepare() {
         //获取Shader中的变量
         auto shader = material->GetShader();
         shaderProgramHandle = shader->GetProgramHandle();
@@ -41,7 +41,7 @@ namespace DivineBrush {
                                               vertexData, vertexIndexDataSize, vertexIndexData);
     }
 
-    void MeshRender::Render() {
+    void MeshRenderer::Render() {
         auto component = gameObject->GetComponent("Transform");
         auto transform = dynamic_cast<Transform *>(component);
         if (!transform) {
@@ -130,12 +130,12 @@ namespace DivineBrush {
         });
     }
 
-    void MeshRender::SetGLEnabled(unsigned int state, bool enabled) {
+    void MeshRenderer::SetGLEnabled(unsigned int state, bool enabled) {
         RenderCommandBuffer::SetStateEnableHandler(state, enabled);
     }
 
-    void MeshRender::SetUniformMatrix4fv(unsigned int shaderProgramHandle, const char *uniformName, bool transpose,
-                                         glm::mat4 &matrix) {
+    void MeshRenderer::SetUniformMatrix4fv(unsigned int shaderProgramHandle, const char *uniformName, bool transpose,
+                                           glm::mat4 &matrix) {
         RenderCommandBuffer::SetUniformMatrix4fvHandler(shaderProgramHandle, uniformName, transpose, matrix);
     }
 

@@ -57,8 +57,8 @@ namespace DivineBrush::UI {
         //使用图片贴图
         material->SetTexture("u_diffuse_texture", texture2d);
 
-        //挂上 MeshRender 组件
-        auto pMeshRender = dynamic_cast<MeshRender *>(GetGameObject()->AddComponentByName("MeshRender"));
+        //挂上 MeshRenderer 组件
+        auto pMeshRender = dynamic_cast<MeshRenderer *>(GetGameObject()->AddComponentByName("MeshRenderer"));
         pMeshRender->SetMaterial(material);
         pMeshRender->SetMeshFilter(mesh_filter);
     }
