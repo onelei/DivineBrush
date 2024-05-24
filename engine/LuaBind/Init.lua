@@ -19,6 +19,14 @@ PhysicMaterial = require("Physics.PhysicMaterial")
 ---Light
 Environment = require("Lighting.Environment")
 Light = require("Lighting.Light")
+---Render
+Material = require("Render.Material")
+MeshFilter = require("Render.MeshFilter")
+MeshRenderer = require("Render.MeshRenderer")
+SkinnedMeshRenderer = require("Render.SkinnedMeshRenderer")
+---Animation
+AnimationClip = require("Animation.AnimationClip")
+Animation = require("Animation.Animation")
 
 function main()
     print("Hello World!")
@@ -98,4 +106,28 @@ function main()
     light4:SetAttenuationQuadratic(0.44)
     print("PointLight2")
 
+
+    ---创建骨骼蒙皮动画
+    local skeletonObj = GameObject.new("skeleton")
+    skeletonObj:GetTransform():SetPosition(Cpp.Vector3(0, -1, 0))
+    skeletonObj:GetTransform():SetRotation(Cpp.Vector3(-90, 0, 0))
+    ---@type Animation
+    local animation = skeletonObj:AddComponent(Animation)
+    animation:LoadFromFile("animation/fbx_extra_bip001_bip001_take_001_baselayer.skeleton_anim", "idle")
+    local mesh_filter = skeletonObj:AddComponent(MeshFilter)
+    mesh_filter:LoadMesh("model/fbx_extra_jiulian.mesh")
+    ---加载Mesh
+    mesh_filter:LoadWeight("model/fbx_extra_jiulian.weight")
+    ---加载权重文件
+    ---手动创建Material
+    local skeletonMaterial = Material.new()---设置材质
+    skeletonMaterial:Parse("material/fbx_extra_jiulian.mat")
+    print("skeleton")
+    ---挂上 MeshRenderer 组件
+    ---@type SkinnedMeshRenderer
+    local skinned_mesh_renderer = skeletonObj:AddComponent(SkinnedMeshRenderer)
+    skinned_mesh_renderer:SetMaterial(skeletonMaterial)
+    ---播放动画
+    skeletonObj:GetComponent(Animation):Play("idle")
+    print("idle")
 end

@@ -6,6 +6,7 @@
 #include "rttr/registration.h"
 #include "MeshFilter.h"
 #include "../Application.h"
+#include "../../depends/debug/debug.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -15,19 +16,28 @@ namespace DivineBrush {
                 .constructor<>()(rttr::policy::ctor::as_raw_ptr);
     }
 
-    MeshFilter::MeshFilter() : mesh(nullptr) {
+    MeshFilter::MeshFilter() {
 
     }
 
     MeshFilter::~MeshFilter() {
         if (mesh != nullptr) {
             delete mesh;
+            mesh = nullptr;
+        }
+        if (skinMesh != nullptr) {
+            delete skinMesh;
+            skinMesh = nullptr;
+        }
+        if (boneInfo != nullptr) {
+            delete boneInfo;
+            boneInfo = nullptr;
         }
     }
 
-    void MeshFilter::LoadMesh(const char *mesh_file_path) {
+    void MeshFilter::LoadMesh(const std::string& filePath) {
         //读取 Mesh文件头
-        std::ifstream input_file_stream(Application::GetDataPath() + mesh_file_path, std::ios::in | std::ios::binary);
+        std::ifstream input_file_stream(Application::GetDataPath() + filePath, std::ios::in | std::ios::binary);
         MeshFileHead mesh_file_head;
         input_file_stream.read((char *) &mesh_file_head, sizeof(mesh_file_head));
         //读取顶点数据
@@ -46,22 +56,10 @@ namespace DivineBrush {
         mesh->vertex_index_data = vertex_index_data;
     }
 
-    void ExportMesh(char *mesh_file_path) {
-//        std::ofstream output_file_stream(Application::GetDataPath()+mesh_file_path, std::ios::out | std::ios::binary);
-//        MeshFilter::MeshFileHead mesh_file_head;
-//        mesh_file_head.type[0] = 'm';
-//        mesh_file_head.type[1] = 'e';
-//        mesh_file_head.type[2] = 's';
-//        mesh_file_head.type[3] = 'h';
-//        mesh_file_head.vertex_num = kVertexRemoveDumplicateVector.size();
-//        mesh_file_head.vertex_index_num = kVertexIndexVector.size();
-//        output_file_stream.write((char *) &mesh_file_head, sizeof(mesh_file_head));
-//        output_file_stream.write((char*)&kVertexRemoveDumplicateVector[0], kVertexRemoveDumplicateVector.size() * sizeof(Vertex));
-//        output_file_stream.write((char *)&kVertexIndexVector[0], kVertexIndexVector.size() * sizeof(unsigned short));
-//        output_file_stream.close();
-    }
-
     void MeshFilter::CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned short> &vertex_index_data) {
+        if (mesh != nullptr) {
+            delete mesh;
+        }
         mesh = new Mesh();
         mesh->vertex_num = vertex_data.size();
         mesh->vertex_index_num = vertex_index_data.size();
@@ -73,5 +71,57 @@ namespace DivineBrush {
         unsigned short vertex_index_data_size = mesh->vertex_num * sizeof(Vertex);
         mesh->vertex_index_data = static_cast<unsigned short *>(malloc(vertex_index_data_size));
         memcpy(mesh->vertex_index_data, &vertex_index_data[0], vertex_index_data_size);
+    }
+
+    void MeshFilter::CreateMeshLua(std::vector<float> &vertex_data, std::vector<unsigned short> &vertex_index_data) {
+        if (mesh != nullptr) {
+            delete mesh;
+        }
+        mesh = new Mesh();
+        //顶点数据: 9个浮点数
+        mesh->vertex_num = vertex_data.size() / 9;
+        mesh->vertex_index_num = vertex_index_data.size();
+
+        unsigned short vertex_data_size = mesh->vertex_num * sizeof(Vertex);
+        mesh->vertex_data = static_cast<Vertex *>(malloc(vertex_data_size));
+        memcpy(mesh->vertex_data, &vertex_data[0], vertex_data_size);
+
+        unsigned short vertex_index_data_size = mesh->vertex_num * sizeof(unsigned short);
+        mesh->vertex_index_data = static_cast<unsigned short *>(malloc(vertex_index_data_size));
+        memcpy(mesh->vertex_index_data, &vertex_index_data[0], vertex_index_data_size);
+    }
+
+    void MeshFilter::SetBoneInfo(std::vector<int> &boneInfoData) {
+        if (boneInfo != nullptr) {
+            delete boneInfo;
+        }
+        auto size = boneInfoData.size() * sizeof(char);
+        boneInfo = static_cast<BoneInfo *>(malloc(size));
+        for (int i = 0; i < size; ++i) {
+            ((char *) boneInfo)[i] = boneInfoData[i];
+        }
+    }
+
+    void MeshFilter::LoadWeight(std::string filePath) {
+        std::ifstream fileStream(Application::GetDataPath() + filePath, std::ios::in | std::ios::binary);
+        if (!fileStream.is_open()) {
+            Debug::LogError("LoadWeight: file not found " + filePath);
+            return;
+        }
+        //读取文件头
+        char fileHead[7];
+        fileStream.read(fileHead, 6);
+        fileHead[6] = '\0';
+        if (strcmp(fileHead, "weight") != 0) {
+            Debug::LogError("LoadWeight: file head error");
+            return;
+        }
+        //读取文件权重
+        fileStream.seekg(0, std::ios::end);
+        int fileSize = fileStream.tellg();
+        fileStream.seekg(6, std::ios::beg);
+        boneInfo = static_cast<BoneInfo *>(malloc(fileSize - 6));
+        fileStream.read((char *) boneInfo, fileSize - 6);
+        fileStream.close();
     }
 } // DivineBrush

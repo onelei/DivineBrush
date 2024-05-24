@@ -17,7 +17,9 @@
 #include "Handler/CreateVAOHandler.h"
 #include "Handler/SetBlendFuncHandler.h"
 #include "Handler/ActiveAndBindTextureHandler.h"
-#include "Handler/SetUniform1iHandler.h"
+#include "Handler/SetUniformIntHandler.h"
+#include "Handler/SetUniformFloatHandler.h"
+#include "Handler/SetUniformVector3Handler.h"
 #include "Handler/BindVAOAndDrawElementsHandler.h"
 #include "Handler/SetStencilBufferClearValueHandler.h"
 #include "Handler/SetStencilFuncHandler.h"
@@ -26,6 +28,8 @@
 #include "Handler/UpdateTextureSubImage2DHandler.h"
 #include "Handler/UpdateVBODataHandler.h"
 #include "Handler/UpdateUBODataHandler.h"
+#include "Handler/BindUniformBufferHandler.h"
+#include "Handler/CreateUBOHandler.h"
 
 namespace DivineBrush {
     rigtorp::SPSCQueue<RenderCommandHandler *> RenderCommandBuffer::ringBuffer = rigtorp::SPSCQueue<RenderCommandHandler *>(
@@ -211,9 +215,32 @@ namespace DivineBrush {
         RenderCommandBuffer::Enqueue(handler);
     }
 
-    void RenderCommandBuffer::SetUniform1iHandler(unsigned int shaderProgramHandle, char *uniformName, int value) {
+    void
+    RenderCommandBuffer::SetUniformIntHandler(unsigned int shaderProgramHandle, const char *uniformName, int value) {
         //设置Shader程序从纹理单元读取颜色数据
-        auto handler = ObjectPool<DivineBrush::SetUniform1iHandler>::Get();
+        auto handler = ObjectPool<DivineBrush::SetUniformIntHandler>::Get();
+        handler->shaderProgramHandle = shaderProgramHandle;
+        handler->uniformName = new char[strlen(uniformName) + 1];  // 加1因为需要为结尾的空字符腾出空间
+        strcpy(handler->uniformName, uniformName);
+        handler->value = value;
+        RenderCommandBuffer::Enqueue(handler);
+    }
+
+    void RenderCommandBuffer::SetUniformFloatHandler(unsigned int shaderProgramHandle, const char *uniformName,
+                                                     float value) {
+        //设置Shader程序从纹理单元读取颜色数据
+        auto handler = ObjectPool<DivineBrush::SetUniformFloatHandler>::Get();
+        handler->shaderProgramHandle = shaderProgramHandle;
+        handler->uniformName = new char[strlen(uniformName) + 1];  // 加1因为需要为结尾的空字符腾出空间
+        strcpy(handler->uniformName, uniformName);
+        handler->value = value;
+        RenderCommandBuffer::Enqueue(handler);
+    }
+
+    void RenderCommandBuffer::SetUniformVector3Handler(unsigned int shaderProgramHandle, const char *uniformName,
+                                                       glm::vec3 value) {
+        //设置Shader程序从纹理单元读取颜色数据
+        auto handler = ObjectPool<DivineBrush::SetUniformVector3Handler>::Get();
         handler->shaderProgramHandle = shaderProgramHandle;
         handler->uniformName = new char[strlen(uniformName) + 1];  // 加1因为需要为结尾的空字符腾出空间
         strcpy(handler->uniformName, uniformName);
@@ -286,6 +313,26 @@ namespace DivineBrush {
         handler->data = (unsigned char *) malloc(dataSize);
         memcpy(handler->data, data, dataSize);
         handler->dataSize = dataSize;
+        RenderCommandBuffer::Enqueue(handler);
+    }
+
+    void RenderCommandBuffer::BindUniformBufferHandler(unsigned int shaderProgramHandle) {
+        auto handler = ObjectPool<DivineBrush::BindUniformBufferHandler>::Get();
+        handler->shaderProgramHandle = shaderProgramHandle;
+        RenderCommandBuffer::Enqueue(handler);
+    }
+
+    void
+    RenderCommandBuffer::CreateUBOHandler(unsigned int shaderProgramHandle, unsigned int uboHandle, char *name,
+                                          unsigned int size,
+                                          void *data) {
+        auto handler = ObjectPool<DivineBrush::CreateUBOHandler>::Get();
+        handler->shaderProgramHandle = shaderProgramHandle;
+        handler->uboHandle = uboHandle;
+        handler->name = name;
+        handler->size = size;
+        handler->data = (unsigned char *) malloc(size);
+        memcpy(handler->data, data, size);
         RenderCommandBuffer::Enqueue(handler);
     }
 

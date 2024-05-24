@@ -6,6 +6,7 @@
 #include <rapidxml/rapidxml.hpp>
 #include "rapidxml/rapidxml_utils.hpp"
 #include "../Application.h"
+#include "../RenderPipeline/RenderCommandBuffer.h"
 #include <string>
 
 namespace DivineBrush {
@@ -63,6 +64,15 @@ namespace DivineBrush {
 
     void Material::SetUniformVector3(const std::string &shaderPropertyName, glm::vec3 &value) {
         uniformVector3Map[shaderPropertyName] = value;
+    }
+
+    void Material::Render(GLuint shaderProgramHandle) {
+        for (auto& pair:uniformIntMap){
+            RenderCommandBuffer::SetUniformFloatHandler(shaderProgramHandle,pair.first.c_str(), pair.second);
+        }
+        for (auto& pair:uniformFloatMap){
+            RenderCommandBuffer::SetUniformFloatHandler(shaderProgramHandle,pair.first.c_str(), pair.second);
+        }
     }
 
 } // DivineBrush

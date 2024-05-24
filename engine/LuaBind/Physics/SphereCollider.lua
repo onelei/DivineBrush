@@ -3,7 +3,7 @@
 --- Created by onelei.
 --- DateTime: 2024/5/8 11:06
 ---
----@class SphereCollider
+---@class SphereCollider:Collider
 local SphereCollider = class("SphereCollider", Collider)
 
 function SphereCollider:ctor()

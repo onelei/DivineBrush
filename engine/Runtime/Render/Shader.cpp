@@ -69,6 +69,8 @@ namespace DivineBrush {
                                          std::istreambuf_iterator<char>());
 
         CreateProgram(vertex_shader_text.c_str(), fragment_shader_text.c_str());
+
+        RenderCommandBuffer::BindUniformBufferHandler(shaderProgramHandle);
     }
 
     void Shader::CreateProgram(const char *vertex_shader_text, const char *fragment_shader_text) {

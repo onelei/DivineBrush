@@ -3,7 +3,7 @@
 --- Created by onelei.
 --- DateTime: 2024/5/8 11:07
 ---
----@class PhysicMaterial
+---@class PhysicMaterial:BaseCpp
 ---@alias float number
 local PhysicMaterial = class("PhysicMaterial", BaseCpp)
 

@@ -9,6 +9,8 @@
 #include <vector>
 #include <unordered_map>
 #include <glm/glm.hpp>
+#include <GL/glew.h>
+#include <GL/gl.h>
 
 namespace DivineBrush {
 
@@ -42,6 +44,8 @@ namespace DivineBrush {
         static bool TryGetUniformBuffer(const std::string &name, UniformBuffer *&uniformBuffer);
 
         static bool TryGetUniformInfos(const std::string &name, std::vector<UniformInfo> *&uniformInfos);
+
+        static void Bind(GLuint shaderProgramId);
 
     private:
         static void CreateUniformBuffer();

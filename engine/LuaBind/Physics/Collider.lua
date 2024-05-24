@@ -3,7 +3,7 @@
 --- Created by onelei.
 --- DateTime: 2024/5/8 16:42
 ---
----@class Collider
+---@class Collider:Component
 local Collider = class("Collider", Component)
 
 function Collider:ctor()

@@ -3,7 +3,7 @@
 --- Created by onelei.
 --- DateTime: 2024/4/1 16:24
 ---
----@class GameObject
+---@class GameObject:BaseCpp
 local GameObject = class("GameObject", BaseCpp)
 
 function GameObject:ctor(name)

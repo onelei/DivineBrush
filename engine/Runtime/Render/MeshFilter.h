@@ -27,134 +27,83 @@ namespace DivineBrush {
             glm::vec3 pos;
             glm::vec4 color;
             glm::vec2 uv;
+            glm::vec3 normal;
         };
 
         struct MeshFileHead {
             char type[4];
+            char name[32];
             unsigned short vertex_num;
             unsigned short vertex_index_num;
         };
 
         struct Mesh {
-            unsigned short vertex_num;
-            unsigned short vertex_index_num;
-            Vertex *vertex_data;
-            unsigned short *vertex_index_data;
+            char *name = nullptr;
+            unsigned short vertex_num = 0;
+            unsigned short vertex_index_num = 0;
+            Vertex *vertex_data = nullptr;
+            unsigned short *vertex_index_data = nullptr;
+
+            ~Mesh() {
+                if (vertex_data) {
+                    delete[] vertex_data;
+                    vertex_data = nullptr;
+                }
+                if (vertex_index_data) {
+                    delete[] vertex_index_data;
+                    vertex_index_data = nullptr;
+                }
+            }
+
+            unsigned short GetSize() {
+                return sizeof(vertex_num) + sizeof(Vertex) * vertex_num
+                       + sizeof(vertex_index_num) + vertex_index_num * sizeof(unsigned short);
+            }
         };
 
-        void LoadMesh(const char *mesh_file_path);
+        struct BoneInfo {
+            //骨骼顶点索引
+            char index[4];
+            //骨骼权重
+            char weight[4];
+        };
+
+        void LoadMesh(const std::string& filePath);
+
         void CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned short> &vertex_index_data);
+
+        void CreateMeshLua(std::vector<float> &vertex_data, std::vector<unsigned short> &vertex_index_data);
 
         Mesh *GetMesh() {
             return this->mesh;
         }
 
-    private:
-        Mesh *mesh = nullptr;
-    };
-
-//原始顶点数组
-    static const MeshFilter::Vertex kVertexs[36] = {
-            //Front
-            glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(1.0f, -1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f),
-            glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-
-            glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
-
-            //back
-            glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(1.0f, -1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f),
-            glm::vec3(1.0f, 1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-
-            glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(1.0f, 1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec3(-1.0f, 1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
-
-            //left
-            glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f),
-            glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-
-            glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec3(-1.0f, 1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
-
-            //right
-            glm::vec3(1.0f, -1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(1.0f, -1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f),
-            glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-
-            glm::vec3(1.0f, -1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec3(1.0f, 1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
-
-            //up
-            glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f),
-            glm::vec3(1.0f, 1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-
-            glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(1.0f, 1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec3(-1.0f, 1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
-
-            //down
-            glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(1.0f, -1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 0.0f),
-            glm::vec3(1.0f, -1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-
-            glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 0.0f),
-            glm::vec3(1.0f, -1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
-    };
-
-//去重的顶点Vector
-    static std::vector<MeshFilter::Vertex> kVertexRemoveDumplicateVector;
-//顶点索引Vector
-    static std::vector<unsigned short> kVertexIndexVector;
-
-//顶点去重
-    static void VertexRemoveDumplicate(char *mesh_file_path) {
-        for (int i = 0; i < 36; ++i) {
-            const MeshFilter::Vertex &vertex = kVertexs[i];
-            //判断顶点是否存在
-            int index = -1;
-            for (int j = 0; j < kVertexRemoveDumplicateVector.size(); ++j) {
-                if (vertex.pos == kVertexRemoveDumplicateVector[j].pos &&
-                    vertex.color == kVertexRemoveDumplicateVector[j].color &&
-                    vertex.uv == kVertexRemoveDumplicateVector[j].uv) {
-                    index = j;
-                    break;
-                }
-            }
-            if (index < 0) {
-                //没找到就将目标顶点加入kVertexRemoveDumplicateVector，并记录索引为kVertexRemoveDumplicateVector.size()。
-                kVertexRemoveDumplicateVector.push_back(vertex);
-                kVertexIndexVector.push_back(kVertexRemoveDumplicateVector.size() - 1);
-            } else {
-                //找到了目标顶点，记录索引为kVertexRemoveDumplicateVector的位置。
-                kVertexIndexVector.push_back(index);
-            }
+        Mesh *GetSkinMesh() {
+            return this->skinMesh;
         }
 
-        std::ofstream output_file_stream(mesh_file_path, std::ios::out | std::ios::binary);
-        MeshFilter::MeshFileHead mesh_file_head;
-        mesh_file_head.type[0] = 'm';
-        mesh_file_head.type[1] = 'e';
-        mesh_file_head.type[2] = 's';
-        mesh_file_head.type[3] = 'h';
-        mesh_file_head.vertex_num = kVertexRemoveDumplicateVector.size();
-        mesh_file_head.vertex_index_num = kVertexIndexVector.size();
-        output_file_stream.write((char *) &mesh_file_head, sizeof(mesh_file_head));
-        output_file_stream.write((char *) &kVertexRemoveDumplicateVector[0],
-                                 kVertexRemoveDumplicateVector.size() * sizeof(MeshFilter::Vertex));
-        output_file_stream.write((char *) &kVertexIndexVector[0], kVertexIndexVector.size() * sizeof(unsigned short));
-        output_file_stream.close();
-    }
+        void SetSkinMesh(Mesh *mesh) {
+            this->skinMesh = mesh;
+        }
 
-    static void ExportMesh(char *mesh_file_path);
+        const char *GetMeshName(){
+            return this->mesh->name;
+        }
+
+        BoneInfo *GetBoneInfo() {
+            return this->boneInfo;
+        }
+
+        void SetBoneInfo(std::vector<int> &boneInfoData);
+
+        void LoadWeight(std::string filePath);
+
+    private:
+        Mesh *mesh = nullptr;
+        Mesh *skinMesh = nullptr;
+        BoneInfo *boneInfo = nullptr;
+    };
+
 } // DivineBrush
 
 #endif //ENGINE_MESHFILTER_H

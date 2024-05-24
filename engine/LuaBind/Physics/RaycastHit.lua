@@ -3,7 +3,7 @@
 --- Created by onelei.
 --- DateTime: 2024/5/8 11:07
 ---
----@class RaycastHit
+---@class RaycastHit:BaseCpp
 local RaycastHit = class("RaycastHit", BaseCpp)
 
 function RaycastHit:ctor()

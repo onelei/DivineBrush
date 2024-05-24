@@ -8,11 +8,13 @@ namespace DivineBrush {
     unsigned int RenderGenerater::shaderIndex;//Shader程序索引
     unsigned int RenderGenerater::vaoIndex;//VAO索引
     unsigned int RenderGenerater::vboIndex;//VBO索引
+    unsigned int RenderGenerater::uboIndex;//UBO索引
     unsigned int RenderGenerater::textureIndex;//Texture索引
 
     std::unordered_map<unsigned int, GLuint> RenderGenerater::shaderMap;//Shader程序映射表
     std::unordered_map<unsigned int, GLuint> RenderGenerater::vaoMap;//VAO映射表
     std::unordered_map<unsigned int, GLuint> RenderGenerater::vboMap;//VBO映射表
+    std::unordered_map<unsigned int, GLuint> RenderGenerater::uboMap;//UBO映射表
     std::unordered_map<unsigned int, GLuint> RenderGenerater::textureMap;//Texture映射表
     unsigned int RenderGenerater::CreateShader() {
         return ++shaderIndex;
@@ -61,4 +63,17 @@ namespace DivineBrush {
     GLuint RenderGenerater::GetTexture(unsigned int key) {
         return textureMap[key];
     }
+
+    unsigned int RenderGenerater::CreateUBO() {
+        return ++uboIndex;
+    }
+
+    void RenderGenerater::SetUBO(unsigned int key, GLuint value) {
+        uboMap[key] = value;
+    }
+
+    GLuint RenderGenerater::GetUBO(unsigned int key) {
+        return uboMap[key];
+    }
+
 } // DivineBrush

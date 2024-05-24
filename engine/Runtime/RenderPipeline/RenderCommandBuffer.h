@@ -72,7 +72,12 @@ namespace DivineBrush {
 
         static void ActiveAndBindTextureHandler(unsigned int textureUnit, unsigned int textureHandle);
 
-        static void SetUniform1iHandler(unsigned int shaderProgramHandle, char *uniformName, int value);
+        static void SetUniformIntHandler(unsigned int shaderProgramHandle, const char *uniformName, int value);
+
+        static void SetUniformFloatHandler(unsigned int shaderProgramHandle, const char *uniformName, float value);
+
+        static void
+        SetUniformVector3Handler(unsigned int shaderProgramHandle, const char *uniformName, glm::vec3 value);
 
         static void BindVAOAndDrawElementsHandler(unsigned int vaoHandle, unsigned int vertexIndexCount);
 
@@ -100,6 +105,13 @@ namespace DivineBrush {
                                                    unsigned char *data,
                                                    unsigned int dataSize);
 
+        static void BindUniformBufferHandler(unsigned int shaderProgramHandle);
+
+        static void CreateUBOHandler(unsigned int shaderProgramHandle,
+                                     unsigned int uboHandle,
+                                     char *name,
+                                     unsigned int size,
+                                     void *data);
 
         static bool IsEmpty();
 

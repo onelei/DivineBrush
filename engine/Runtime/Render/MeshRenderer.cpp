@@ -20,27 +20,6 @@ namespace DivineBrush {
                 .constructor<>()(rttr::policy::ctor::as_raw_ptr);
     }
 
-    void MeshRenderer::Prepare() {
-        //获取Shader中的变量
-        auto shader = material->GetShader();
-        shaderProgramHandle = shader->GetProgramHandle();
-        auto component_mesh_filter = gameObject->GetComponent("MeshFilter");
-        mesh_filter = dynamic_cast<MeshFilter *>(component_mesh_filter);
-        if (!mesh_filter) {
-            return;
-        }
-        vaoHandle = RenderGenerater::CreateVAO();
-        vboHandle = RenderGenerater::CreateVBO();
-        auto mesh = mesh_filter->GetMesh();
-        auto vertexDataSize = mesh->vertex_num * sizeof(MeshFilter::Vertex);
-        auto vertexTypeSize = sizeof(MeshFilter::Vertex);
-        auto vertexData = mesh->vertex_data;
-        auto vertexIndexDataSize = mesh->vertex_index_num * sizeof(unsigned short);
-        auto vertexIndexData = mesh->vertex_index_data;
-        RenderCommandBuffer::CreateVAOHandler(shaderProgramHandle, vaoHandle, vboHandle, vertexDataSize, vertexTypeSize,
-                                              vertexData, vertexIndexDataSize, vertexIndexData);
-    }
-
     void MeshRenderer::Render() {
         auto component = gameObject->GetComponent("Transform");
         auto transform = dynamic_cast<Transform *>(component);
@@ -62,18 +41,23 @@ namespace DivineBrush {
         if ((GetGameObject()->GetLayer() & camera->GetCullingMask()) == 0x00) {
             return;
         }
-        auto mesh = mesh_filter->GetMesh();
-
+        auto mesh = mesh_filter->GetSkinMesh() != nullptr ? mesh_filter->GetSkinMesh() : mesh_filter->GetMesh();
+        //获取Shader中的变量
+        auto shader = material->GetShader();
+        shaderProgramHandle = shader->GetProgramHandle();
         if (vaoHandle == 0) {
-            Prepare();
+            vaoHandle = RenderGenerater::CreateVAO();
+            vboHandle = RenderGenerater::CreateVBO();
+            auto vertexDataSize = mesh->vertex_num * sizeof(MeshFilter::Vertex);
+            auto vertexTypeSize = sizeof(MeshFilter::Vertex);
+            auto vertexData = mesh->vertex_data;
+            auto vertexIndexDataSize = mesh->vertex_index_num * sizeof(unsigned short);
+            auto vertexIndexData = mesh->vertex_index_data;
+            RenderCommandBuffer::CreateVAOHandler(shaderProgramHandle, vaoHandle, vboHandle, vertexDataSize, vertexTypeSize,
+                                                  vertexData, vertexIndexDataSize, vertexIndexData);
         } else {
-//            auto handler = ObjectPool<UpdateVBODataHandler>::Get();
-//            handler->vboHandle = vboHandle;
-//            auto vertexDataSize = mesh->vertex_num * sizeof(MeshFilter::Vertex);
-//            handler->vertexDataSize = vertexDataSize;
-//            handler->vertexData= (unsigned char*)malloc(vertexDataSize);
-//            memcpy(handler->vertexData, mesh->vertex_data, vertexDataSize);
-//            RenderCommandBuffer::Enqueue(handler);
+            auto vertexDataSize = mesh->vertex_num * sizeof(MeshFilter::Vertex);
+            RenderCommandBuffer::UpdateVBODataHandler(vboHandle, vertexDataSize, mesh->vertex_data);
         }
 
         //进行实际的渲染调用：这里你绘制你的场景，包括提到的立方体渲染。
@@ -88,7 +72,6 @@ namespace DivineBrush {
 
         auto mvp = camera->GetProjection() * camera->GetView() * model;
 
-        auto shader = material->GetShader();
         //指定GPU程序(就是指定顶点着色器、片段着色器)
         shader->Use();
 
@@ -105,9 +88,9 @@ namespace DivineBrush {
         //设置混合函数
         RenderCommandBuffer::SetBlendFuncHandler(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         //上传mvp矩阵
-        //SetUniformMatrix4fv(shaderProgramHandle, "u_model", false, model);
-        //SetUniformMatrix4fv(shaderProgramHandle, "u_view", false, camera->GetView());
-        //SetUniformMatrix4fv(shaderProgramHandle, "u_projection", false, camera->GetProjection());
+        SetUniformMatrix4fv(shaderProgramHandle, "u_model", false, model);
+        SetUniformMatrix4fv(shaderProgramHandle, "u_view", false, camera->GetView());
+        SetUniformMatrix4fv(shaderProgramHandle, "u_projection", false, camera->GetProjection());
         SetUniformMatrix4fv(shaderProgramHandle, "u_mvp", false, mvp);
 
         //拿到保存的Texture
@@ -119,9 +102,12 @@ namespace DivineBrush {
 
             //设置Shader程序从纹理单元读取颜色数据
             auto uniformName = textures[texture_index].first.c_str();
-            RenderCommandBuffer::SetUniform1iHandler(shaderProgramHandle, const_cast<char *>(uniformName),
-                                                     texture_index);
+            RenderCommandBuffer::SetUniformIntHandler(shaderProgramHandle, const_cast<char *>(uniformName),
+                                                      texture_index);
         }
+
+        //Material Render
+        material->Render(shaderProgramHandle);
 
         RenderCommandBuffer::BindVAOAndDrawElementsHandler(vaoHandle, mesh->vertex_index_num);
 

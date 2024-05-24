@@ -3,7 +3,7 @@
 --- Created by onelei.
 --- DateTime: 2024/4/1 16:48
 ---
----@class Component
+---@class Component:BaseCpp
 local Component = class("Component", BaseCpp)
 
 function Component:ctor()

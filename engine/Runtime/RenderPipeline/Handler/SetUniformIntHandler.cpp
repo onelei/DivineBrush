@@ -2,29 +2,29 @@
 // Created by onelei on 2024/4/11.
 //
 
-#include "SetUniform1iHandler.h"
+#include "SetUniformIntHandler.h"
 #include "../../../depends/template/ObjectPool.h"
 #include "../RenderGenerater.h"
 
 namespace DivineBrush {
-    SetUniform1iHandler::SetUniform1iHandler() {
-        renderCommand = DivineBrush::RenderCommand::SetUniform1i;
+    SetUniformIntHandler::SetUniformIntHandler() {
+        renderCommand = DivineBrush::RenderCommand::SetUniformInt;
     }
 
-    SetUniform1iHandler::~SetUniform1iHandler() {
+    SetUniformIntHandler::~SetUniformIntHandler() {
 
     }
 
-    void SetUniform1iHandler::Run() {
+    void SetUniformIntHandler::Run() {
         RenderCommandHandler::Run();
         auto shaderProgram = RenderGenerater::GetShader(shaderProgramHandle);
         auto u_texture_location = glGetUniformLocation(shaderProgram, uniformName);
         glUniform1i(u_texture_location, value);
     }
 
-    void SetUniform1iHandler::Clear() {
+    void SetUniformIntHandler::Clear() {
         RenderCommandHandler::Clear();
         free(uniformName);
-        DivineBrush::ObjectPool<DivineBrush::SetUniform1iHandler>::Release(this);
+        DivineBrush::ObjectPool<DivineBrush::SetUniformIntHandler>::Release(this);
     }
 } // DivineBrush

@@ -2,19 +2,19 @@
 // Created by onelei on 2024/4/11.
 //
 
-#ifndef ENGINE_SETUNIFORM1IHANDLER_H
-#define ENGINE_SETUNIFORM1IHANDLER_H
+#ifndef ENGINE_SETUNIFORMINTHANDLER_H
+#define ENGINE_SETUNIFORMINTHANDLER_H
 
 #include "RenderCommandHandler.h"
 #include "cstdlib"
 
 namespace DivineBrush {
 
-    class SetUniform1iHandler : public RenderCommandHandler {
+    class SetUniformIntHandler : public RenderCommandHandler {
     public:
-        SetUniform1iHandler();
+        SetUniformIntHandler();
 
-        ~SetUniform1iHandler();
+        ~SetUniformIntHandler();
 
         unsigned int shaderProgramHandle = 0;
         char *uniformName = nullptr;
@@ -27,4 +27,4 @@ namespace DivineBrush {
 
 } // DivineBrush
 
-#endif //ENGINE_SETUNIFORM1IHANDLER_H
+#endif //ENGINE_SETUNIFORMINTHANDLER_H

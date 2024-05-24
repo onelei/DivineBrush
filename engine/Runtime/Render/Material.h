@@ -28,6 +28,8 @@ namespace DivineBrush {
 
         void SetTexture(const std::string &shaderPropertyName, Texture2d *texture);
 
+        void Render(GLuint shaderProgramHandle);
+
         Shader *GetShader() { return shader; }
 
         std::vector<std::pair<std::string, Texture2d *>> &GetTextures() { return textures; }

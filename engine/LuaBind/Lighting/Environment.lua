@@ -3,7 +3,7 @@
 --- Created by onelei.
 --- DateTime: 2024/5/18 16:23
 ---
----@class Environment
+---@class Environment:BaseCpp
 local Environment = class("Environment", BaseCpp)
 
 function Environment:ctor()

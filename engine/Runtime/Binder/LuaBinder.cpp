@@ -19,6 +19,12 @@
 #include "../Physics/Collider.h"
 #include "../Lighting/Environment.h"
 #include "../Lighting/Light.h"
+#include "../Animation/Animation.h"
+#include "../Animation/AnimationClip.h"
+#include "../Render/MeshFilter.h"
+#include "../Render/MeshRenderer.h"
+#include "../Render/Material.h"
+#include "../Render/SkinnedMeshRenderer.h"
 
 namespace DivineBrush {
     void LuaBinder::Init() {
@@ -192,6 +198,75 @@ namespace DivineBrush {
                 "SetDynamic", &DivineBrush::RigidBody::SetDynamic,
                 "GetDynamic", &DivineBrush::RigidBody::GetDynamic
         );
+
+        //绑定AnimationClip
+        cpp_ns_table.new_usertype<DivineBrush::AnimationClip>(
+                "AnimationClip", sol::call_constructor,
+                sol::constructors<DivineBrush::AnimationClip()>(),
+                "LoadFromFile", &DivineBrush::AnimationClip::LoadFromFile,
+                "GetCurrentFrameBoneMat4", &DivineBrush::AnimationClip::GetCurrentFrameBoneMat4,
+                "GetCurrentFrameNormalBoneMat3", &DivineBrush::AnimationClip::GetCurrentFrameNormalBoneMat3,
+                "Play", &DivineBrush::AnimationClip::Play,
+                "Stop", &DivineBrush::AnimationClip::Stop
+        );
+
+        //绑定Animation
+        cpp_ns_table.new_usertype<DivineBrush::Animation>(
+                "Animation", sol::call_constructor,
+                sol::constructors<DivineBrush::Animation()>(),
+                sol::base_classes, sol::bases<Component>(),
+                "LoadFromFile", &DivineBrush::Animation::LoadFromFile,
+                "GetAnimationClip", &DivineBrush::Animation::GetAnimationClip,
+                "Play", &DivineBrush::Animation::Play,
+                "Stop", &DivineBrush::Animation::Stop
+        );
+
+        //绑定Material
+        cpp_ns_table.new_usertype<DivineBrush::Material>(
+                "Material", sol::call_constructor,
+                sol::constructors<DivineBrush::Material()>(),
+                "Parse", &DivineBrush::Material::Parse,
+                "SetUniformInt", &DivineBrush::Material::SetUniformInt,
+                "SetUniformFloat", &DivineBrush::Material::SetUniformFloat,
+                "SetUniformVector3", &DivineBrush::Material::SetUniformVector3,
+                "SetTexture", &DivineBrush::Material::SetTexture,
+                "GetShader", &DivineBrush::Material::GetShader,
+                "GetTextures", &DivineBrush::Material::GetTextures
+        );
+
+        //绑定MeshFilter
+        cpp_ns_table.new_usertype<DivineBrush::MeshFilter>(
+                "MeshFilter", sol::call_constructor,
+                sol::constructors<DivineBrush::MeshFilter()>(),
+                sol::base_classes, sol::bases<Component>(),
+                "LoadMesh", &DivineBrush::MeshFilter::LoadMesh,
+                "CreateMesh", &DivineBrush::MeshFilter::CreateMeshLua,
+                "GetMesh", &DivineBrush::MeshFilter::GetMesh,
+                "GetSkinMesh", &DivineBrush::MeshFilter::GetSkinMesh,
+                "GetMeshName", &DivineBrush::MeshFilter::GetMeshName,
+                "SetBoneInfo", &DivineBrush::MeshFilter::SetBoneInfo,
+                "LoadWeight", &DivineBrush::MeshFilter::LoadWeight
+        );
+
+        //绑定MeshRenderer
+        cpp_ns_table.new_usertype<DivineBrush::MeshRenderer>(
+                "MeshRenderer", sol::call_constructor,
+                sol::constructors<DivineBrush::MeshRenderer()>(),
+                sol::base_classes, sol::bases<Component>(),
+                "SetMaterial", &DivineBrush::MeshRenderer::SetMaterial,
+                "GetMaterial", &DivineBrush::MeshRenderer::GetMaterial,
+                "SetMeshFilter", &DivineBrush::MeshRenderer::SetMeshFilter,
+                "GetMeshFilter", &DivineBrush::MeshRenderer::GetMeshFilter
+        );
+
+        //绑定SkinnedMeshRenderer
+        cpp_ns_table.new_usertype<DivineBrush::SkinnedMeshRenderer>(
+                "SkinMeshRenderer", sol::call_constructor,
+                sol::constructors<DivineBrush::SkinnedMeshRenderer()>(),
+                sol::base_classes, sol::bases<MeshRenderer, Component>(),
+                "OnUpdate", &DivineBrush::SkinnedMeshRenderer::OnUpdate
+        );
+
 
         //设置lua搜索目录
         sol::table package_table = solState["package"];

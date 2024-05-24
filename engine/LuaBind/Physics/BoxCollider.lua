@@ -3,7 +3,7 @@
 --- Created by onelei.
 --- DateTime: 2024/5/8 11:05
 ---
----@class BoxCollider
+---@class BoxCollider:Collider
 local BoxCollider = class("BoxCollider", Collider)
 
 function BoxCollider:ctor()

@@ -3,7 +3,7 @@
 --- Created by onelei.
 --- DateTime: 2024/5/18 16:23
 ---
----@class Light
+---@class Light:Component
 local Light = class("Light", Component)
 
 function Light:ctor()

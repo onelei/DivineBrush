@@ -108,4 +108,13 @@ namespace DivineBrush {
         }
     }
 
+    void UniformBufferManager::Bind(GLuint shaderProgramId) {
+        for (auto &v:uniformBuffers){
+           auto blockIndex = glGetUniformBlockIndex(shaderProgramId, v.second.name.c_str());
+           if (blockIndex != GL_INVALID_INDEX) {
+               glUniformBlockBinding(shaderProgramId, blockIndex, v.second.bind);
+           }
+        }
+    }
+
 } // DivineBrush

@@ -141,8 +141,8 @@ set(IMGUI_BACKENDS
         Runtime/RenderPipeline/Handler/SetUniformMatrix4fvHandler.h
         Runtime/RenderPipeline/Handler/ActiveAndBindTextureHandler.cpp
         Runtime/RenderPipeline/Handler/ActiveAndBindTextureHandler.h
-        Runtime/RenderPipeline/Handler/SetUniform1iHandler.cpp
-        Runtime/RenderPipeline/Handler/SetUniform1iHandler.h
+        Runtime/RenderPipeline/Handler/SetUniformIntHandler.cpp
+        Runtime/RenderPipeline/Handler/SetUniformIntHandler.h
         Runtime/RenderPipeline/Handler/BindVAOAndDrawElementsHandler.cpp
         Runtime/RenderPipeline/Handler/BindVAOAndDrawElementsHandler.h
         Runtime/RenderPipeline/Handler/SetClearFlagAndClearColorBufferHandler.cpp
@@ -207,6 +207,14 @@ set(IMGUI_BACKENDS
         Runtime/Animation/Animation.h
         Runtime/Render/SkinnedMeshRenderer.cpp
         Runtime/Render/SkinnedMeshRenderer.h
+        Runtime/RenderPipeline/Handler/SetUniformFloatHandler.cpp
+        Runtime/RenderPipeline/Handler/SetUniformFloatHandler.h
+        Runtime/RenderPipeline/Handler/SetUniformVector3Handler.cpp
+        Runtime/RenderPipeline/Handler/SetUniformVector3Handler.h
+        Runtime/RenderPipeline/Handler/BindUniformBufferHandler.cpp
+        Runtime/RenderPipeline/Handler/BindUniformBufferHandler.h
+        Runtime/RenderPipeline/Handler/CreateUBOHandler.cpp
+        Runtime/RenderPipeline/Handler/CreateUBOHandler.h
 )
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
