@@ -18,6 +18,7 @@
 #include "../RenderPipeline/RenderCommandBuffer.h"
 #include "../Physics/Physics.h"
 #include "../Time/Time.h"
+#include "../../Runtime/Audio/Audio.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -141,6 +142,7 @@ namespace DivineBrush {
 
         Physics::Init();
 
+        Audio::Play2D("nullptr");
         return 0;
     }
 

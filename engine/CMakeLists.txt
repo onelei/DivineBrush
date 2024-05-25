@@ -27,6 +27,7 @@ find_package(sol2 CONFIG REQUIRED)
 find_package(Lua REQUIRED)
 find_package(SPSCQueue CONFIG REQUIRED)
 find_package(unofficial-omniverse-physx-sdk CONFIG REQUIRED)
+find_package(OpenAL CONFIG REQUIRED)
 
 set(IMGUI_BACKENDS
         ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_glfw.cpp
@@ -264,7 +265,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         sol2
         ${LUA_LIBRARIES}
         SPSCQueue::SPSCQueue
-        unofficial::omniverse-physx-sdk::sdk)
+        unofficial::omniverse-physx-sdk::sdk
+        OpenAL::OpenAL)
 
 
 #if (MSVC)
