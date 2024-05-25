@@ -60,8 +60,8 @@ set(IMGUI_BACKENDS
         Runtime/UI/Texture.h
         Runtime/UI/Texture2d.cpp
         Runtime/UI/Texture2d.h
-        Runtime/Render/Render.cpp
-        Runtime/Render/Render.h
+        Runtime/EditorApplication.cpp
+        Runtime/EditorApplication.h
         Runtime/Application.cpp
         Runtime/Application.h
         Runtime/Render/Shader.cpp

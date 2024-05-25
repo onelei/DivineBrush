@@ -2,24 +2,24 @@
 // Created by onelei on 2024/3/8.
 //
 
-#include "Render.h"
+#include "EditorApplication.h"
 #include <cstdio>
 #include <glm/ext/matrix_transform.hpp>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include "../../editor/window/EditorWindow.h"
-#include "../Component/GameObject.h"
-#include "../Input/Input.h"
-#include "../Component/Scene.h"
-#include "../Screen/Screen.h"
-#include <easy/profiler.h>
-#include "../../depends/debug/debug.h"
-#include "../RenderPipeline/RenderCommandBuffer.h"
-#include "../Physics/Physics.h"
-#include "../Time/Time.h"
-#include "../../Runtime/Audio/Audio.h"
-#include "../../samples/scene/sample_scene.h"
+#include "../Editor/Window/EditorWindow.h"
+#include "Component/GameObject.h"
+#include "Input/Input.h"
+#include "Component/Scene.h"
+#include "Screen/Screen.h"
+#include "easy/profiler.h"
+#include "../depends/debug/debug.h"
+#include "RenderPipeline/RenderCommandBuffer.h"
+#include "Physics/Physics.h"
+#include "Time/Time.h"
+#include "Audio/Audio.h"
+#include "../samples/scene/sample_scene.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -44,7 +44,9 @@ namespace DivineBrush {
     class Application;
 
     const char *glsl_version;
-    bool Render::useImGui = true;
+    GLFWwindow *EditorApplication::gameWindow = nullptr;
+    GLFWwindow *EditorApplication::editorWindow = nullptr;
+    bool EditorApplication::useImGui = true;
 
     static void glfw_error_callback(int error, const char *description) {
         fprintf(stderr, "GLFW Error %d: %s\n", error, description);
@@ -66,7 +68,7 @@ namespace DivineBrush {
         Input::SetMousePosition(x, y);
     }
 
-    int Render::Init() {
+    int EditorApplication::Init() {
         EASY_MAIN_THREAD;
         profiler::startListen();// 启动profiler服务器，等待gui连接。
 
@@ -109,12 +111,12 @@ namespace DivineBrush {
 
         // Create window with graphics context
         //Dear ImGui GLFW+OpenGL3 example
-        this->gameWindow = glfwCreateWindow(480, 320, "DivineBrush", nullptr, nullptr);
-        if (this->gameWindow == nullptr)
+        gameWindow = glfwCreateWindow(480, 320, "DivineBrush", nullptr, nullptr);
+        if (gameWindow == nullptr)
             exit(EXIT_FAILURE);
 
-        this->editorWindow = glfwCreateWindow(960, 640, "DivineBrushEditor", nullptr, gameWindow);
-        if (this->editorWindow == nullptr)
+        editorWindow = glfwCreateWindow(960, 640, "DivineBrushEditor", nullptr, gameWindow);
+        if (editorWindow == nullptr)
             exit(EXIT_FAILURE);
 
         glfwSetKeyCallback(gameWindow, glfw_key_callback);
@@ -125,8 +127,8 @@ namespace DivineBrush {
         // icon
         GLFWimage image;
         DivineBrush::Texture2d::LoadGLFWimage("../resources/icon.ico", &image); // 读取图标
-        glfwSetWindowIcon(this->gameWindow, 1, &image); // 设置窗口图标
-        glfwSetWindowIcon(this->editorWindow, 1, &image); // 设置窗口图标
+        glfwSetWindowIcon(gameWindow, 1, &image); // 设置窗口图标
+        glfwSetWindowIcon(editorWindow, 1, &image); // 设置窗口图标
 
         glfwMakeContextCurrent(editorWindow);
 
@@ -147,7 +149,7 @@ namespace DivineBrush {
         return 0;
     }
 
-    void Render::InitImGui() {
+    void EditorApplication::InitImGui() {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -188,7 +190,7 @@ namespace DivineBrush {
 
     }
 
-    void Render::Run() {
+    void EditorApplication::Run() {
         // Our state
         bool show_demo_window = true;
         bool show_another_window = false;
@@ -322,7 +324,7 @@ namespace DivineBrush {
         glfwTerminate();
     }
 
-    void Render::Update() {
+    void EditorApplication::Update() {
         EASY_FUNCTION(profiler::colors::Magenta); // 标记函数
         Time::Update();
         UpdateScreenSize();
@@ -330,11 +332,11 @@ namespace DivineBrush {
         Input::Update();
     }
 
-    void Render::UpdateScreenSize() {
+    void EditorApplication::UpdateScreenSize() {
         RenderCommandBuffer::UpdateScreenSizeHandler(gameWindow);
     }
 
-    void Render::FixUpdate() {
+    void EditorApplication::FixUpdate() {
         EASY_FUNCTION(profiler::colors::Magenta); // 标记函数
         Physics::FixUpdate();
         GameObject::FixUpdateAll();
