@@ -11,6 +11,7 @@
 #include "../Render/Camera.h"
 #include "../../depends/node/Node.h"
 #include "rttr/registration.h"
+
 using namespace rttr;
 
 namespace DivineBrush {
@@ -75,17 +76,28 @@ namespace DivineBrush {
             return this->transform;
         }
 
-        Component *AddComponentByName(const std::string &componentName);
+        Component *AddComponent(const std::string &componentName);
 
         Component *AddComponentByLua(std::string componentName, Component *component);
 
         Component *GetComponent(const std::string &componentName);
 
         template<class T = Component>
-        T *GetComponent(){
+        T *GetComponent() {
             type t = type::get<T>();
             auto componentName = t.get_name().to_string();
             auto component = GetComponent(componentName);
+            if (component == nullptr) {
+                return nullptr;
+            }
+            return dynamic_cast<T *>(component);
+        }
+
+        template<class T = Component>
+        T *AddComponent() {
+            type t = type::get<T>();
+            auto componentName = t.get_name().to_string();
+            auto component = AddComponent(componentName);
             if (component == nullptr) {
                 return nullptr;
             }

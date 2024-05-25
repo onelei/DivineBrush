@@ -96,8 +96,7 @@ namespace DivineBrush {
             auto pxRigidStatic = Physics::CreatePxRigidStatic(transform->GetPosition(), gameObject->GetName());
             pxRigidActor = dynamic_cast<physx::PxRigidActor *>(pxRigidStatic);
         }
-        auto component = gameObject->GetComponent("Collider");
-        auto _collider = dynamic_cast<Collider *>(component);
+        auto _collider = gameObject->GetComponent<Collider>();
         BindCollider(_collider);
     }
 

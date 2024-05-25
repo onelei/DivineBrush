@@ -33,7 +33,7 @@ namespace DivineBrush::Editor {
                     gameObject->SetLayer(layer);
                 }
                 //Transform
-                auto transform = dynamic_cast<Transform *>(gameObject->GetComponent("Transform"));
+                auto transform = gameObject->GetComponent<Transform>();
 
                 auto position = transform->GetPosition();
                 auto rotation = transform->GetRotation();

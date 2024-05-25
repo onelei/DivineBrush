@@ -10,9 +10,8 @@ namespace DivineBrush {
     GameObject::GameObject(const char *name) {
         this->SetName(name);
         // 添加Transform组件
-        AddComponentByName("Transform");
-        auto component = this->GetComponent("Transform");
-        transform = dynamic_cast<Transform *>(component);
+        AddComponent<Transform>();
+        transform = this->GetComponent<Transform>();
         // 添加到根节点
         GetRootNode()->AddChild(this);
     }
@@ -21,7 +20,7 @@ namespace DivineBrush {
         //DEBUG_LOG_INFO("GameObject::~GameObject");
     }
 
-    Component *GameObject::AddComponentByName(const std::string &componentName) {
+    Component *GameObject::AddComponent(const std::string &componentName) {
         type t = type::get_by_name(componentName);
         variant var = t.create();
         Component *component = var.get_value<Component *>();
@@ -66,11 +65,7 @@ namespace DivineBrush {
             if (!gameObject->IsActive()) {
                 return;
             }
-            auto mesh_render_component = gameObject->GetComponent("MeshRenderer");
-            if (!mesh_render_component) {
-                return;
-            }
-            auto mesh_render = dynamic_cast<MeshRenderer *>(mesh_render_component);
+            auto mesh_render = gameObject->GetComponent<MeshRenderer>();
             if (!mesh_render) {
                 return;
             }

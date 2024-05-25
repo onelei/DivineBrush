@@ -21,13 +21,11 @@ namespace DivineBrush {
     }
 
     void MeshRenderer::Render() {
-        auto component = gameObject->GetComponent("Transform");
-        auto transform = dynamic_cast<Transform *>(component);
+        auto transform = gameObject->GetComponent<Transform>();
         if (!transform) {
             return;
         }
-        auto component_mesh_filter = gameObject->GetComponent("MeshFilter");
-        mesh_filter = dynamic_cast<MeshFilter *>(component_mesh_filter);
+        mesh_filter = gameObject->GetComponent<MeshFilter>();
         if (!mesh_filter) {
             return;
         }

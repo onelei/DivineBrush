@@ -19,6 +19,7 @@
 #include "../Physics/Physics.h"
 #include "../Time/Time.h"
 #include "../../Runtime/Audio/Audio.h"
+#include "../../samples/scene/sample_scene.h"
 
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -197,7 +198,7 @@ namespace DivineBrush {
         UpdateScreenSize();
 
         auto gameObject = new GameObject("SampleScene");
-        auto scene = dynamic_cast<Scene *>(gameObject->AddComponentByName("SampleScene"));
+        auto scene = dynamic_cast<Scene *>(gameObject->AddComponent<SampleScene>());
 
         // Main loop
 #ifdef __EMSCRIPTEN__

@@ -30,7 +30,7 @@ namespace DivineBrush::UI {
             return;
         }
         Component::OnUpdate();
-        auto transform = dynamic_cast<Transform *>(gameObject->GetComponent("Transform"));
+        auto transform = gameObject->GetComponent<Transform>();
         //按钮的图片 与 按钮坐标同步
         auto transform_image_normal = dynamic_cast<Transform *>(normal_image->GetGameObject()->GetComponent(
                 "Transform"));

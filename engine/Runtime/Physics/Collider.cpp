@@ -85,8 +85,7 @@ namespace DivineBrush {
         if (rigidBody != nullptr) {
             return rigidBody;
         }
-        auto component = GetGameObject()->GetComponent("RigidBody");
-        rigidBody = dynamic_cast<RigidBody *>(component);
+        rigidBody = GetGameObject()->GetComponent<RigidBody>();
         return rigidBody;
     }
 
