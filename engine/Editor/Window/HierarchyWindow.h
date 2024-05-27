@@ -21,6 +21,8 @@ namespace DivineBrush::Editor {
 
         ~HierarchyWindow();
 
+        void OnPrepareGUI() override;
+
         void OnGUI() override;
 
         void DrawTreeNode(Node *node, const char *name, ImGuiTreeNodeFlags flags);

@@ -29,9 +29,16 @@ find_package(SPSCQueue CONFIG REQUIRED)
 find_package(unofficial-omniverse-physx-sdk CONFIG REQUIRED)
 find_package(OpenAL CONFIG REQUIRED)
 
-set(IMGUI_BACKENDS
-        ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_glfw.cpp
-        ${PROJECT_SOURCE_DIR}/depends/imgui/backends/imgui_impl_opengl3.cpp
+find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
+
+include_directories(${RAPIDXML_INCLUDE_DIRS}
+        ${PROJECT_SOURCE_DIR}/depends/easy_profiler/include
+        ${LUA_INCLUDE_DIR})
+
+add_executable(${PROJECT_NAME}
+        Main.cpp
+        Resources/app_icon.rc
+        ${SOURCE_FILES}
         Editor/Window/EditorWindow.h
         Editor/Window/HierarchyWindow.cpp
         Editor/Window/HierarchyWindow.h
@@ -216,20 +223,6 @@ set(IMGUI_BACKENDS
         Runtime/RenderPipeline/Handler/BindUniformBufferHandler.h
         Runtime/RenderPipeline/Handler/CreateUBOHandler.cpp
         Runtime/RenderPipeline/Handler/CreateUBOHandler.h
-)
-
-find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
-
-include_directories(${PROJECT_SOURCE_DIR}/depends/imgui/backends
-        ${RAPIDXML_INCLUDE_DIRS}
-        ${PROJECT_SOURCE_DIR}/depends/easy_profiler/include
-        ${LUA_INCLUDE_DIR})
-
-add_executable(${PROJECT_NAME}
-        Main.cpp
-        Resources/app_icon.rc
-        ${SOURCE_FILES}
-        ${IMGUI_BACKENDS}
         Runtime/Component/Object.cpp
         Runtime/Component/Object.h
         Runtime/Component/Object.h

@@ -8,6 +8,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <GLFW/glfw3.h>
 #include "../Editor/Window/EditorWindow.h"
 #include "Component/GameObject.h"
 #include "Input/Input.h"
@@ -158,7 +159,7 @@ namespace DivineBrush {
         (void) io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-        //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;          // Enable Docking
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;          // Enable Docking
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
@@ -285,6 +286,7 @@ namespace DivineBrush {
                              clear_color.w);
                 glClear(GL_COLOR_BUFFER_BIT);
                 ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+                DivineBrush::Editor::EditorWindow::SetScreen(display_w,display_h);
             }
 
             EASY_BLOCK("glfwSwapBuffers")

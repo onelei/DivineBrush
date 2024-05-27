@@ -20,6 +20,8 @@ namespace DivineBrush::Editor {
 
         ~ConsoleWindow();
 
+        void OnPrepareGUI() override;
+
         void OnGUI() override;
 
     private:

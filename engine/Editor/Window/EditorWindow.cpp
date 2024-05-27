@@ -16,6 +16,8 @@
 namespace DivineBrush::Editor {
     bool EditorWindow::is_init = false;
     std::unordered_map<std::string, EditorWindow *> EditorWindow::window_map;
+    int EditorWindow::screenWidth = 0;
+    int EditorWindow::screenHeight = 0;
 
     EditorWindow::EditorWindow() = default;
 
@@ -31,7 +33,7 @@ namespace DivineBrush::Editor {
     }
 
     void EditorWindow::GUI() {
-        if(!is_init) {
+        if (!is_init) {
             window_map[k_Hierarchy] = new HierarchyWindow();
             window_map[k_Inspector] = new InspectorWindow();
             window_map[k_Scene] = new SceneWindow();
@@ -42,9 +44,14 @@ namespace DivineBrush::Editor {
         }
 
         for (auto &pair: window_map) {
-            ImGui::Begin(pair.second->GetTitle().c_str(), nullptr, ImGuiWindowFlags_NoCollapse);
-            //pair.second-> OnResize();
-            pair.second->OnGUI();
+            auto window = pair.second;
+            window->OnPrepareGUI();
+            ImGui::Begin(window->GetTitle().c_str(), nullptr, ImGuiWindowFlags_NoCollapse);
+            // 获取当前窗口的大小
+            window->size = ImGui::GetWindowSize();
+            // 获取当前窗口的起点位置
+            window->pos = ImGui::GetWindowPos();
+            window->OnGUI();
             ImGui::End();
         }
     }
@@ -73,7 +80,7 @@ namespace DivineBrush::Editor {
         return window_map.find(title) != window_map.end();
     }
 
-    EditorWindow *EditorWindow::GetWindow(const std::string& title) {
+    EditorWindow *EditorWindow::GetWindow(const std::string &title) {
         if (ContainsWindow(title)) {
             return window_map[title];
         }
@@ -88,6 +95,15 @@ namespace DivineBrush::Editor {
     EditorWindow *EditorWindow::CreateWindow(EditorWindow *editorWindow) {
         window_map[editorWindow->GetTitle()] = editorWindow;
         return editorWindow;
+    }
+
+    void EditorWindow::SetScreen(int width, int height) {
+        screenWidth = width;
+        screenHeight = height;
+    }
+
+    void EditorWindow::OnPrepareGUI() {
+
     }
 
 }

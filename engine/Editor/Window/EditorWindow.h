@@ -32,13 +32,23 @@ namespace DivineBrush::Editor {
 
         static bool ContainsWindow(std::string title);
 
-        static EditorWindow *GetWindow(const std::string& title);
+        static EditorWindow *GetWindow(const std::string &title);
 
         static EditorWindow *CreateWindow(std::string title);
 
         static EditorWindow *CreateWindow(EditorWindow *editorWindow);
 
         static void GUI();
+
+        static void SetScreen(int width, int height);
+
+        static int GetScreenWidth(){
+            return screenWidth;
+        }
+
+        static int GetScreenHeight(){
+            return screenHeight;
+        };
 
         virtual std::string GetTitle() {
             return this->title;
@@ -52,6 +62,8 @@ namespace DivineBrush::Editor {
 
         virtual void OnDisable();
 
+        virtual void OnPrepareGUI();
+
         virtual void OnGUI();
 
         virtual void OnResize();
@@ -61,12 +73,14 @@ namespace DivineBrush::Editor {
     public:
         //window title
         std::string title;
-        ImVec2 position;
+        ImVec2 pos;
         //window size
         ImVec2 size;
     private:
         static bool is_init;
         static std::unordered_map<std::string, EditorWindow *> window_map;
+        static int screenWidth;
+        static int screenHeight;
     };
 } // DivineBrush
 

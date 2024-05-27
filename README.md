@@ -26,7 +26,7 @@ Windows:
 6. vcpkg install glew
 7. vcpkg install glm
 8. vcpkg install rttr
-9. vcpkg install imgui[core,glfw-binding,opengl3-binding,sdl2-binding,dx11-binding]
+9. vcpkg install imgui[docking-experimental,core,glfw-binding,opengl3-binding,sdl2-binding,dx11-binding]
 10. vcpkg install rapidxml
 11. vcpkg install freetype
 12. vcpkg install sol2
@@ -39,6 +39,8 @@ Windows:
 https://damassets.autodesk.net/content/dam/autodesk/www/adn/fbx/2020-2-1/fbx202021_fbxsdk_vs2019_win.exe
 
 18. vcpkg install openal-soft
+
+19. 
 
     
 

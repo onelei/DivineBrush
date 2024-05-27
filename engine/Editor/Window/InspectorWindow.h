@@ -19,6 +19,8 @@ namespace DivineBrush::Editor {
 
         ~InspectorWindow();
 
+        void OnPrepareGUI() override;
+
         void OnGUI() override;
 
     private:
