@@ -18,14 +18,6 @@ namespace DivineBrush {
         Run();
     }
 
-    void Application::Update() {
-
-    }
-
-    void Application::UpdateScreenSize() {
-
-    }
-
     void Application::Run() {
         EditorApplication::Run();
     }

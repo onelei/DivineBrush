@@ -37,6 +37,9 @@ namespace DivineBrush {
     }
 
     GLuint RenderGenerater::GetShader(unsigned int key) {
+//        if(shaderMap[key] == 0){
+//            return 0;
+//        }
         return shaderMap[key];
     }
 
@@ -45,6 +48,9 @@ namespace DivineBrush {
     }
 
     GLuint RenderGenerater::GetVAO(unsigned int key) {
+//        if(vaoMap[key] == 0){
+//            return 0;
+//        }
         return vaoMap[key];
     }
 
@@ -53,6 +59,9 @@ namespace DivineBrush {
     }
 
     GLuint RenderGenerater::GetVBO(unsigned int key) {
+//        if(vboMap[key] == 0){
+//            return 0;
+//        }
         return vboMap[key];
     }
 
@@ -61,6 +70,9 @@ namespace DivineBrush {
     }
 
     GLuint RenderGenerater::GetTexture(unsigned int key) {
+//        if(textureMap[key] == 0){
+//            return 0;
+//        }
         return textureMap[key];
     }
 
@@ -73,6 +85,9 @@ namespace DivineBrush {
     }
 
     GLuint RenderGenerater::GetUBO(unsigned int key) {
+//        if(uboMap[key] == 0){
+//            return 0;
+//        }
         return uboMap[key];
     }
 

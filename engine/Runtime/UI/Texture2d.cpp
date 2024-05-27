@@ -186,10 +186,9 @@ namespace DivineBrush {
         texture2d->gl_texture_format = server_format;
         texture2d->width = width;
         texture2d->height = height;
+        texture2d->textureHandle = RenderGenerater::CreateTexture();
 
-        auto textureHandle = RenderGenerater::CreateTexture();
-
-        RenderCommandBuffer::CreateTexImage2DHandler(textureHandle, texture2d->width, texture2d->height,
+        RenderCommandBuffer::CreateTexImage2DHandler(texture2d->textureHandle, texture2d->width, texture2d->height,
                                                      texture2d->gl_texture_format, client_format, data_type, data,
                                                      data_size);
 

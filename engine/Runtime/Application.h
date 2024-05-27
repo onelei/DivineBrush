@@ -30,10 +30,6 @@ namespace DivineBrush {
 
         static void Init(std::string &dataPath, std::string &persistentDataPath);
 
-        void Update();
-
-        void UpdateScreenSize();
-
         static void Run();
 
     private:

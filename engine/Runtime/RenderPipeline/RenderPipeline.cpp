@@ -34,8 +34,6 @@ namespace DivineBrush {
         glfwMakeContextCurrent(window);
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
-        // Enable vsync
-        glfwSwapInterval(1);
         //创建UBO
         UniformBufferManager::Init();
 

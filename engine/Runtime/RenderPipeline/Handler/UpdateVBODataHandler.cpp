@@ -18,7 +18,7 @@ namespace DivineBrush {
 
     void UpdateVBODataHandler::Run() {
         RenderCommandHandler::Run();
-        auto vbo = RenderGenerater::GetShader(vboHandle);
+        auto vbo = RenderGenerater::GetVBO(vboHandle);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferSubData(GL_ARRAY_BUFFER, 0, vertexDataSize, vertexData);
     }
