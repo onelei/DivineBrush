@@ -9,18 +9,11 @@
 #include "EditorWindow.h"
 
 namespace DivineBrush::Editor {
-    class EditorWindow;
-}
-
-namespace DivineBrush::Editor {
-
     class ConsoleWindow : public EditorWindow {
     public:
         ConsoleWindow();
 
         ~ConsoleWindow();
-
-        void OnPrepareGUI() override;
 
         void OnGUI() override;
 

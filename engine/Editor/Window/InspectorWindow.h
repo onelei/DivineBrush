@@ -9,17 +9,11 @@
 #include "EditorWindow.h"
 
 namespace DivineBrush::Editor {
-    class EditorWindow;
-}
-
-namespace DivineBrush::Editor {
     class InspectorWindow : public EditorWindow {
     public:
         InspectorWindow();
 
         ~InspectorWindow();
-
-        void OnPrepareGUI() override;
 
         void OnGUI() override;
 

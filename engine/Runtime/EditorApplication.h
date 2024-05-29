@@ -8,6 +8,7 @@
 #include "Render/MeshRenderer.h"
 #include "RenderPipeline/RenderPipeline.h"
 #include "Application.h"
+#include "imgui.h"
 
 namespace DivineBrush {
     class Application;
@@ -29,6 +30,7 @@ namespace DivineBrush {
 
         static GLFWwindow *gameWindow;
         static GLFWwindow *editorWindow;
+        static ImGuiIO *io;
         static bool useImGui;
     };
 

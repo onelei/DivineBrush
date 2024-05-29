@@ -17,18 +17,6 @@ namespace DivineBrush::Editor {
         EditorWindow::~EditorWindow();
     }
 
-    void HierarchyWindow::OnPrepareGUI() {
-        EditorWindow::OnPrepareGUI();
-        auto topHeight = EditorWindow::GetScreenHeight() / 8;
-        auto minWidth = 200;
-        // 设置窗口的起点位置
-        ImVec2 windowPos = ImVec2(0, topHeight);
-        ImGui::SetNextWindowPos(windowPos);
-        // 设置窗口的大小
-        ImVec2 windowSize = ImVec2(minWidth, EditorWindow::GetScreenHeight() - topHeight * 2);
-        ImGui::SetNextWindowSize(windowSize);
-    }
-
     void HierarchyWindow::OnGUI() {
         auto base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick |
                           ImGuiTreeNodeFlags_SpanAvailWidth;

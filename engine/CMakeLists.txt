@@ -239,7 +239,11 @@ add_executable(${PROJECT_NAME}
         Runtime/RenderPipeline/RenderCommandBuffer.cpp
         Runtime/RenderPipeline/RenderCommandBuffer.h
         Runtime/RenderPipeline/RenderCommandBuffer.h
-        Runtime/Physics/RaycastHit.cpp)
+        Runtime/Physics/RaycastHit.cpp
+        Editor/Window/Layouts/DefaultLayout.cpp
+        Editor/Window/Layouts/DefaultLayout.h
+        Editor/Window/Layouts/BaseLayout.cpp
+        Editor/Window/Layouts/BaseLayout.h)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw

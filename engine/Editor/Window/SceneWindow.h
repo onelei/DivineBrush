@@ -9,10 +9,6 @@
 #include "EditorWindow.h"
 
 namespace DivineBrush::Editor {
-    class EditorWindow;
-}
-
-namespace DivineBrush::Editor {
     class SceneWindow : public EditorWindow {
     public:
         SceneWindow();

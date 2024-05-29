@@ -10,18 +10,12 @@
 #include "../../depends/node/Node.h"
 
 namespace DivineBrush::Editor {
-    class EditorWindow;
-}
-
-namespace DivineBrush::Editor {
 
     class HierarchyWindow : public EditorWindow {
     public:
         HierarchyWindow();
 
         ~HierarchyWindow();
-
-        void OnPrepareGUI() override;
 
         void OnGUI() override;
 

@@ -12,17 +12,21 @@
 #include "GameWindow.h"
 #include "ProjectWindow.h"
 #include "ConsoleWindow.h"
+#include "Layouts/DefaultLayout.h"
 
 namespace DivineBrush::Editor {
     bool EditorWindow::is_init = false;
     std::unordered_map<std::string, EditorWindow *> EditorWindow::window_map;
     int EditorWindow::screenWidth = 0;
     int EditorWindow::screenHeight = 0;
+    ImGuiIO *EditorWindow::imGuiIO = nullptr;
+    BaseLayout* EditorWindow::layout = nullptr;
 
     EditorWindow::EditorWindow() = default;
 
-    EditorWindow::EditorWindow(std::string _title) {
-        this->title = std::move(_title);
+    EditorWindow::EditorWindow(const char *_title) {
+        this->title = _title;
+        layout = new DefaultLayout();
     }
 
     EditorWindow::~EditorWindow() {
@@ -32,8 +36,9 @@ namespace DivineBrush::Editor {
         window_map.clear();
     }
 
-    void EditorWindow::GUI() {
+    void EditorWindow::GUI(ImGuiIO *io) {
         if (!is_init) {
+            imGuiIO = io;
             window_map[k_Hierarchy] = new HierarchyWindow();
             window_map[k_Inspector] = new InspectorWindow();
             window_map[k_Scene] = new SceneWindow();
@@ -42,18 +47,11 @@ namespace DivineBrush::Editor {
             window_map[k_Console] = new ConsoleWindow();
             is_init = true;
         }
+        layout->GUI(io);
+    }
 
-        for (auto &pair: window_map) {
-            auto window = pair.second;
-            window->OnPrepareGUI();
-            ImGui::Begin(window->GetTitle().c_str(), nullptr, ImGuiWindowFlags_NoCollapse);
-            // 获取当前窗口的大小
-            window->size = ImGui::GetWindowSize();
-            // 获取当前窗口的起点位置
-            window->pos = ImGui::GetWindowPos();
-            window->OnGUI();
-            ImGui::End();
-        }
+    void EditorWindow::OnAwake() {
+
     }
 
     void EditorWindow::OnEnable() {
@@ -76,19 +74,19 @@ namespace DivineBrush::Editor {
 
     }
 
-    bool EditorWindow::ContainsWindow(std::string title) {
+    bool EditorWindow::ContainsWindow(const char *title) {
         return window_map.find(title) != window_map.end();
     }
 
-    EditorWindow *EditorWindow::GetWindow(const std::string &title) {
+    EditorWindow *EditorWindow::GetWindow(const char *title) {
         if (ContainsWindow(title)) {
             return window_map[title];
         }
-        return CreateWindow(title);
+        return nullptr;
     }
 
-    EditorWindow *EditorWindow::CreateWindow(std::string title) {
-        auto editorWindow = new EditorWindow(std::move(title));
+    EditorWindow *EditorWindow::CreateWindow(const char *title) {
+        auto editorWindow = new EditorWindow(title);
         return CreateWindow(editorWindow);
     }
 
@@ -101,10 +99,5 @@ namespace DivineBrush::Editor {
         screenWidth = width;
         screenHeight = height;
     }
-
-    void EditorWindow::OnPrepareGUI() {
-
-    }
-
 }
 // DivineBrush

@@ -7,50 +7,51 @@
 
 #include <string>
 #include <unordered_map>
-#include <imgui.h>
+#include <imgui_internal.h>
 #include "../../Runtime/Serialize/ScriptableObject.h"
+#include "Layouts/BaseLayout.h"
 
 namespace DivineBrush::Editor {
-    class HierarchyWindow;
-}
-
-namespace DivineBrush::Editor {
-    static std::string k_Hierarchy = "Hierarchy";
-    static std::string k_Inspector = "Inspector";
-    static std::string k_Scene = "Scene";
-    static std::string k_Game = "Game";
-    static std::string k_Project = "Project";
-    static std::string k_Console = "Console";
+    static const char *k_Hierarchy = "Hierarchy";
+    static const char *k_Inspector = "Inspector";
+    static const char *k_Scene = "Scene";
+    static const char *k_Game = "Game";
+    static const char *k_Project = "Project";
+    static const char *k_Console = "Console";
 
     class EditorWindow : public ScriptableObject {
     public:
         EditorWindow();
 
-        EditorWindow(std::string title);
+        EditorWindow(const char *title);
 
         ~EditorWindow();
 
-        static bool ContainsWindow(std::string title);
+        static bool ContainsWindow(const char *title);
 
-        static EditorWindow *GetWindow(const std::string &title);
+        static EditorWindow *GetWindow(const char *title);
 
-        static EditorWindow *CreateWindow(std::string title);
+        static EditorWindow *CreateWindow(const char *title);
 
         static EditorWindow *CreateWindow(EditorWindow *editorWindow);
 
-        static void GUI();
+        static void GUI(ImGuiIO *io);
 
         static void SetScreen(int width, int height);
 
-        static int GetScreenWidth(){
+        static int GetScreenWidth() {
             return screenWidth;
         }
 
-        static int GetScreenHeight(){
+        static int GetScreenHeight() {
             return screenHeight;
         };
 
-        virtual std::string GetTitle() {
+        static ImGuiIO *GetIO() {
+            return imGuiIO;
+        }
+
+        virtual const char *GetTitle() {
             return this->title;
         };
 
@@ -58,11 +59,11 @@ namespace DivineBrush::Editor {
             return this->size;
         }
 
+        virtual void OnAwake();
+
         virtual void OnEnable();
 
         virtual void OnDisable();
-
-        virtual void OnPrepareGUI();
 
         virtual void OnGUI();
 
@@ -72,15 +73,19 @@ namespace DivineBrush::Editor {
 
     public:
         //window title
-        std::string title;
+        const char *title;
         ImVec2 pos;
         //window size
         ImVec2 size;
+        ImGuiWindow *guiWindow;
+
     private:
         static bool is_init;
         static std::unordered_map<std::string, EditorWindow *> window_map;
         static int screenWidth;
         static int screenHeight;
+        static ImGuiIO *imGuiIO;
+        static BaseLayout *layout;
     };
 } // DivineBrush
 
