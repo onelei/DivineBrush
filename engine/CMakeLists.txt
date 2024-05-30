@@ -17,6 +17,7 @@ find_package(glad CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(rttr CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
+find_package(imguizmo CONFIG REQUIRED)
 find_package(freeimage CONFIG REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Freetype REQUIRED)
@@ -252,6 +253,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         glm::glm
         RTTR::Core
         imgui::imgui
+        imguizmo::imguizmo
         d3d12
         dxgi
         freeimage::FreeImage freeimage::FreeImagePlus

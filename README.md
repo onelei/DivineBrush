@@ -40,7 +40,9 @@ https://damassets.autodesk.net/content/dam/autodesk/www/adn/fbx/2020-2-1/fbx2020
 
 18. vcpkg install openal-soft
 
-19. 
+19. vcpkg install ImGuizmo
+
+20. 
 
     
 
