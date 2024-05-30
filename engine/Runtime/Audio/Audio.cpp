@@ -77,7 +77,7 @@ namespace DivineBrush {
 //
 //        ALenum bgmFormat;
 //        ALsizei bgmFreq;
-//        std::vector<char> bgmData = LoadWAV("audio/background_music.wav", bgmFormat, bgmFreq);
+//        std::Vector<char> bgmData = LoadWAV("audio/background_music.wav", bgmFormat, bgmFreq);
 //        alBufferData(bgmBuffer, bgmFormat, bgmData.data(), bgmData.size(), bgmFreq);
 //        CheckError("buffer data");
 //

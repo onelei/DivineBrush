@@ -9,7 +9,6 @@ namespace DivineBrush ::Editor {
 
     void DefaultLayout::OnBeginDockSpace() {
         BaseLayout::OnBeginDockSpace();
-        // ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
         ImGuiViewport *viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->Pos);
         ImGui::SetNextWindowSize(viewport->Size);
@@ -78,16 +77,15 @@ namespace DivineBrush ::Editor {
         // Dock windows
         ImGui::DockBuilderDockWindow(k_Hierarchy, dock_id_left);
         ImGui::DockBuilderDockWindow(k_Inspector, dock_id_right);
-        ImGui::DockBuilderDockWindow("Scene and Game", dock_id_center);
-        ImGui::DockBuilderDockWindow("Project and Console", dock_id_bottom);
+        ImGui::DockBuilderDockWindow(k_Scene, dock_id_center);
+        ImGui::DockBuilderDockWindow(k_Game, dock_id_center);
+        ImGui::DockBuilderDockWindow(k_Project, dock_id_bottom);
+        ImGui::DockBuilderDockWindow(k_Console, dock_id_bottom);
         ImGui::DockBuilderFinish(dockspaceId);
     }
 
     void DefaultLayout::OnGUI(ImGuiIO *io) {
-        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
-        ImGuiTabBarFlags tabBarFlags = ImGuiTabBarFlags_NoTooltip;
         ImGuiTabItemFlags tabItemFlags = ImGuiTabItemFlags_NoTooltip;
-        //ImGuiDockNodeFlags nodeFlags = ImGuiDockNodeFlags_AutoHideTabBar;
         // Hierarchy
         auto hierarchyWindow = EditorWindow::GetWindow(k_Hierarchy);
         if (hierarchyWindow != nullptr) {
@@ -98,35 +96,25 @@ namespace DivineBrush ::Editor {
             ImGui::End();
         }
 
-        ImGui::Begin("Scene and Game", nullptr, windowFlags);
-        {
-            if (ImGui::BeginTabBar("##Tabs",tabBarFlags)) {
-                // Scene
-                auto sceneWindow = EditorWindow::GetWindow(k_Scene);
-                if (sceneWindow != nullptr) {
-                    if (ImGui::BeginTabItem(sceneWindow->GetTitle(), nullptr,tabItemFlags)) {
-                        sceneWindow->size = ImGui::GetWindowSize();
-                        sceneWindow->pos = ImGui::GetWindowPos();
-                        sceneWindow->OnGUI();
-                        ImGui::EndTabItem();
-                    }
-                }
-                // Game
-                auto gameWindow = EditorWindow::GetWindow(k_Game);
-                if (gameWindow != nullptr) {
-                    if (ImGui::BeginTabItem(gameWindow->GetTitle(), nullptr,tabItemFlags)) {
-                        gameWindow->size = ImGui::GetWindowSize();
-                        gameWindow->pos = ImGui::GetWindowPos();
-                        gameWindow->OnGUI();
-                        ImGui::EndTabItem();
-                    }
-                }
-                ImGui::EndTabBar();
-            }
+        // Scene
+        auto sceneWindow = EditorWindow::GetWindow(k_Scene);
+        if (sceneWindow != nullptr) {
+            ImGui::Begin(sceneWindow->GetTitle(), nullptr, tabItemFlags);
+            sceneWindow->size = ImGui::GetWindowSize();
+            sceneWindow->pos = ImGui::GetWindowPos();
+            sceneWindow->OnGUI();
+            ImGui::End();
         }
-        ImGui::End();
 
-
+        // Game
+        auto gameWindow = EditorWindow::GetWindow(k_Game);
+        if (gameWindow != nullptr) {
+            ImGui::Begin(gameWindow->GetTitle(), nullptr, tabItemFlags);
+            gameWindow->size = ImGui::GetWindowSize();
+            gameWindow->pos = ImGui::GetWindowPos();
+            gameWindow->OnGUI();
+            ImGui::End();
+        }
 
         // Inspector
         auto inspectorWindow = EditorWindow::GetWindow(k_Inspector);
@@ -138,34 +126,26 @@ namespace DivineBrush ::Editor {
             ImGui::End();
         }
 
-        ImGui::Begin("Project and Console", nullptr, windowFlags);
-        {
-            if (ImGui::BeginTabBar("##Tabs",tabBarFlags)) {
-                // Project
-                auto projectWindow = EditorWindow::GetWindow(k_Project);
-                if (projectWindow != nullptr) {
-                    if (ImGui::BeginTabItem(projectWindow->GetTitle())) {
-                        projectWindow->size = ImGui::GetWindowSize();
-                        projectWindow->pos = ImGui::GetWindowPos();
-                        projectWindow->OnGUI();
-                        ImGui::EndTabItem();
-                    }
-                }
-
-                // Console
-                auto consoleWindow = EditorWindow::GetWindow(k_Console);
-                if (consoleWindow != nullptr) {
-                    if (ImGui::BeginTabItem(consoleWindow->GetTitle())) {
-                        consoleWindow->size = ImGui::GetWindowSize();
-                        consoleWindow->pos = ImGui::GetWindowPos();
-                        consoleWindow->OnGUI();
-                        ImGui::EndTabItem();
-                    }
-                }
-                ImGui::EndTabBar();
-            }
+        // Project
+        auto projectWindow = EditorWindow::GetWindow(k_Project);
+        if (projectWindow != nullptr) {
+            ImGui::Begin(projectWindow->GetTitle());
+            projectWindow->size = ImGui::GetWindowSize();
+            projectWindow->pos = ImGui::GetWindowPos();
+            projectWindow->OnGUI();
+            ImGui::End();
         }
-        ImGui::End();
+
+        // Console
+        auto consoleWindow = EditorWindow::GetWindow(k_Console);
+        if (consoleWindow != nullptr) {
+            ImGui::Begin(consoleWindow->GetTitle());
+            consoleWindow->size = ImGui::GetWindowSize();
+            consoleWindow->pos = ImGui::GetWindowPos();
+            consoleWindow->OnGUI();
+            ImGui::End();
+        }
+
     }
 
 } // DivineBrush

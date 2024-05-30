@@ -22,7 +22,7 @@
 
 namespace DivineBrush {
     std::unordered_map<int, int> Input::key_action_map;
-    Vector2f Input::mouse_position = {0, 0};
+    Vector2 Input::mouse_position = {0, 0};
     float Input::mouse_scroll = 0;
 
     void Input::RecordKey(int key, int action) {

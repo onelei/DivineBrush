@@ -17,8 +17,21 @@ namespace DivineBrush::Editor {
 
         void OnGUI() override;
 
+        void On2DGUI();
+
+        void On3DGUI();
+
     private:
-        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+        ImVec2 canvas_sz;
+        bool is2D = false;
+
+        ImVector<ImVec2> points;
+        ImVec2 scrolling = ImVec2(0.0f, 0.0f);
+        float zoom = 1.0f;
+        float perspective_factor = 0.001f;
+        // 透视投影函数
+        ImVec2 PerspectiveTransform(const ImVec2& point, const ImVec2& origin, float zoom, float angle);
+
     };
 } // DivineBrush
 

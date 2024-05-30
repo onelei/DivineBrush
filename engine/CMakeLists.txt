@@ -94,9 +94,9 @@ add_executable(${PROJECT_NAME}
         depends/debug/debug.h
         Runtime/UI/Font.cpp
         Runtime/UI/Font.h
-        depends/vector/vector2f.h
-        depends/vector/vector3f.h
-        depends/vector/vector4f.h
+        Runtime/Vector/Vector2.h
+        Runtime/Vector/Vector3.h
+        Runtime/Vector/Vector4.h
         Runtime/Render/RenderControl.cpp
         Runtime/Render/RenderControl.h
         Runtime/Render/RenderControl.cpp
@@ -109,7 +109,7 @@ add_executable(${PROJECT_NAME}
         Runtime/UI/Text.h
         Runtime/UI/Button.cpp
         Runtime/UI/Button.h
-        depends/vector/rect_int.h
+        Runtime/Vector/RectInt.h
         Editor/Selection.cpp
         Editor/Selection.h
         Runtime/Audio/Audio.cpp

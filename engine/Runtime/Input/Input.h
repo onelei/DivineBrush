@@ -6,7 +6,7 @@
 #define ENGINE_INPUT_H
 
 #include <unordered_map>
-#include "../../depends/vector/vector2f.h"
+#include "../../Runtime/Vector/Vector2.h"
 
 namespace DivineBrush {
 
@@ -38,7 +38,7 @@ namespace DivineBrush {
             mouse_position.y = y;
         }
 
-        static Vector2f GetMousePosition() {
+        static Vector2 GetMousePosition() {
             return mouse_position;
         }
 
@@ -52,7 +52,7 @@ namespace DivineBrush {
 
     private:
         static std::unordered_map<int, int> key_action_map;
-        static Vector2f mouse_position;
+        static Vector2 mouse_position;
         static float mouse_scroll;
     };
 

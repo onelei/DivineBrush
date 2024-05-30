@@ -10,7 +10,7 @@
 #include "../../Runtime/Render/Camera.h"
 #include "../../Runtime/Render/Camera.h"
 #include "../../Runtime/Component/GameObject.h"
-#include "../../depends/vector/vector2f.h"
+#include "../../Runtime/Vector/Vector2.h"
 
 namespace DivineBrush {
 
@@ -31,7 +31,7 @@ namespace DivineBrush {
     private:
         Camera *camera;
         Camera *camera_2;
-        Vector2f mousePosition;
+        Vector2 mousePosition;
         Transform *transform;
         Transform *camera_transform;
         Transform *transform_camera_2;
