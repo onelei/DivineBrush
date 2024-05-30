@@ -9,6 +9,13 @@
 #include "EditorWindow.h"
 
 namespace DivineBrush::Editor {
+    // 示例文件夹和文件结构
+    struct FileNode {
+        const char *name;
+        bool isFolder;
+        std::vector<FileNode> children;
+    };
+
     class ProjectWindow : public EditorWindow {
     public:
         ProjectWindow();
@@ -18,7 +25,31 @@ namespace DivineBrush::Editor {
         void OnGUI() override;
 
     private:
-        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+        // 递归绘制文件夹树
+        void DrawFolderTree(const FileNode &node);
+
+        // 绘制文件列表
+        void DrawFileList(const FileNode &folder);
+
+        // 当前选中的文件夹
+        const FileNode *selectedFolder = nullptr;
+        // 示例文件系统
+        std::vector<FileNode> fileSystem = {
+                {"Assets", true, {
+                                         {"Scripts",      true,  {
+                                                                         {"main.cpp", false, {}},
+                                                                         {"utils.cpp", false, {}},
+                                                                 }},
+                                         {"Textures",     true,  {
+                                                                         {"texture1.png", false, {}},
+                                                                         {"texture2.png", false, {}},
+                                                                 }},
+                                 }},
+                {"Scenes", true, {
+                                         {"scene1.unity", false, {}},
+                                         {"scene2.unity", false, {}},
+                                 }},
+        };
     };
 } // DivineBrush
 

@@ -6,7 +6,6 @@
 #include "ProjectWindow.h"
 
 namespace DivineBrush::Editor {
-
     ProjectWindow::ProjectWindow() : EditorWindow(k_Project) {
 
     }
@@ -15,22 +14,58 @@ namespace DivineBrush::Editor {
         EditorWindow::~EditorWindow();
     }
 
+    void ProjectWindow::DrawFolderTree(const FileNode &node) {
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow;
+        if (!node.isFolder) {
+            flags |= ImGuiTreeNodeFlags_Leaf;
+        }
+        bool nodeOpen = ImGui::TreeNodeEx(node.name, flags);
+        if (ImGui::IsItemClicked()) {
+            selectedFolder = &node;
+        }
+        if (nodeOpen) {
+            for (const auto &child: node.children) {
+                DrawFolderTree(child);
+            }
+            ImGui::TreePop();
+        }
+    }
+
+    // 绘制文件列表
+    void ProjectWindow::DrawFileList(const FileNode &folder) {
+        ImGui::BeginTable("FileTable", 2, ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders);
+        ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed);
+
+        ImGui::TableHeadersRow();
+
+        for (const auto &node: folder.children) {
+            ImGui::TableNextRow();
+            ImGui::TableNextColumn();
+            ImGui::Text("%s", node.name);
+            ImGui::TableNextColumn();
+            ImGui::Text("%s", node.isFolder ? "Folder" : "File");
+        }
+
+        ImGui::EndTable();
+    }
+
     void ProjectWindow::OnGUI() {
+        // 左边文件夹树
+        ImGui::BeginChild("FolderTree", ImVec2(200, 0), true);
+        for (const auto &node: fileSystem) {
+            DrawFolderTree(node);
+        }
+        ImGui::EndChild();
 
-        static float f = 0.0f;
-        static int counter = 0;
-
-        ImGui::Text("ProjectWindow");
-
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3("clear color", (float *) &this->clear_color); // Edit 3 floats representing a color
-
-        if (ImGui::Button(
-                "Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-            counter++;
         ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
 
+        // 右边文件列表
+        ImGui::BeginChild("FileList", ImVec2(0, 0), true);
+        if (selectedFolder) {
+            DrawFileList(*selectedFolder);
+        }
+        ImGui::EndChild();
     }
 
 } // DivineBrush
