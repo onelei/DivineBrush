@@ -10,8 +10,10 @@ namespace DivineBrush ::Editor {
     void DefaultLayout::OnBeginDockSpace() {
         BaseLayout::OnBeginDockSpace();
         ImGuiViewport *viewport = ImGui::GetMainViewport();
-        ImGui::SetNextWindowPos(viewport->Pos);
-        ImGui::SetNextWindowSize(viewport->Size);
+        auto pos = viewport->Pos;
+        auto size = viewport->Size;
+        ImGui::SetNextWindowPos(pos);
+        ImGui::SetNextWindowSize(size);
         ImGui::SetNextWindowViewport(viewport->ID);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
         ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
@@ -19,45 +21,20 @@ namespace DivineBrush ::Editor {
                 ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                 ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
         ImGui::Begin("DockSpace Demo", nullptr, window_flags);
-        ImGui::PopStyleVar(2);
+        {
+            ImGui::PopStyleVar(2);
 
-        dockspaceId = ImGui::GetID("MyDockSpace");
-        ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+            // TopBar
+            auto topBarWindow = EditorWindow::GetWindow(k_TopBar);
+            topBarWindow->OnGUI();
 
-        // 创建菜单栏
-        if (ImGui::BeginMenuBar()) {
-            if (ImGui::BeginMenu("File")) {
-                if (ImGui::MenuItem("Exit")) {}
-                ImGui::EndMenu();
-            }
-            if (ImGui::BeginMenu("Edit")) {
-                if (ImGui::MenuItem("Exit")) {}
-                ImGui::EndMenu();
-            }
-            if (ImGui::BeginMenu("Assets")) {
-                if (ImGui::MenuItem("Exit")) {}
-                ImGui::EndMenu();
-            }
-            if (ImGui::BeginMenu("GameObject")) {
-                if (ImGui::MenuItem("Exit")) {}
-                ImGui::EndMenu();
-            }
-            if (ImGui::BeginMenu("Component")) {
-                if (ImGui::MenuItem("Exit")) {}
-                ImGui::EndMenu();
-            }
-            if (ImGui::BeginMenu("Window")) {
-                if (ImGui::MenuItem("Exit")) {}
-                ImGui::EndMenu();
-            }
-            if (ImGui::BeginMenu("Help")) {
-                if (ImGui::MenuItem("Exit")) {}
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenuBar();
+            // Draw dockspace
+            dockspaceId = ImGui::GetID("MyDockSpace");
+            ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+
         }
-
         ImGui::End();
     }
 
@@ -69,12 +46,14 @@ namespace DivineBrush ::Editor {
 
         // Split the dockspace into 4 nodes
         ImGuiID dock_main_id = dockspaceId;
+        //ImGuiID dock_id_top = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Up, 0.08f, nullptr, &dock_main_id);
+        ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.2f, nullptr, &dock_main_id);
         ImGuiID dock_id_left = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
         ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
-        ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.2f, nullptr, &dock_main_id);
         ImGuiID dock_id_center = dock_main_id;
 
         // Dock windows
+        //ImGui::DockBuilderDockWindow(k_TopBar, dock_id_top);
         ImGui::DockBuilderDockWindow(k_Hierarchy, dock_id_left);
         ImGui::DockBuilderDockWindow(k_Inspector, dock_id_right);
         ImGui::DockBuilderDockWindow(k_Scene, dock_id_center);
@@ -85,7 +64,8 @@ namespace DivineBrush ::Editor {
     }
 
     void DefaultLayout::OnGUI(ImGuiIO *io) {
-        ImGuiTabItemFlags tabItemFlags = ImGuiTabItemFlags_NoTooltip;
+        ImGuiWindowFlags imGuiWindowFlags = ImGuiWindowFlags_MenuBar;
+
         // Hierarchy
         auto hierarchyWindow = EditorWindow::GetWindow(k_Hierarchy);
         if (hierarchyWindow != nullptr) {
@@ -99,7 +79,7 @@ namespace DivineBrush ::Editor {
         // Scene
         auto sceneWindow = EditorWindow::GetWindow(k_Scene);
         if (sceneWindow != nullptr) {
-            ImGui::Begin(sceneWindow->GetTitle(), nullptr, tabItemFlags);
+            ImGui::Begin(sceneWindow->GetTitle(), nullptr, imGuiWindowFlags);
             sceneWindow->size = ImGui::GetWindowSize();
             sceneWindow->pos = ImGui::GetWindowPos();
             sceneWindow->OnGUI();
@@ -109,7 +89,7 @@ namespace DivineBrush ::Editor {
         // Game
         auto gameWindow = EditorWindow::GetWindow(k_Game);
         if (gameWindow != nullptr) {
-            ImGui::Begin(gameWindow->GetTitle(), nullptr, tabItemFlags);
+            ImGui::Begin(gameWindow->GetTitle(), nullptr, imGuiWindowFlags);
             gameWindow->size = ImGui::GetWindowSize();
             gameWindow->pos = ImGui::GetWindowPos();
             gameWindow->OnGUI();

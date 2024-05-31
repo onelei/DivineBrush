@@ -12,6 +12,7 @@
 #include "Layouts/BaseLayout.h"
 
 namespace DivineBrush::Editor {
+    static const char *k_TopBar = "TopBar";
     static const char *k_Hierarchy = "Hierarchy";
     static const char *k_Inspector = "Inspector";
     static const char *k_Scene = "Scene";

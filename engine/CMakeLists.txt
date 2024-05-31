@@ -244,7 +244,12 @@ add_executable(${PROJECT_NAME}
         Editor/Window/Layouts/DefaultLayout.cpp
         Editor/Window/Layouts/DefaultLayout.h
         Editor/Window/Layouts/BaseLayout.cpp
-        Editor/Window/Layouts/BaseLayout.h)
+        Editor/Window/Layouts/BaseLayout.h
+        Editor/Window/TopBarWindow.cpp
+        Editor/Window/TopBarWindow.h
+        Editor/Window/Layouts/HorizontalLayout.h
+        Editor/Window/Layouts/VerticalLayout.h
+        Editor/Window/Layouts/VerticalLayout.h)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw

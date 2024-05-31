@@ -4,7 +4,6 @@
 
 #include <string>
 #include <unordered_map>
-#include <utility>
 #include "EditorWindow.h"
 #include "HierarchyWindow.h"
 #include "InspectorWindow.h"
@@ -13,6 +12,7 @@
 #include "ProjectWindow.h"
 #include "ConsoleWindow.h"
 #include "Layouts/DefaultLayout.h"
+#include "TopBarWindow.h"
 
 namespace DivineBrush::Editor {
     bool EditorWindow::is_init = false;
@@ -39,6 +39,7 @@ namespace DivineBrush::Editor {
     void EditorWindow::GUI(ImGuiIO *io) {
         if (!is_init) {
             imGuiIO = io;
+            window_map[k_TopBar] = new TopBarWindow();
             window_map[k_Hierarchy] = new HierarchyWindow();
             window_map[k_Inspector] = new InspectorWindow();
             window_map[k_Scene] = new SceneWindow();
