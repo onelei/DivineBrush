@@ -47,10 +47,10 @@ namespace DivineBrush ::Editor {
         // Split the dockspace into 4 nodes
         ImGuiID dock_main_id = dockspaceId;
         //ImGuiID dock_id_top = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Up, 0.08f, nullptr, &dock_main_id);
-        ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.2f, nullptr, &dock_main_id);
-        ImGuiID dock_id_left = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
-        ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
-        ImGuiID dock_id_center = dock_main_id;
+        dock_id_bottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.2f, nullptr, &dock_main_id);
+        dock_id_left = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
+        dock_id_right = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
+        dock_id_center = dock_main_id;
 
         // Dock windows
         //ImGui::DockBuilderDockWindow(k_TopBar, dock_id_top);
@@ -79,6 +79,7 @@ namespace DivineBrush ::Editor {
         // Scene
         auto sceneWindow = EditorWindow::GetWindow(k_Scene);
         if (sceneWindow != nullptr) {
+            ImGui::SetNextWindowDockID(dock_id_center, ImGuiCond_Always);
             ImGui::Begin(sceneWindow->GetTitle(), nullptr, imGuiWindowFlags);
             sceneWindow->size = ImGui::GetWindowSize();
             sceneWindow->pos = ImGui::GetWindowPos();
@@ -89,6 +90,7 @@ namespace DivineBrush ::Editor {
         // Game
         auto gameWindow = EditorWindow::GetWindow(k_Game);
         if (gameWindow != nullptr) {
+            ImGui::SetNextWindowDockID(dock_id_center, ImGuiCond_Always);
             ImGui::Begin(gameWindow->GetTitle(), nullptr, imGuiWindowFlags);
             gameWindow->size = ImGui::GetWindowSize();
             gameWindow->pos = ImGui::GetWindowPos();

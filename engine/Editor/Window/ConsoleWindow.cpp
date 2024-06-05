@@ -45,14 +45,17 @@ namespace DivineBrush::Editor {
         memset(InputBuf, 0, sizeof(InputBuf));
         HistoryPos = -1;
 
-// "CLASSIFY" is here to provide the test case where "C"+[tab] completes to "CL" and display multiple matches.
+        // "CLASSIFY" is here to provide the test case where "C"+[tab] completes to "CL" and display multiple matches.
         Commands.push_back("HELP");
         Commands.push_back("HISTORY");
         Commands.push_back("CLEAR");
         Commands.push_back("CLASSIFY");
         AutoScroll = true;
         ScrollToBottom = false;
-        AddLog("Welcome to Dear ImGui!");
+        AddLog("Welcome to the World!");
+        AddLog("[warn] This is Warning Test.");
+        AddLog("[error] This is Error Test.");
+        AddLog("OK");
     }
 
     ConsoleWindow::~ConsoleWindow() {
@@ -113,29 +116,19 @@ namespace DivineBrush::Editor {
     }
 
     void ConsoleWindow::OnGUI() {
-
-        if (ImGui::SmallButton("Add Debug Text")) {
-            AddLog("%d some text", Items.Size);
-            AddLog("some more text");
-            AddLog("display very important message here!");
-        }
+        if (ImGui::Button("Clear")) { ClearLog(); }
         ImGui::SameLine();
-        if (ImGui::SmallButton("Add Debug Error")) { AddLog("[error] something went wrong"); }
+        bool copy_to_clipboard = ImGui::Button("Copy");
+//        static float t = 0.0f; if (ImGui::GetTime() - t > 0.02f) { t = ImGui::GetTime(); AddLog("Spam %f", t); }
+        //ImGui::Separator();
+        // Options menu
         ImGui::SameLine();
-        if (ImGui::SmallButton("Clear")) { ClearLog(); }
-        ImGui::SameLine();
-        bool copy_to_clipboard = ImGui::SmallButton("Copy");
-//static float t = 0.0f; if (ImGui::GetTime() - t > 0.02f) { t = ImGui::GetTime(); AddLog("Spam %f", t); }
-
-        ImGui::Separator();
-
-// Options menu
         if (ImGui::BeginPopup("Options")) {
             ImGui::Checkbox("Auto-scroll", &AutoScroll);
             ImGui::EndPopup();
         }
-
-// Options, Filter
+        // Options, Filter
+        ImGui::SameLine();
         ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_O);
         if (ImGui::Button("Options"))
             ImGui::OpenPopup("Options");
@@ -187,6 +180,10 @@ namespace DivineBrush::Editor {
                 bool has_color = false;
                 if (strstr(item, "[error]")) {
                     color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f);
+                    has_color = true;
+                }
+                else if (strstr(item, "[warn]")) {
+                    color = ImVec4(1.0f, 0.8f, 0.2f, 1.0f);
                     has_color = true;
                 }
                 else if (strncmp(item, "# ", 2) == 0) {

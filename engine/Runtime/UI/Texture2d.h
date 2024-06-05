@@ -19,6 +19,10 @@ namespace DivineBrush {
     public:
         static void LoadGLFWimage(const char *path, GLFWimage *image);
 
+        static FIBITMAP *LoadFIBITMAP(const char *path);
+
+        static GLuint LoadGLTextureId(const char *path);
+
         static Texture2d *LoadFile(const char *path);
 
         static Texture2d *LoadCompressFile(std::string path);

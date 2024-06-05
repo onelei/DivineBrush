@@ -28,6 +28,10 @@ namespace DivineBrush {
             return textureHandle;
         }
 
+        GLuint GetTextureID() {
+            return gl_texture_id;
+        }
+
     protected:
         GLint mipmapCount = 0;
         GLsizei width = 0;

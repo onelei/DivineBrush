@@ -21,14 +21,24 @@ namespace DivineBrush::Editor {
     }
 
     void GameWindow::OnGUI() {
-
         auto windowsPos = ImGui::GetWindowPos();
+        auto windowsSize = ImGui::GetWindowSize();
         Screen::SetXY(windowsPos.x, windowsPos.y);
-        //            if(textureID <= 0)
-        //            {
-        //                textureID =
-        //                    DivineBrush::UI::Image::LoadImageToTextureID("../samples/image/sample.png");
-        //            }
+        if (ImGui::BeginMenuBar()) {
+            if (ImGui::BeginMenu("Game")) {
+                if (ImGui::MenuItem("Game", "Ctrl+N")) {}
+                if (ImGui::MenuItem("Simulator", "Ctrl+O")) {}
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Display0")) {
+                for (int i = 0; i < 8; ++i) {
+                    if (ImGui::MenuItem("Display%d"+(i+1), "Ctrl+N"+i)) {}
+                }
+                ImGui::EndMenu();
+            }
+        }
+        ImGui::EndMenuBar();
         //使用FBO的纹理在ImGui中渲染：现在，你可以使用FBO的纹理作为源，通过ImGui渲染图像。
         textureID = RenderPipeline::GetColorTextureId();
         // ImGui绘制Image，使用FBO Attach Texture id
@@ -38,7 +48,7 @@ namespace DivineBrush::Editor {
         // 第5个参数：图片的色调
         // 第6个参数：图片边框的颜色
         //ImGui::Image((void*)(intptr_t)textureID, ImVec2(480,320), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0), ImVec4(1, 1, 1, 1), ImVec4(0, 1, 0, 1));
-        ImGui::Image((void *) (intptr_t) textureID, ImVec2(480, 320));
+        ImGui::Image((void *) (intptr_t) textureID, windowsSize);
 
     }
 

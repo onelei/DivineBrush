@@ -15,6 +15,11 @@ namespace DivineBrush ::Editor {
         void OnInitLayout() override;
 
         void OnGUI(ImGuiIO *io) override;
+
+        ImGuiID dock_id_bottom;
+        ImGuiID dock_id_left;
+        ImGuiID dock_id_right;
+        ImGuiID dock_id_center;
     };
 
 } // DivineBrush

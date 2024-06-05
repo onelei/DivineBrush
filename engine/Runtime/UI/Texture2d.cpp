@@ -23,26 +23,36 @@ namespace DivineBrush {
         }
     }
 
-    void Texture2d::LoadGLFWimage(const char *path, GLFWimage *image) {
+    FIBITMAP *Texture2d::LoadFIBITMAP(const char *path) {
         // 图像格式
         FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path);
-        if (format == -1) {
-            std::cerr << "Could not find pTexture2D: " << path <<
-                      std::endl;
-            return;
+        if (format == FIF_UNKNOWN) {
+            format = FreeImage_GetFIFFromFilename(path);
+            if (format == FIF_UNKNOWN) {
+                // 无法识别图像格式
+                std::cerr << "Could not get image format : " << path << std::endl;
+                return nullptr;
+            }
         }
         // 加载图像
         FIBITMAP *bitmap = FreeImage_Load(format, path);
         if (!bitmap) {
             std::cerr << "Failed to load pTexture2D: " << path << std::endl;
-            return;
+            return nullptr;
         }
-
         // 转换为32位RGB图像
         FIBITMAP *bitmap32 = FreeImage_ConvertTo32Bits(bitmap);
         FreeImage_Unload(bitmap);
         if (!FreeImage_FlipVertical(bitmap32)) {
             std::cerr << "Failed to flip vertical pTexture2D: " << path << std::endl;
+            return nullptr;
+        }
+        return bitmap32;
+    }
+
+    void Texture2d::LoadGLFWimage(const char *path, GLFWimage *image) {
+        auto bitmap32 = LoadFIBITMAP(path);
+        if (bitmap32 == nullptr) {
             return;
         }
 
@@ -68,27 +78,8 @@ namespace DivineBrush {
 
     Texture2d *Texture2d::LoadFile(const char *path) {
         auto *pTexture2D = new Texture2d();
-        // 图像格式
-        FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path);
-        if (format == FIF_UNKNOWN) {
-            format = FreeImage_GetFIFFromFilename(path);
-            if (format == FIF_UNKNOWN) {
-                // 无法识别图像格式
-                std::cerr << "Could not get image format : " << path << std::endl;
-                return nullptr;
-            }
-        }
-        // 加载图像
-        FIBITMAP *bitmap = FreeImage_Load(format, path);
-        if (!bitmap) {
-            std::cerr << "Failed to load pTexture2D: " << path << std::endl;
-            return nullptr;
-        }
-        // 转换为32位RGB图像
-        FIBITMAP *bitmap32 = FreeImage_ConvertTo32Bits(bitmap);
-        FreeImage_Unload(bitmap);
-        if (!FreeImage_FlipVertical(bitmap32)) {
-            std::cerr << "Failed to flip vertical pTexture2D: " << path << std::endl;
+        auto bitmap32 = LoadFIBITMAP(path);
+        if (bitmap32 == nullptr) {
             return nullptr;
         }
         // 检查像素格式决定是否有Alpha通道
@@ -194,4 +185,28 @@ namespace DivineBrush {
 
         return texture2d;
     }
+
+    GLuint Texture2d::LoadGLTextureId(const char *path) {
+        auto bitmap32 = LoadFIBITMAP(path);
+        if (bitmap32 == nullptr) {
+            return 0;
+        }
+
+        auto width = static_cast<GLsizei>(FreeImage_GetWidth(bitmap32));
+        auto height = static_cast<GLsizei>(FreeImage_GetHeight(bitmap32));
+        // 创建纹理
+        GLuint gl_texture_id;
+        glGenTextures(1, &gl_texture_id);
+        glBindTexture(GL_TEXTURE_2D, gl_texture_id);
+
+        auto bytes = FreeImage_GetBits(bitmap32);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
+                     0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        FreeImage_Unload(bitmap32);
+        return gl_texture_id;
+    }
+
+
 } // DivineBrush

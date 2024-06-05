@@ -4,11 +4,21 @@
 
 #include <GL/glew.h>
 #include "TopBarWindow.h"
-#include "Layouts/HorizontalLayout.h"
+#include "Layouts/GUILayout.h"
+#include "../../Runtime/UI/Texture2d.h"
+#include "../../depends/stacklayout/imgui_stacklayout.h"
 
 namespace DivineBrush::Editor {
     TopBarWindow::TopBarWindow() : EditorWindow(k_TopBar) {
+        dragButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_ViewToolMove On@2x.png");
+        moveButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_MoveTool@2x.png");
+        rotateButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_RotateTool@2x.png");
+        scaleButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_ScaleTool@2x.png");
+        rectButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_RectTool@2x.png");
 
+        playButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/PlayButton On@2x.png");
+        pauseButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/PauseButton On@2x.png");
+        nextButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_StepButton On@2x.png");
     }
 
     TopBarWindow::~TopBarWindow() {
@@ -53,92 +63,97 @@ namespace DivineBrush::Editor {
         // Draw toolbar
         ImGui::Separator();
 
-//        HorizontalLayout::Begin(0,20.0f);{
-//            HorizontalLayout::Button("Left");
-//            HorizontalLayout::Button("Left2");
-//            HorizontalLayout::Button("Left3");
-//            HorizontalLayout::Space();
-//            HorizontalLayout::Button("Center");
-//            HorizontalLayout::Button("Center2");
-//            HorizontalLayout::Button("Center3");
-//            HorizontalLayout::Space();
-//            HorizontalLayout::Button("Right");
-//            HorizontalLayout::Button("Right1");
-//        }
-//        HorizontalLayout::End();
-
-        // 创建水平布局管理器
-//        HorizontalLayout::Begin(3);
-//
-//        // 第一列：左对齐
-//        HorizontalLayout::Button("Button 1##left");
-//        HorizontalLayout::Button("Button 2##left");
-//        HorizontalLayout::Button("Button 3##left");
-//
-//        HorizontalLayout::NextColumn();
-//
-//        // 第二列：居中对齐
-//        HorizontalLayout::Button("Button 1##center");
-//        HorizontalLayout::Button("Button 2##center");
-//        HorizontalLayout::Button("Button 3##center");
-//
-//        HorizontalLayout::NextColumn();
-//
-//        // 第三列：右对齐
-//        HorizontalLayout::Button("Button 1##right");
-//        HorizontalLayout::Button("Button 2##right");
-//        HorizontalLayout::Button("Button 3##right");
-//
-//        HorizontalLayout::End();
-
-
         // 创建三列
-        ImGui::Columns(3, "mycolumns");
-//        static GLuint myTexture =0;
-//        if(myTexture<=0){
-//            myTexture = Texture2d::LoadTextureFromFile("path/to/a.png");
-//        }
-
+        ImGui::Columns(3, "columns");
+        float availableHeight = 10;
         // 第一列：左对齐
-        //ImGui::ImageButton("1");
-        //ImGui::SameLine();
-        ImGui::Button("2");
+        float buttonWidth = 10.0f; // 按钮宽度
+        ImGui::ImageButton( dragButtonTextureId , ImVec2(buttonWidth, availableHeight));
         ImGui::SameLine();
-        ImGui::Button("3");
+        ImGui::ImageButton( moveButtonTextureId , ImVec2(buttonWidth, availableHeight));
+        ImGui::SameLine();
+        ImGui::ImageButton( rotateButtonTextureId , ImVec2(buttonWidth, availableHeight));
+        ImGui::SameLine();
+        ImGui::ImageButton( scaleButtonTextureId , ImVec2(buttonWidth, availableHeight));
+        ImGui::SameLine();
+        ImGui::ImageButton( rectButtonTextureId , ImVec2(buttonWidth, availableHeight));
         ImGui::SameLine();
         // 移动到下一列
         ImGui::NextColumn();
 
         // 第二列：居中对齐
         float columnWidth = ImGui::GetColumnWidth();
-        float buttonWidth = 100.0f; // 按钮宽度
-        float padding = (columnWidth - buttonWidth) / 2.0f;
+        buttonWidth = 10.0f; // 按钮宽度
+        float spacing = ImGui::GetStyle().ItemSpacing.x; // Spacing between buttons
+        float totalButtonWidth = 3 * buttonWidth + 2 * spacing; // Total width of buttons and spacing
+        float availableWidth = ImGui::GetContentRegionAvail().x; // Available width in the column
+        // Calculate the remaining space to be divided on both sides
+        float remainingSpace = availableWidth - totalButtonWidth;
+        float halfSpace = remainingSpace / 2.0f;
 
-        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding); // 设置X位置
-        ImGui::Button("4");
+        // Create a dummy item to push buttons to the center
+        ImGui::Dummy(ImVec2(halfSpace, 0)); // Adjust dummy width to push buttons to the center
         ImGui::SameLine();
-        ImGui::Button("5");
+
+        ImGui::ImageButton( playButtonTextureId, ImVec2(buttonWidth, availableHeight));
         ImGui::SameLine();
-        ImGui::Button("6");
+        ImGui::ImageButton( pauseButtonTextureId, ImVec2(buttonWidth, availableHeight));
+        ImGui::SameLine();
+        ImGui::ImageButton( nextButtonTextureId, ImVec2(buttonWidth, availableHeight));
         ImGui::SameLine();
         // 移动到下一列
         ImGui::NextColumn();
 
         // 第三列：右对齐
-        float rightPadding = columnWidth - buttonWidth;
+        //buttonWidth = 300.0f; // 按钮宽度
+        //float rightPadding = (columnWidth - buttonWidth);
 
-        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + rightPadding); // 设置X位置
-        ImGui::Button("7");
+        //ImGui::SetCursorPosX(ImGui::GetCursorPosX() + rightPadding); // 设置X位置
+        // Create a dummy item to push buttons to the right
+        availableWidth = ImGui::GetContentRegionAvail().x;
+        buttonWidth = 80.0f; // Width of each button
+        spacing = ImGui::GetStyle().ItemSpacing.x; // Spacing between buttons
+        totalButtonWidth = 3 * buttonWidth + 2 * spacing; // Total width of buttons and spacing
+        ImGui::Dummy(ImVec2(availableWidth - totalButtonWidth, 0)); // Adjust dummy width to push buttons to the right
+
+        // Account
         ImGui::SameLine();
-        ImGui::Button("8");
+        ImGui::PushItemWidth(buttonWidth);
+        {
+            const char *items[] = {"Account", "Account1"};
+            static int item_current = 0;
+            if (ImGui::Combo("##combo", &item_current, items, IM_ARRAYSIZE(items))) {
+
+            }
+            ImGui::PopItemWidth();
+        }
+        // Layers
         ImGui::SameLine();
-        ImGui::Button("9");
+        ImGui::PushItemWidth(buttonWidth);
+        {
+            const char *items[] = {"Layers", "Layers1"};
+            static int item_current = 0;
+            if (ImGui::Combo("##combo", &item_current, items, IM_ARRAYSIZE(items))) {
+
+            }
+            ImGui::PopItemWidth();
+        }
+        // Layout
         ImGui::SameLine();
+        ImGui::PushItemWidth(buttonWidth);
+        {
+            const char *items[] = {"Layout", "Layout1"};
+            static int item_current = 0;
+            if (ImGui::Combo("##combo", &item_current, items, IM_ARRAYSIZE(items))) {
+
+            }
+            ImGui::PopItemWidth();
+        }
 
         // 结束窗口
         ImGui::Columns(1);
 
+        ImGui::Spacing();
         ImGui::Separator();
-
     }
 }// DivineBrush::Editor

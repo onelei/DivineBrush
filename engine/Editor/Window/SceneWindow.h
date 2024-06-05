@@ -74,7 +74,7 @@ namespace DivineBrush::Editor {
 
         void EditTransform(float* cameraView, float* cameraProjection, float* matrix, bool editTransformDecomposition);
         // Camera projection
-        bool isPerspective = true;
+        bool isPerspective = false;
         float fov = 27.f;
         float viewWidth = 10.f; // for orthographic
         float camYAngle = 165.f / 180.f * 3.14159f;

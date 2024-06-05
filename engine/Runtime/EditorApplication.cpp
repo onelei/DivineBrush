@@ -127,7 +127,7 @@ namespace DivineBrush {
 
         // icon
         GLFWimage image;
-        DivineBrush::Texture2d::LoadGLFWimage("../resources/icon.ico", &image); // 读取图标
+        DivineBrush::Texture2d::LoadGLFWimage("../Resources/icon.ico", &image); // 读取图标
         glfwSetWindowIcon(gameWindow, 1, &image); // 设置窗口图标
         glfwSetWindowIcon(editorWindow, 1, &image); // 设置窗口图标
 

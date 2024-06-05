@@ -43,8 +43,7 @@ namespace DivineBrush::Editor {
             OrthoGraphic(-viewWidth, viewWidth, -viewHeight, viewHeight, 1000.f, -1000.f, cameraProjection);
         }
         ImGuizmo::SetOrthographic(!isPerspective);
-       // ImGuizmo::BeginFrame();
-
+        //ImGuizmo::BeginFrame();
         //ImGui::SetNextWindowPos(ImVec2(1024, 100), ImGuiCond_Appearing);
         //ImGui::SetNextWindowSize(ImVec2(256, 256), ImGuiCond_Appearing);
 
