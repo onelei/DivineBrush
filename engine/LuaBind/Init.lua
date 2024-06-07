@@ -106,7 +106,6 @@ function main()
     light4:SetAttenuationQuadratic(0.44)
     print("PointLight2")
 
-
     ---创建骨骼蒙皮动画
     --local skeletonObj = GameObject.new("skeleton")
     --skeletonObj:GetTransform():SetPosition(Cpp.Vector3(0, -1, 0))

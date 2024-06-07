@@ -8,13 +8,9 @@
 //order is important
 #include <GL/glew.h>
 #include <GL/gl.h>
-
 #define GLM_ENABLE_EXPERIMENTAL
-
 #include <GLFW/glfw3.h>
 //order is important
-
-#include <FreeImage.h>
 #include "../Component/Object.h"
 
 namespace DivineBrush {

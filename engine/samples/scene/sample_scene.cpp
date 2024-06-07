@@ -27,35 +27,41 @@ namespace DivineBrush {
     }
 
     void SampleScene::OnAwake() {
-        auto gameObject = new GameObject("Cube");
+        //Texture2d::CompressFile("image/Diffuse_FishSoup_Pot_1.jpg", "image/diffuse_fishsoup_pot.cpt");
+
+        auto gameObject = new GameObject("3DModel");
         transform = gameObject->GetComponent<Transform>();
 
         auto mesh_filter = gameObject->AddComponent<MeshFilter>();
         mesh_filter->LoadMesh("model/cube.mesh");
-
+        //mesh_filter->LoadMesh("model/fishsoup_pot.mesh");
+        //mesh_filter->LoadMesh("model/export.mesh");
         auto material = new Material();
         material->Parse("material/cube.mat");
-
+        //material->Parse("material/fishsoup_pot.mat");
         auto mesh_render = gameObject->AddComponent<MeshRenderer>();
         mesh_render->SetMeshFilter(mesh_filter);
         mesh_render->SetMaterial(material);
 
-        auto camera_gameObject = new GameObject("Camera");
-        camera_transform = camera_gameObject->GetComponent<Transform>();
-        camera_transform->SetPosition(glm::vec3(0, 0, 10));
-        camera = camera_gameObject->AddComponent<Camera>();
-        camera->GetGameObject()->SetTag(GameObject::kTagMainCamera);
-        camera->SetDepth(0);
+        auto camera_gameObject = new GameObject("SceneCamera");
+        sceneCameraTransform = camera_gameObject->GetComponent<Transform>();
+        sceneCameraTransform->SetPosition(glm::vec3(0, 0, 10));
+        sceneCamera = camera_gameObject->AddComponent<Camera>();
+        sceneCamera->GetGameObject()->SetTag(GameObject::kTagMainCamera);
+        sceneCamera->SetDepth(0);
 
-        //创建相机2 GameObject
-//        auto go_camera_2 = new GameObject("main_camera");
+//        //创建相机2 GameObject
+//        auto go_camera_2 = new GameObject("SceneCamera");
 //        //挂上 Transform 组件
-//        transform_camera_2 = dynamic_cast<Transform *>(go_camera_2->AddComponent("Transform"));
-//        transform_camera_2->SetPosition(glm::vec3(1, 0, 10));
+//        sceneCameraTransform = go_camera_2->GetComponent<Transform>();
+//        sceneCameraTransform->SetPosition(glm::vec3(1, 0, 10));
 //        //挂上 Camera 组件
-//        camera_2 = dynamic_cast<Camera *>(go_camera_2->AddComponent("Camera"));
-//        camera_2->SetDepth(1);
-        //camera_2->SetCullingMask(0x02);
+//        sceneCamera = go_camera_2->AddComponent<Camera>();
+//        sceneCamera->SetClearFlag(GL_DEPTH_BUFFER_BIT);
+//        sceneCamera->SetDepth(1);
+//        sceneCamera->SetCullingMask(0x02);
+
+
         mousePosition = Input::GetMousePosition();
 
         CreateFont();
@@ -67,22 +73,22 @@ namespace DivineBrush {
     }
 
     void SampleScene::OnUpdate() {
-        //camera
-        camera->SetCenter(glm::vec3(0, 0, 0));
-        camera->SetUp(glm::vec3(0, 1, 0));
-        camera->SetClearColor(glm::vec4(0.45f, 0.55f, 0.60f, 1.00f));
-        camera->SetFov(60.f);
-        camera->SetAspect(Screen::GetAspect());
-        camera->SetNear(1.f);
-        camera->SetFar(1000.f);
-
+        //sceneCamera
+        sceneCamera->SetCenter(glm::vec3(0, 0, 0));
+        sceneCamera->SetUp(glm::vec3(0, 1, 0));
+        sceneCamera->SetClearColor(glm::vec4(0.45f, 0.55f, 0.60f, 1.00f));
+        sceneCamera->SetFov(60.f);
+        sceneCamera->SetAspect(Screen::GetAspect());
+        sceneCamera->SetNear(1.f);
+        sceneCamera->SetFar(1000.f);
+        sceneCamera->SetMode(Camera::CameraMode::Perspective);
         //设置相机2
-//        camera_2->SetCenter(glm::vec3(glm::vec3(transform_camera_2->GetPosition().x, 0, 0)));
-//        camera_2->SetUp(glm::vec3(0, 1, 0));
-//        camera_2->SetFov(60.f);
-//        camera_2->SetAspect(Screen::GetAspect());
-//        camera_2->SetNear(1.f);
-//        camera_2->SetFar(1000.f);
+//        sceneCamera->SetCenter(glm::vec3(glm::vec3(sceneCameraTransform->GetPosition().x, 0, 0)));
+//        sceneCamera->SetUp(glm::vec3(0, 1, 0));
+//        sceneCamera->SetFov(60.f);
+//        sceneCamera->SetAspect(Screen::GetAspect());
+//        sceneCamera->SetNear(1.f);
+//        sceneCamera->SetFar(1000.f);
 
         if (Input::GetKeyUp(GLFW_KEY_A)) {
             auto pGameObject = GameObject::Find("mask");
@@ -93,12 +99,18 @@ namespace DivineBrush {
         }
 
         //旋转物体
-        if (Input::GetKeyDown(GLFW_KEY_R)) {
-            auto rotate_eulerAngle = Input::GetMousePosition().x - mousePosition.x;
-            auto rotation = transform->GetRotation();
-            rotation.y = rotate_eulerAngle;
-            transform->SetRotation(rotation);
-        }
+//        if (Input::GetKeyDown(GLFW_KEY_R)) {
+//            auto rotate_eulerAngle = Input::GetMousePosition().x - mousePosition.x;
+//            auto rotation = transform->GetRotation();
+//            rotation.y = rotate_eulerAngle;
+//            transform->SetRotation(rotation);
+//        }
+        //旋转物体
+        static float rotate_eulerAngle = 0.f;
+        rotate_eulerAngle += 0.1f;
+        glm::vec3 rotation = transform->GetRotation();
+        rotation.y = rotate_eulerAngle;
+        transform->SetRotation(rotation);
 
         //旋转相机
         if (Input::GetKeyDown(GLFW_KEY_LEFT_ALT) && Input::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -107,14 +119,14 @@ namespace DivineBrush {
             glm::mat4 old_mat4 = glm::mat4(1.0f);
             //以相机所在坐标系位置，计算用于旋转的矩阵，这里是零点，所以直接用方阵。
             glm::mat4 rotate_mat4 = glm::rotate(old_mat4, glm::radians(degrees), glm::vec3(0.0f, 1.0f, 0.0f));
-            glm::vec4 old_pos = glm::vec4(camera_transform->GetPosition(), 1.0f);
+            glm::vec4 old_pos = glm::vec4(sceneCameraTransform->GetPosition(), 1.0f);
             glm::vec4 new_pos = rotate_mat4 * old_pos;//旋转矩阵 * 原来的坐标 = 相机以零点做旋转。
 
-            camera_transform->SetPosition(glm::vec3(new_pos));
+            sceneCameraTransform->SetPosition(glm::vec3(new_pos));
         }
 
         mousePosition = Input::GetMousePosition();
-        camera_transform->SetPosition(camera_transform->GetPosition() * (10 - Input::GetMouseScroll()) / 10.f);
+        sceneCameraTransform->SetPosition(sceneCameraTransform->GetPosition() * (10 - Input::GetMouseScroll()) / 10.f);
     }
 
     void SampleScene::CreateFont() {
@@ -172,37 +184,38 @@ namespace DivineBrush {
 
     void SampleScene::CreateUI() {
         //创建UI相机 GameObject
-        auto go_camera_ui = new GameObject("ui_camera");
+        auto uiCameraObj = new GameObject("UICamera");
         //挂上 Transform 组件
-        auto transform_camera_ui = go_camera_ui->GetComponent<Transform>();
-        transform_camera_ui->SetPosition(glm::vec3(0, 0, 10));
+        uiCameraTransform = uiCameraObj->GetComponent<Transform>();
+        uiCameraTransform->SetPosition(glm::vec3(0, 0, 10));
         //挂上 Camera 组件
-        auto camera_ui = go_camera_ui->AddComponent<Camera>();
-        camera_ui->SetDepth(1);
-        camera_ui->SetCullingMask(0x02);
+        uiCamera = uiCameraObj->AddComponent<Camera>();
+        uiCamera->SetDepth(1);
+        uiCamera->SetCullingMask(0x02);
         //UI相机不能清除之前的颜色。不然用第一个相机矩阵渲染的物体就被清除 没了。
-        camera_ui->SetClearFlag(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        uiCamera->SetClearFlag(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         //设置正交相机
-        camera_ui->SetCenter(glm::vec3(0, 0, 0));
-        camera_ui->SetUp(glm::vec3(0, 1, 0));
-        camera_ui->SetOrthographic(-Screen::GetWidth() / 2, Screen::GetWidth() / 2, -Screen::GetHeight() / 2,
+        uiCamera->SetCenter(glm::vec3(0, 0, 0));
+        uiCamera->SetUp(glm::vec3(0, 1, 0));
+        uiCamera->SetOrthographic(-Screen::GetWidth() / 2, Screen::GetWidth() / 2, -Screen::GetHeight() / 2,
                                    Screen::GetHeight() / 2);
-        camera_ui->SetNear(-100);
-        camera_ui->SetFar(100);
-        camera_ui->SetMode(Camera::CameraMode::Orthographic);
+        uiCamera->SetNear(-100);
+        uiCamera->SetFar(100);
+        uiCamera->SetMode(Camera::CameraMode::Orthographic);
 
         //创建 image
-        auto go = new GameObject("image");
-        go->SetLayer(0x02);
+        auto headGameObject = new GameObject("HeadImage");
+        headGameObject->SetLayer(0x02);
         //挂上 Image 组件
-        auto image = go->AddComponent<UI::Image>();
-        //Texture2d::CompressFile("image/image2.png", "image/image2.glt");
+        auto image = headGameObject->AddComponent<UI::Image>();
+        //Texture2d::CompressFile("image/Head.png", "image/Head.glt");
         image->Load("image/image2.glt");
+        //headGameObject->GetComponent<Transform>()->SetScale(glm::vec3(0.6, 0.6, 0.6));
 
         //创建 GameObject
         auto go_mask = new GameObject("mask");
         go_mask->SetLayer(0x02);
-        go_mask->SetParent(go);
+        go_mask->SetParent(headGameObject);
         //挂上 Mask 组件
         auto mask = go_mask->AddComponent<UI::Mask>();
         //Texture2d::CompressFile("image/mask.png", "image/mask.glt");

@@ -22,11 +22,11 @@ Windows:
 2. vcpkg integrate install
 3. vcpkg install glad
 4. vcpkg install glfw3
-5. vcpkg install freeimage
+5. vcpkg install stb
 6. vcpkg install glew
 7. vcpkg install glm
 8. vcpkg install rttr
-9. vcpkg install imgui[docking-experimental,core,glfw-binding,opengl3-binding,sdl2-binding,dx11-binding]
+9. vcpkg install imgui[docking-experimental,docking-layout,docking-layout-external,core,glfw-binding,opengl3-binding,sdl2-binding,dx11-binding]
 10. vcpkg install rapidxml
 11. vcpkg install freetype
 12. vcpkg install sol2

@@ -18,7 +18,6 @@ find_package(glm CONFIG REQUIRED)
 find_package(rttr CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(imguizmo CONFIG REQUIRED)
-find_package(freeimage CONFIG REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
@@ -29,12 +28,14 @@ find_package(Lua REQUIRED)
 find_package(SPSCQueue CONFIG REQUIRED)
 find_package(unofficial-omniverse-physx-sdk CONFIG REQUIRED)
 find_package(OpenAL CONFIG REQUIRED)
+find_package(Stb REQUIRED)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
 include_directories(${RAPIDXML_INCLUDE_DIRS}
         ${PROJECT_SOURCE_DIR}/depends/easy_profiler/include
-        ${LUA_INCLUDE_DIR})
+        ${LUA_INCLUDE_DIR}
+        ${Stb_INCLUDE_DIR})
 
 add_executable(${PROJECT_NAME}
         Main.cpp
@@ -263,7 +264,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         imguizmo::imguizmo
         d3d12
         dxgi
-        freeimage::FreeImage freeimage::FreeImagePlus
         GLEW::GLEW
         Freetype::Freetype
         spdlog::spdlog

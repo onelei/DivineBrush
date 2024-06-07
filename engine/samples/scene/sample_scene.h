@@ -29,12 +29,12 @@ namespace DivineBrush {
         void CreateUI();
 
     private:
-        Camera *camera;
-        Camera *camera_2;
+        Camera *uiCamera;
+        Camera *sceneCamera;
         Vector2 mousePosition;
         Transform *transform;
-        Transform *camera_transform;
-        Transform *transform_camera_2;
+        Transform *uiCameraTransform;
+        Transform *sceneCameraTransform;
     };
 
 } // DivineBrush

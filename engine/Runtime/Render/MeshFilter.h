@@ -27,18 +27,21 @@ namespace DivineBrush {
             glm::vec3 pos;
             glm::vec4 color;
             glm::vec2 uv;
-            glm::vec3 normal;
+            //TODO SkinMesh
+            //glm::vec3 normal;
         };
 
         struct MeshFileHead {
             char type[4];
-            char name[32];
+            //TODO SkinMesh
+            //char name[32];
             unsigned short vertex_num;
             unsigned short vertex_index_num;
         };
 
         struct Mesh {
-            char *name = nullptr;
+            //TODO SkinMesh
+            //char *name = nullptr;
             unsigned short vertex_num = 0;
             unsigned short vertex_index_num = 0;
             Vertex *vertex_data = nullptr;
@@ -87,7 +90,9 @@ namespace DivineBrush {
         }
 
         const char *GetMeshName(){
-            return this->mesh->name;
+            return nullptr;
+            //TODO SkinMesh
+            //this->mesh->name;
         }
 
         BoneInfo *GetBoneInfo() {

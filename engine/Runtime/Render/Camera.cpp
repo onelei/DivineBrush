@@ -55,9 +55,9 @@ namespace DivineBrush {
     void Camera::RenderAll() {
         EASY_FUNCTION(profiler::colors::Magenta); // 标记函数
         for (auto &camera: cameras) {
-            if (camera->GetGameObject()->GetTag() == GameObject::kTagMainCamera) {
+            //if (camera->GetGameObject()->GetTag() == GameObject::kTagMainCamera) {
                 camera->Clear();
-            }
+            //}
             camera->Render();
             current_camera = camera;
             GameObject::RenderAll();

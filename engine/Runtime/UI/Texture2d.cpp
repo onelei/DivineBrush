@@ -4,17 +4,16 @@
 
 #include <iostream>
 #include <fstream>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 #include "Texture2d.h"
 #include "../Application.h"
-#include "../../depends/template/ObjectPool.h"
 #include "../RenderPipeline/Handler/CreateCompressedTexImage2DHandler.h"
 #include "../RenderPipeline/Handler/CreateTexImage2DHandler.h"
 #include "../RenderPipeline/RenderGenerater.h"
 #include "../RenderPipeline/RenderCommandBuffer.h"
 
 namespace DivineBrush {
-    static const unsigned int bytesPerPixel = 4;
-
     Texture2d::Texture2d() = default;
 
     Texture2d::~Texture2d() {
@@ -23,85 +22,56 @@ namespace DivineBrush {
         }
     }
 
-    FIBITMAP *Texture2d::LoadFIBITMAP(const char *path) {
-        // 图像格式
-        FREE_IMAGE_FORMAT format = FreeImage_GetFileType(path);
-        if (format == FIF_UNKNOWN) {
-            format = FreeImage_GetFIFFromFilename(path);
-            if (format == FIF_UNKNOWN) {
-                // 无法识别图像格式
-                std::cerr << "Could not get image format : " << path << std::endl;
-                return nullptr;
-            }
-        }
-        // 加载图像
-        FIBITMAP *bitmap = FreeImage_Load(format, path);
-        if (!bitmap) {
-            std::cerr << "Failed to load pTexture2D: " << path << std::endl;
-            return nullptr;
-        }
-        // 转换为32位RGB图像
-        FIBITMAP *bitmap32 = FreeImage_ConvertTo32Bits(bitmap);
-        FreeImage_Unload(bitmap);
-        if (!FreeImage_FlipVertical(bitmap32)) {
-            std::cerr << "Failed to flip vertical pTexture2D: " << path << std::endl;
-            return nullptr;
-        }
-        return bitmap32;
-    }
-
     void Texture2d::LoadGLFWimage(const char *path, GLFWimage *image) {
-        auto bitmap32 = LoadFIBITMAP(path);
-        if (bitmap32 == nullptr) {
+        int width, height, channels;
+        auto data = stbi_load(path, &width, &height, &channels, 4);
+        if (data == nullptr) {
             return;
         }
-
-        auto width = FreeImage_GetWidth(bitmap32);
-        auto height = FreeImage_GetHeight(bitmap32);
-        auto size = width * height * bytesPerPixel;
-        image->width = static_cast<GLsizei>(width);
-        image->height = static_cast<GLsizei>(height);
+        image->width = width;
+        image->height = height;
+        image->pixels = data;
         // 创建纹理
         GLuint gl_texture_id;
         glGenTextures(1, &gl_texture_id);
         glBindTexture(GL_TEXTURE_2D, gl_texture_id);
-
-        auto bytes = FreeImage_GetBits(bitmap32);
-        image->pixels = new BYTE[size];
-        memcpy(image->pixels, bytes, size);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height,
-                     0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
+                     0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        FreeImage_Unload(bitmap32);
     }
 
     Texture2d *Texture2d::LoadFile(const char *path) {
-        auto *pTexture2D = new Texture2d();
-        auto bitmap32 = LoadFIBITMAP(path);
-        if (bitmap32 == nullptr) {
+        // 加载图像
+        int width, height, channels;
+        auto data = stbi_load(path, &width, &height, &channels, 0);
+        if (data == nullptr) {
             return nullptr;
         }
-        // 检查像素格式决定是否有Alpha通道
-        auto bitsPerPixel = FreeImage_GetBPP(bitmap32);
-        bool hasAlpha = FreeImage_IsTransparent(bitmap32) || (bitsPerPixel == 32);
-        GLenum gl_texture_format = hasAlpha ? GL_COMPRESSED_RGBA_S3TC_DXT5_EXT : GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
-        //如果原始图像数据是以BGR(A)格式存储的（FreeImage的常规情形），而上传时没有正确地转换为OpenGL期望的RGB(A)格式，会导致颜色通道位置错误，从而产生色彩偏差。
-        // 对于DXT压缩，错误的通道顺序会导致颜色混乱。
-        int texture_format = hasAlpha ? GL_BGRA : GL_BGR;
-        pTexture2D->width = static_cast<GLsizei>(FreeImage_GetWidth(bitmap32));
-        pTexture2D->height = static_cast<GLsizei>(FreeImage_GetHeight(bitmap32));
-        pTexture2D->gl_texture_format = gl_texture_format;
+        auto *pTexture2D = new Texture2d();
+        // 根据颜色通道数设置OpenGL的格式
+        int image_data_format = GL_RGB;
+        if (channels == 1) {
+            image_data_format = GL_ALPHA;
+        } else if (channels == 3) {
+            image_data_format = GL_RGB;
+            pTexture2D->gl_texture_format = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+        } else if (channels == 4) {
+            image_data_format = GL_RGBA;
+            pTexture2D->gl_texture_format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+        }
+        pTexture2D->width = width;
+        pTexture2D->height = height;
         // 创建纹理
         glGenTextures(1, &(pTexture2D->gl_texture_id));
         glBindTexture(GL_TEXTURE_2D, pTexture2D->gl_texture_id);
         glTexImage2D(GL_TEXTURE_2D, pTexture2D->mipmapCount, pTexture2D->gl_texture_format, pTexture2D->width,
                      pTexture2D->height,
-                     0, texture_format, GL_UNSIGNED_BYTE, FreeImage_GetBits(bitmap32));
+                     0, image_data_format, GL_UNSIGNED_BYTE, data);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        FreeImage_Unload(bitmap32);
+        stbi_image_free(data);
         return pTexture2D;
     }
 
@@ -129,12 +99,8 @@ namespace DivineBrush {
 
     void Texture2d::CompressFile(std::string imageFilePath, std::string targetImageFilePath) {
         imageFilePath = Application::GetDataPath() + imageFilePath;
+        stbi_set_flip_vertically_on_load(true);
         Texture2d *texture2d = LoadFile(imageFilePath.c_str());
-        if (texture2d == nullptr) {
-            std::cerr << "Failed to load pTexture2D: " << imageFilePath << std::endl;
-            return;
-        }
-
         //1. 获取压缩是否成功
         GLint compressSuccess = 0;
         glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_COMPRESSED, &compressSuccess);
@@ -156,8 +122,8 @@ namespace DivineBrush {
 
         CompressFileHead fileHead;
         //glCompressedTexImage2D -> glt
-        fileHead.type[0] = 'g';
-        fileHead.type[1] = 'l';
+        fileHead.type[0] = 'c';
+        fileHead.type[1] = 'p';
         fileHead.type[2] = 't';
         fileHead.mipmapCount = texture2d->mipmapCount;
         fileHead.width = texture2d->width;
@@ -165,9 +131,11 @@ namespace DivineBrush {
         fileHead.textureFormat = compressFormat;
         fileHead.compressSize = compressSize;
 
-        fileStream.write((char *) &fileHead, sizeof(fileHead));
+        fileStream.write((char *) &fileHead, sizeof(CompressFileHead));
         fileStream.write((char *) texture, compressSize);
         fileStream.close();
+        free(texture);
+        stbi_set_flip_vertically_on_load(false);
     }
 
     Texture2d *Texture2d::Create(unsigned short width, unsigned short height, unsigned int server_format,
@@ -187,24 +155,22 @@ namespace DivineBrush {
     }
 
     GLuint Texture2d::LoadGLTextureId(const char *path) {
-        auto bitmap32 = LoadFIBITMAP(path);
-        if (bitmap32 == nullptr) {
+        int width, height, channels;
+        auto data = stbi_load(path, &width, &height, &channels, 4);
+        if (data == nullptr) {
             return 0;
         }
 
-        auto width = static_cast<GLsizei>(FreeImage_GetWidth(bitmap32));
-        auto height = static_cast<GLsizei>(FreeImage_GetHeight(bitmap32));
         // 创建纹理
         GLuint gl_texture_id;
         glGenTextures(1, &gl_texture_id);
         glBindTexture(GL_TEXTURE_2D, gl_texture_id);
 
-        auto bytes = FreeImage_GetBits(bitmap32);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
-                     0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+                     0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        FreeImage_Unload(bitmap32);
+        stbi_image_free(data);
         return gl_texture_id;
     }
 

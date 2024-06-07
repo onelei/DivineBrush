@@ -63,10 +63,12 @@ namespace DivineBrush {
                     continue;
                 auto boneWeight = boneInfo[i].weight[j] / 100.0f;
                 bonePos = bonePos + boneMat4[boneIndex] * vertexPos * boneWeight;
-                boneNormal = boneNormal + boneMat3[boneIndex] * vertex.normal * boneWeight;
+                //TODO SkinMesh
+                //boneNormal = boneNormal + boneMat3[boneIndex] * vertex.normal * boneWeight;
             }
             skinMesh->vertex_data[i].pos = glm::vec3(bonePos);
-            skinMesh->vertex_data[i].normal = boneNormal;
+            //TODO SkinMesh
+            //skinMesh->vertex_data[i].normal = boneNormal;
         }
     }
 
