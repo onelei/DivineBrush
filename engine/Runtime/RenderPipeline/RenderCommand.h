@@ -10,6 +10,7 @@ namespace DivineBrush {
         None,
         UpdateScreenSize,
         CompileShader,
+        BindMesh,
         BindUniformBuffer,
         UseShaderProgram,
         CreateVAO,

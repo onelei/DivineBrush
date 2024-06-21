@@ -7,6 +7,7 @@
 #include "MeshFilter.h"
 #include "../Application.h"
 #include "../../depends/debug/debug.h"
+#include "../RenderPipeline/RenderCommandBuffer.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -124,4 +125,44 @@ namespace DivineBrush {
         fileStream.read((char *) boneInfo, fileSize - 6);
         fileStream.close();
     }
+
+    void MeshFilter::LoadModel(const std::string &path) {
+        Assimp::Importer importer;
+        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+            std::cerr << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+            return;
+        }
+
+        aiMesh* mesh = scene->mMeshes[0];
+        //processMesh(mesh);
+        for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+            vertices.push_back(mesh->mVertices[i].x);
+            vertices.push_back(mesh->mVertices[i].y);
+            vertices.push_back(mesh->mVertices[i].z);
+
+            vertices.push_back(mesh->mNormals[i].x);
+            vertices.push_back(mesh->mNormals[i].y);
+            vertices.push_back(mesh->mNormals[i].z);
+
+            if (mesh->mTextureCoords[0]) {
+                vertices.push_back(mesh->mTextureCoords[0][i].x);
+                vertices.push_back(mesh->mTextureCoords[0][i].y);
+            } else {
+                vertices.push_back(0.0f);
+                vertices.push_back(0.0f);
+            }
+        }
+
+        for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+            aiFace face = mesh->mFaces[i];
+            for (unsigned int j = 0; j < face.mNumIndices; j++) {
+                indices.push_back(face.mIndices[j]);
+            }
+        }
+
+        RenderCommandBuffer::BindMeshHandler(vertices, indices);
+    }
+
 } // DivineBrush

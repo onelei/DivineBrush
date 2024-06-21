@@ -29,6 +29,7 @@ find_package(SPSCQueue CONFIG REQUIRED)
 find_package(unofficial-omniverse-physx-sdk CONFIG REQUIRED)
 find_package(OpenAL CONFIG REQUIRED)
 find_package(Stb REQUIRED)
+find_package(assimp CONFIG REQUIRED)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
@@ -252,7 +253,11 @@ add_executable(${PROJECT_NAME}
         depends/stacklayout/imgui_stacklayout.cpp
         depends/stacklayout/imgui_stacklayout.h
         depends/stacklayout/imgui_stacklayout_internal.h
-        depends/stacklayout/imgui_stacklayout.cpp)
+        depends/stacklayout/imgui_stacklayout.cpp
+        Runtime/RenderPipeline/Handler/BindMeshHandler.cpp
+        Runtime/RenderPipeline/Handler/BindMeshHandler.h
+        Runtime/RenderPipeline/Handler/BindMeshHandler.h
+)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw
@@ -272,7 +277,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         ${LUA_LIBRARIES}
         SPSCQueue::SPSCQueue
         unofficial::omniverse-physx-sdk::sdk
-        OpenAL::OpenAL)
+        OpenAL::OpenAL
+        assimp::assimp)
 
 
 #if (MSVC)

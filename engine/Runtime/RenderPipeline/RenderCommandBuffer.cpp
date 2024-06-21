@@ -30,6 +30,7 @@
 #include "Handler/UpdateUBODataHandler.h"
 #include "Handler/BindUniformBufferHandler.h"
 #include "Handler/CreateUBOHandler.h"
+#include "Handler/BindMeshHandler.h"
 
 namespace DivineBrush {
     rigtorp::SPSCQueue<RenderCommandHandler *> RenderCommandBuffer::ringBuffer = rigtorp::SPSCQueue<RenderCommandHandler *>(
@@ -333,6 +334,13 @@ namespace DivineBrush {
         handler->size = size;
         handler->data = (unsigned char *) malloc(size);
         memcpy(handler->data, data, size);
+        RenderCommandBuffer::Enqueue(handler);
+    }
+
+    void RenderCommandBuffer::BindMeshHandler(std::vector<float> vertices, std::vector<unsigned int> indices) {
+        auto handler = ObjectPool<DivineBrush::BindMeshHandler>::Get();
+        handler->vertices = std::move(vertices);
+        handler->indices = std::move(indices);
         RenderCommandBuffer::Enqueue(handler);
     }
 

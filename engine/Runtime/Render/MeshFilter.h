@@ -5,6 +5,9 @@
 #ifndef ENGINE_MESHFILTER_H
 #define ENGINE_MESHFILTER_H
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <glm/vec3.hpp>
@@ -73,6 +76,8 @@ namespace DivineBrush {
 
         void LoadMesh(const std::string& filePath);
 
+        void LoadModel(const std::string& filePath);
+
         void CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned short> &vertex_index_data);
 
         void CreateMeshLua(std::vector<float> &vertex_data, std::vector<unsigned short> &vertex_index_data);
@@ -107,6 +112,9 @@ namespace DivineBrush {
         Mesh *mesh = nullptr;
         Mesh *skinMesh = nullptr;
         BoneInfo *boneInfo = nullptr;
+
+        std::vector<float> vertices;
+        std::vector<unsigned int> indices;
     };
 
 } // DivineBrush

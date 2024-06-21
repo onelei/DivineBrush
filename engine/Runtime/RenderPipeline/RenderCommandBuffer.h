@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 #include <rigtorp/SPSCQueue.h>
 #include <glm/ext/matrix_float4x4.hpp>
+#include <vector>
 #include "Handler/RenderCommandHandler.h"
 
 namespace DivineBrush {
@@ -112,6 +113,8 @@ namespace DivineBrush {
                                      char *name,
                                      unsigned int size,
                                      void *data);
+
+        static void BindMeshHandler(std::vector<float> vertices, std::vector<unsigned int> indices);
 
         static bool IsEmpty();
 
