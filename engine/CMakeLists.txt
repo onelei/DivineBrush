@@ -257,6 +257,8 @@ add_executable(${PROJECT_NAME}
         Runtime/RenderPipeline/Handler/BindMeshHandler.cpp
         Runtime/RenderPipeline/Handler/BindMeshHandler.h
         Runtime/RenderPipeline/Handler/BindMeshHandler.h
+        Runtime/RenderPipeline/Handler/BindMeshHandler.cpp
+        Runtime/RenderPipeline/Handler/BindMeshHandler.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

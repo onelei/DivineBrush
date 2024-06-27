@@ -16,6 +16,7 @@
 #include <vector>
 #include "fstream"
 #include "../Component/Component.h"
+#include "Material.h"
 
 namespace DivineBrush {
 
@@ -31,7 +32,7 @@ namespace DivineBrush {
             glm::vec4 color;
             glm::vec2 uv;
             //TODO SkinMesh
-            //glm::vec3 normal;
+            glm::vec3 normal;
         };
 
         struct MeshFileHead {
@@ -48,7 +49,7 @@ namespace DivineBrush {
             unsigned short vertex_num = 0;
             unsigned short vertex_index_num = 0;
             Vertex *vertex_data = nullptr;
-            unsigned short *vertex_index_data = nullptr;
+            unsigned int *vertex_index_data = nullptr;
 
             ~Mesh() {
                 if (vertex_data) {
@@ -63,7 +64,7 @@ namespace DivineBrush {
 
             unsigned short GetSize() {
                 return sizeof(vertex_num) + sizeof(Vertex) * vertex_num
-                       + sizeof(vertex_index_num) + vertex_index_num * sizeof(unsigned short);
+                       + sizeof(vertex_index_num) + vertex_index_num * sizeof(unsigned int);
             }
         };
 
@@ -74,11 +75,9 @@ namespace DivineBrush {
             char weight[4];
         };
 
-        void LoadMesh(const std::string& filePath);
-
         void LoadModel(const std::string& filePath);
 
-        void CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned short> &vertex_index_data);
+        void CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned int> &vertex_index_data);
 
         void CreateMeshLua(std::vector<float> &vertex_data, std::vector<unsigned short> &vertex_index_data);
 
@@ -108,13 +107,22 @@ namespace DivineBrush {
 
         void LoadWeight(std::string filePath);
 
+        const std::vector<Vertex>& GetVertices() const { return vertices; }
+        const std::vector<unsigned int>& GetIndices() const { return indices; }
+
+        void ProcessNode(aiNode *node, const aiScene *scene);
+
+        Mesh* ProcessMesh(aiMesh *aiMesh);
+
     private:
         Mesh *mesh = nullptr;
         Mesh *skinMesh = nullptr;
         BoneInfo *boneInfo = nullptr;
 
-        std::vector<float> vertices;
+        std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
+        std::vector<MeshFilter::Mesh*> meshes;
+        std::vector<Material> materials;
     };
 
 } // DivineBrush

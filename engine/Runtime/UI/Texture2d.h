@@ -21,7 +21,7 @@ namespace DivineBrush {
 
         static GLuint LoadGLTextureId(const char *path);
 
-        static Texture2d *LoadFile(const char *path);
+        static Texture2d *LoadFile(std::string path);
 
         static Texture2d *LoadCompressFile(std::string path);
 

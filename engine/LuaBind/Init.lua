@@ -114,7 +114,6 @@ function main()
     --local animation = skeletonObj:AddComponent(Animation)
     --animation:LoadFromFile("animation/fbx_extra_bip001_bip001_take_001_baselayer.skeleton_anim", "idle")
     --local mesh_filter = skeletonObj:AddComponent(MeshFilter)
-    --mesh_filter:LoadMesh("model/fbx_extra_jiulian.mesh")
     -----加载Mesh
     --mesh_filter:LoadWeight("model/fbx_extra_jiulian.weight")
     -----加载权重文件

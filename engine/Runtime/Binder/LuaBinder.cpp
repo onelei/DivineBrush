@@ -239,7 +239,6 @@ namespace DivineBrush {
                 "MeshFilter", sol::call_constructor,
                 sol::constructors<DivineBrush::MeshFilter()>(),
                 sol::base_classes, sol::bases<Component>(),
-                "LoadMesh", &DivineBrush::MeshFilter::LoadMesh,
                 "CreateMesh", &DivineBrush::MeshFilter::CreateMeshLua,
                 "GetMesh", &DivineBrush::MeshFilter::GetMesh,
                 "GetSkinMesh", &DivineBrush::MeshFilter::GetSkinMesh,

@@ -25,19 +25,18 @@ namespace DivineBrush {
         glBindVertexArray(VAO);
 
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(MeshFilter::Vertex), &vertices[0], GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
-        // Vertex positions
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(MeshFilter::Vertex), (void*)offsetof(MeshFilter::Vertex, pos));
         glEnableVertexAttribArray(0);
-        // Vertex normals
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(MeshFilter::Vertex), (void*)offsetof(MeshFilter::Vertex, normal));
         glEnableVertexAttribArray(1);
-        // Vertex texture coords
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(MeshFilter::Vertex), (void*)offsetof(MeshFilter::Vertex, uv));
         glEnableVertexAttribArray(2);
 
         glBindVertexArray(0);

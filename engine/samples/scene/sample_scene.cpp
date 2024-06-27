@@ -31,13 +31,14 @@ namespace DivineBrush {
 
         auto gameObject = new GameObject("3DModel");
         transform = gameObject->GetComponent<Transform>();
-
+        transform->SetScale(glm::vec3(1, 1, 1));
         auto mesh_filter = gameObject->AddComponent<MeshFilter>();
-        mesh_filter->LoadMesh("model/cube.mesh");
-        //mesh_filter->LoadMesh("model/fishsoup_pot.mesh");
-        //mesh_filter->LoadMesh("model/export.mesh");
+        //mesh_filter->LoadModel("model/cube.obj");
+        //mesh_filter->LoadModel("model/FishSoup_Pot.obj");
+        mesh_filter->LoadModel("model/su7.fbx");
         auto material = new Material();
         material->Parse("material/cube.mat");
+        //material->Parse("material/fishsoup_pot.mat");
         //material->Parse("material/fishsoup_pot.mat");
         auto mesh_render = gameObject->AddComponent<MeshRenderer>();
         mesh_render->SetMeshFilter(mesh_filter);
@@ -155,7 +156,7 @@ namespace DivineBrush {
                     {{-1.0f +
                       offset, 4.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {character->left_top_x,     character->right_bottom_y}}
             };
-            std::vector<unsigned short> index_vector = {
+            std::vector<unsigned int> index_vector = {
                     0, 1, 2,
                     0, 2, 3
             };

@@ -38,23 +38,24 @@ namespace DivineBrush {
         if ((GetGameObject()->GetLayer() & camera->GetCullingMask()) == 0x00) {
             return;
         }
-        auto mesh = mesh_filter->GetSkinMesh() != nullptr ? mesh_filter->GetSkinMesh() : mesh_filter->GetMesh();
+        //auto mesh = mesh_filter->GetSkinMesh() != nullptr ? mesh_filter->GetSkinMesh() : mesh_filter->GetMesh();
         //获取Shader中的变量
         auto shader = material->GetShader();
         shaderProgramHandle = shader->GetProgramHandle();
         if (vaoHandle == 0) {
             vaoHandle = RenderGenerater::CreateVAO();
             vboHandle = RenderGenerater::CreateVBO();
-            auto vertexDataSize = mesh->vertex_num * sizeof(MeshFilter::Vertex);
-            auto vertexTypeSize = sizeof(MeshFilter::Vertex);
-            auto vertexData = mesh->vertex_data;
-            auto vertexIndexDataSize = mesh->vertex_index_num * sizeof(unsigned short);
-            auto vertexIndexData = mesh->vertex_index_data;
-            RenderCommandBuffer::CreateVAOHandler(shaderProgramHandle, vaoHandle, vboHandle, vertexDataSize, vertexTypeSize,
-                                                  vertexData, vertexIndexDataSize, vertexIndexData);
+            auto vertexDataSize = mesh_filter->GetVertices().size()*sizeof(MeshFilter::Vertex);
+            auto vertexData = &mesh_filter->GetVertices()[0];
+            auto indiceDataSize = mesh_filter->GetIndices().size() * sizeof(unsigned int);
+            auto indiceData = &mesh_filter->GetIndices()[0];
+            RenderCommandBuffer::CreateVAOHandler(shaderProgramHandle, vaoHandle, vboHandle, vertexDataSize,
+                                                  const_cast<MeshFilter::Vertex *>(vertexData), indiceDataSize,
+                                                  (void *) indiceData);
         } else {
-            auto vertexDataSize = mesh->vertex_num * sizeof(MeshFilter::Vertex);
-            RenderCommandBuffer::UpdateVBODataHandler(vboHandle, vertexDataSize, mesh->vertex_data);
+            auto vertexDataSize = mesh_filter->GetVertices().size()*sizeof(MeshFilter::Vertex);
+            auto vertexData = &mesh_filter->GetVertices()[0];
+            RenderCommandBuffer::UpdateVBODataHandler(vboHandle, vertexDataSize, (void *) vertexData);
         }
 
         //进行实际的渲染调用：这里你绘制你的场景，包括提到的立方体渲染。
@@ -66,7 +67,7 @@ namespace DivineBrush {
 
         auto scale = glm::scale(transform->GetScale()); //缩放;
         auto model = trans * scale * eulerAngleYXZ;
-
+        //model = glm::mat4(1.0f); // 单位矩阵，确保模型在原点
         auto mvp = camera->GetProjection() * camera->GetView() * model;
 
         //指定GPU程序(就是指定顶点着色器、片段着色器)
@@ -90,23 +91,10 @@ namespace DivineBrush {
         SetUniformMatrix4fv(shaderProgramHandle, "u_projection", false, camera->GetProjection());
         SetUniformMatrix4fv(shaderProgramHandle, "u_mvp", false, mvp);
 
-        //拿到保存的Texture
-        auto textures = material->GetTextures();
-        for (int texture_index = 0; texture_index < textures.size(); ++texture_index) {
-            auto textureUnit = GL_TEXTURE0 + texture_index;
-            auto textureHandle = textures[texture_index].second->GetTextureHandle();
-            RenderCommandBuffer::ActiveAndBindTextureHandler(textureUnit, textureHandle);
-
-            //设置Shader程序从纹理单元读取颜色数据
-            auto uniformName = textures[texture_index].first.c_str();
-            RenderCommandBuffer::SetUniformIntHandler(shaderProgramHandle, const_cast<char *>(uniformName),
-                                                      texture_index);
-        }
-
         //Material Render
         material->Render(shaderProgramHandle);
 
-        RenderCommandBuffer::BindVAOAndDrawElementsHandler(vaoHandle, mesh->vertex_index_num);
+        RenderCommandBuffer::BindVAOAndDrawElementsHandler(vaoHandle, mesh_filter->GetIndices().size());
 
         GetGameObject()->ForeachComponent([](Component *component) {
             component->OnPostprocessRender();

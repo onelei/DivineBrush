@@ -140,23 +140,18 @@ namespace DivineBrush {
                                                unsigned int vaoHandle,
                                                unsigned int vboHandle,
                                                unsigned int vertexDataSize,
-                                               unsigned int vertexTypeSize,
-                                               void *vertexData,
+                                               MeshFilter::Vertex *vertexData,
                                                unsigned int vertexIndexDataSize,
-                                               void *vertexIndexData) {
+                                               void* vertexIndexData) {
         auto handler = ObjectPool<DivineBrush::CreateVAOHandler>::Get();
         handler->vaoHandle = vaoHandle;
         handler->vboHandle = vboHandle;
         handler->vertexDataSize = vertexDataSize;
-        handler->vertexTypeSize = vertexTypeSize;
-
         handler->vertexData = (unsigned char *) malloc(vertexDataSize);
         memcpy(handler->vertexData, vertexData, vertexDataSize);
-
         handler->vertexIndexDataSize = vertexIndexDataSize;
         handler->vertexIndexData = (unsigned char *) malloc(vertexIndexDataSize);
         memcpy(handler->vertexIndexData, vertexIndexData, vertexIndexDataSize);
-
         handler->shaderProgramHandle = shaderProgramHandle;
         RenderCommandBuffer::Enqueue(handler);
     }
@@ -337,7 +332,7 @@ namespace DivineBrush {
         RenderCommandBuffer::Enqueue(handler);
     }
 
-    void RenderCommandBuffer::BindMeshHandler(std::vector<float> vertices, std::vector<unsigned int> indices) {
+    void RenderCommandBuffer::BindMeshHandler(std::vector<MeshFilter::Vertex> vertices, std::vector<unsigned int> indices) {
         auto handler = ObjectPool<DivineBrush::BindMeshHandler>::Get();
         handler->vertices = std::move(vertices);
         handler->indices = std::move(indices);

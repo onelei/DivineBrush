@@ -3,6 +3,9 @@
 //
 
 #include "RenderGenerater.h"
+#include "../../depends/debug/debug.h"
+
+#define DEBUG
 
 namespace DivineBrush {
     unsigned int RenderGenerater::shaderIndex;//Shader程序索引
@@ -37,9 +40,12 @@ namespace DivineBrush {
     }
 
     GLuint RenderGenerater::GetShader(unsigned int key) {
-//        if(shaderMap[key] == 0){
-//            return 0;
-//        }
+#if defined(DEBUG)
+        if (shaderMap[key] == 0) {
+            Debug::LogError("GetShader :" + std::to_string(key));
+            return 0;
+        }
+#endif
         return shaderMap[key];
     }
 
@@ -48,9 +54,12 @@ namespace DivineBrush {
     }
 
     GLuint RenderGenerater::GetVAO(unsigned int key) {
-//        if(vaoMap[key] == 0){
-//            return 0;
-//        }
+#if defined(DEBUG)
+        if (vaoMap[key] == 0) {
+            Debug::LogError("GetVAO :" + std::to_string(key));
+            return 0;
+        }
+#endif
         return vaoMap[key];
     }
 
@@ -59,9 +68,12 @@ namespace DivineBrush {
     }
 
     GLuint RenderGenerater::GetVBO(unsigned int key) {
-//        if(vboMap[key] == 0){
-//            return 0;
-//        }
+#if defined(DEBUG)
+        if (vboMap[key] == 0) {
+            Debug::LogError("GetVBO :" + std::to_string(key));
+            return 0;
+        }
+#endif
         return vboMap[key];
     }
 
@@ -70,9 +82,12 @@ namespace DivineBrush {
     }
 
     GLuint RenderGenerater::GetTexture(unsigned int key) {
-//        if(textureMap[key] == 0){
-//            return 0;
-//        }
+#if defined(DEBUG)
+        if (textureMap[key] == 0) {
+            Debug::LogError("GetTexture :" + std::to_string(key));
+            return 0;
+        }
+#endif
         return textureMap[key];
     }
 
@@ -85,9 +100,12 @@ namespace DivineBrush {
     }
 
     GLuint RenderGenerater::GetUBO(unsigned int key) {
-//        if(uboMap[key] == 0){
-//            return 0;
-//        }
+#if defined(DEBUG)
+        if (uboMap[key] == 0) {
+            Debug::LogError("GetUBO :" + std::to_string(key));
+            return 0;
+        }
+#endif
         return uboMap[key];
     }
 

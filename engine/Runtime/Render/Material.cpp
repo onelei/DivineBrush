@@ -8,6 +8,7 @@
 #include "../Application.h"
 #include "../RenderPipeline/RenderCommandBuffer.h"
 #include <string>
+#include <filesystem>
 
 namespace DivineBrush {
     void Material::Parse(const std::string &materialPath) {
@@ -45,6 +46,9 @@ namespace DivineBrush {
     }
 
     void Material::SetTexture(const std::string &shaderPropertyName, Texture2d *texture) {
+        if (texture == nullptr) {
+            return;
+        }
         for (auto &pair: textures) {
             if (pair.first == shaderPropertyName) {
                 delete (pair.second);
@@ -67,11 +71,47 @@ namespace DivineBrush {
     }
 
     void Material::Render(GLuint shaderProgramHandle) {
+        for (int texture_index = 0; texture_index < textures.size(); ++texture_index) {
+            auto textureUnit = GL_TEXTURE0 + texture_index;
+            auto textureHandle = textures[texture_index].second->GetTextureHandle();
+            RenderCommandBuffer::ActiveAndBindTextureHandler(textureUnit, textureHandle);
+
+            //设置Shader程序从纹理单元读取颜色数据
+            auto uniformName = textures[texture_index].first.c_str();
+            RenderCommandBuffer::SetUniformIntHandler(shaderProgramHandle, const_cast<char *>(uniformName),
+                                                      texture_index);
+        }
         for (auto& pair:uniformIntMap){
             RenderCommandBuffer::SetUniformFloatHandler(shaderProgramHandle,pair.first.c_str(), pair.second);
         }
         for (auto& pair:uniformFloatMap){
             RenderCommandBuffer::SetUniformFloatHandler(shaderProgramHandle,pair.first.c_str(), pair.second);
+        }
+        for (auto& pair:uniformVector3Map) {
+            RenderCommandBuffer::SetUniformVector3Handler(shaderProgramHandle, pair.first.c_str(), pair.second);
+        }
+    }
+
+    void Material::LoadFromAssimpMaterial(aiMaterial *material, std::string fullPath) {
+        aiString str;
+        if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+            material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
+            // Combine model directory with texture relative path
+            auto modelDir = std::filesystem::path(fullPath).parent_path();
+            std::filesystem::path fullTexturePath = modelDir / str.C_Str();
+            auto texture = Texture2d::LoadFile(fullTexturePath.string());
+            SetTexture("u_diffuse_texture", texture);
+        }
+
+        aiColor4D color;
+        if (AI_SUCCESS == material->Get(AI_MATKEY_COLOR_DIFFUSE, color)) {
+            glm::vec3 diffuseColor(color.r, color.g, color.b);
+            SetUniformVector3("u_color", diffuseColor);
+        }
+
+        float shininess;
+        if (AI_SUCCESS == material->Get(AI_MATKEY_SHININESS, shininess)) {
+            SetUniformFloat("u_specular_highlight_shininess", shininess);
         }
     }
 

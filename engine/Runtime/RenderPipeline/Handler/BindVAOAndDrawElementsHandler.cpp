@@ -21,7 +21,7 @@ namespace DivineBrush {
         glBindVertexArray(kVAO);
         {
             //使用顶点索引进行绘制，最后的0表示数据偏移量。
-            glDrawElements(GL_TRIANGLES, vertexIndexCount, GL_UNSIGNED_SHORT, 0);
+            glDrawElements(GL_TRIANGLES, vertexIndexCount, GL_UNSIGNED_INT, 0);
         }
         glBindVertexArray(0);
     }

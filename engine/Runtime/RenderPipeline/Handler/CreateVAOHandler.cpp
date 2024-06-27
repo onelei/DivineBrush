@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 #include "../../../depends/template/ObjectPool.h"
 #include "../RenderGenerater.h"
+#include "../../Render/MeshFilter.h"
 
 namespace DivineBrush {
     CreateVAOHandler::CreateVAOHandler() {
@@ -19,47 +20,51 @@ namespace DivineBrush {
     void CreateVAOHandler::Run() {
         RenderCommandHandler::Run();
 
+        // Get shader program ID
         auto program_id = RenderGenerater::GetShader(shaderProgramHandle);
         auto vpos_location = glGetAttribLocation(program_id, "a_pos");
         auto vcol_location = glGetAttribLocation(program_id, "a_color");
         auto a_uv_location = glGetAttribLocation(program_id, "a_uv");
+        auto vnormal_location = glGetAttribLocation(program_id, "a_normal");
 
-        //创建VBO和EBO，设置VAO
-        //在GPU上创建缓冲区对象
+        // Create VBO and EBO, set VAO
         GLuint kVBO, kEBO;
         GLuint kVAO;
+
+        // Generate and bind VBO
         glGenBuffers(1, &kVBO);
-        //将缓冲区对象指定为顶点缓冲区对象
         glBindBuffer(GL_ARRAY_BUFFER, kVBO);
-        //上传顶点数据到缓冲区对象
+        // Upload vertex data to VBO
         glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, GL_STATIC_DRAW);
         RenderGenerater::SetVBO(vboHandle, kVBO);
 
-        //在GPU上创建缓冲区对象
+        // Generate and bind EBO
         glGenBuffers(1, &kEBO);
-        //将缓冲区对象指定为顶点索引缓冲区对象
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, kEBO);
-        //上传顶点索引数据到缓冲区对象
+        // Upload index data to EBO
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexIndexDataSize, vertexIndexData, GL_STATIC_DRAW);
-        //设置VAO
+
+        // Generate and bind VAO
         glGenVertexArrays(1, &kVAO);
         glBindVertexArray(kVAO);
         {
-            //指定当前使用的VBO
+            // Bind VBO and set vertex attribute pointers
             glBindBuffer(GL_ARRAY_BUFFER, kVBO);
-            //将Shader变量(a_pos)和顶点坐标VBO句柄进行关联，最后的0表示数据偏移量。
-            glVertexAttribPointer(vpos_location, 3, GL_FLOAT, false, vertexTypeSize, 0);
-            //启用顶点Shader属性(a_color)，指定与顶点颜色数据进行关联。
-            glVertexAttribPointer(vcol_location, 4, GL_FLOAT, false, vertexTypeSize,
-                                  (void *) (sizeof(float) * 3));
-            //将Shader变量(a_uv)和顶点UV坐标VBO句柄进行关联。
-            glVertexAttribPointer(a_uv_location, 2, GL_FLOAT, false, vertexTypeSize,
-                                  (void *) (sizeof(float) * (3 + 4)));
+            glVertexAttribPointer(vpos_location, 3, GL_FLOAT, GL_FALSE, sizeof(MeshFilter::Vertex),
+                                  (void *) offsetof(MeshFilter::Vertex, pos));
+            glVertexAttribPointer(vcol_location, 4, GL_FLOAT, GL_FALSE, sizeof(MeshFilter::Vertex),
+                                  (void *) offsetof(MeshFilter::Vertex, color));
+            glVertexAttribPointer(a_uv_location, 2, GL_FLOAT, GL_FALSE, sizeof(MeshFilter::Vertex),
+                                  (void *) offsetof(MeshFilter::Vertex, uv));
+            glVertexAttribPointer(vnormal_location, 3, GL_FLOAT, GL_FALSE, sizeof(MeshFilter::Vertex),
+                                  (void *) offsetof(MeshFilter::Vertex, normal));
 
             glEnableVertexAttribArray(vpos_location);
             glEnableVertexAttribArray(vcol_location);
             glEnableVertexAttribArray(a_uv_location);
+            glEnableVertexAttribArray(vnormal_location);
 
+            // Bind EBO
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, kEBO);
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);

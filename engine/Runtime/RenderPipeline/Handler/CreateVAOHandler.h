@@ -20,7 +20,6 @@ namespace DivineBrush {
         unsigned int vaoHandle = 0;
         unsigned int vboHandle = 0;
         unsigned int vertexDataSize = 0;
-        unsigned int vertexTypeSize = 0;
         void *vertexData = nullptr;
         unsigned int vertexIndexDataSize = 0;
         void *vertexIndexData = nullptr;

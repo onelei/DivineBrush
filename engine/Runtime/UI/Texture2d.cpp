@@ -6,12 +6,14 @@
 #include <fstream>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include <filesystem>
 #include "Texture2d.h"
 #include "../Application.h"
 #include "../RenderPipeline/Handler/CreateCompressedTexImage2DHandler.h"
 #include "../RenderPipeline/Handler/CreateTexImage2DHandler.h"
 #include "../RenderPipeline/RenderGenerater.h"
 #include "../RenderPipeline/RenderCommandBuffer.h"
+#include "../../depends/debug/debug.h"
 
 namespace DivineBrush {
     Texture2d::Texture2d() = default;
@@ -41,10 +43,14 @@ namespace DivineBrush {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
-    Texture2d *Texture2d::LoadFile(const char *path) {
+    Texture2d *Texture2d::LoadFile(std::string path) {
+        if (!std::filesystem::exists(path)){
+            Debug::LogError("Texture2d::LoadFile Texture file not found: " + path);
+            return nullptr;
+        }
         // 加载图像
         int width, height, channels;
-        auto data = stbi_load(path, &width, &height, &channels, 0);
+        auto data = stbi_load(path.c_str(), &width, &height, &channels, 0);
         if (data == nullptr) {
             return nullptr;
         }

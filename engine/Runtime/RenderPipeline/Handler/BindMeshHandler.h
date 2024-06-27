@@ -8,6 +8,7 @@
 #include <vector>
 #include <GL/glew.h>
 #include "RenderCommandHandler.h"
+#include "../../Render/MeshFilter.h"
 
 namespace DivineBrush {
 
@@ -18,7 +19,7 @@ namespace DivineBrush {
         ~BindMeshHandler();
 
         GLuint VAO, VBO, EBO;
-        std::vector<float> vertices;
+        std::vector<MeshFilter::Vertex> vertices;
         std::vector<unsigned int> indices;
 
         void Run() override;

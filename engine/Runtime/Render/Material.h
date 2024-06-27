@@ -10,6 +10,8 @@
 #include "Shader.h"
 #include "../ui/Texture2d.h"
 #include "glm/vec3.hpp"
+#include <assimp/scene.h>
+#include <glm/glm.hpp>
 
 namespace DivineBrush {
     class Material {
@@ -29,6 +31,8 @@ namespace DivineBrush {
         void SetTexture(const std::string &shaderPropertyName, Texture2d *texture);
 
         void Render(GLuint shaderProgramHandle);
+
+        void LoadFromAssimpMaterial(aiMaterial* material,std::string fullPath);
 
         Shader *GetShader() { return shader; }
 

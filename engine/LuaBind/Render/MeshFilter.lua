@@ -15,10 +15,6 @@ function MeshFilter:SetCpp(...)
     self.cpp = Cpp.MeshFilter()
 end
 
-function MeshFilter:LoadMesh(filePath)
-    self:GetCpp():LoadMesh(filePath)
-end
-
 function MeshFilter:CreateMesh(vertex_data, vertex_index_data)
     self:GetCpp():CreateMesh(vertex_data, vertex_index_data)
 end

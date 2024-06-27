@@ -12,6 +12,7 @@
 #include <glm/ext/matrix_float4x4.hpp>
 #include <vector>
 #include "Handler/RenderCommandHandler.h"
+#include "../Render/MeshFilter.h"
 
 namespace DivineBrush {
 
@@ -50,10 +51,9 @@ namespace DivineBrush {
                                      unsigned int vaoHandle,
                                      unsigned int vboHandle,
                                      unsigned int vertexDataSize,
-                                     unsigned int vertexTypeSize,
-                                     void *vertexData,
+                                     MeshFilter::Vertex *vertexData,
                                      unsigned int vertexIndexDataSize,
-                                     void *vertexIndexData);
+                                     void * vertexIndexData);
 
         static void UpdateVBODataHandler(unsigned int vboHandle,
                                          unsigned int vertexDataSize,
@@ -114,7 +114,7 @@ namespace DivineBrush {
                                      unsigned int size,
                                      void *data);
 
-        static void BindMeshHandler(std::vector<float> vertices, std::vector<unsigned int> indices);
+        static void BindMeshHandler(std::vector<MeshFilter::Vertex> vertices, std::vector<unsigned int> indices);
 
         static bool IsEmpty();
 
