@@ -73,7 +73,10 @@ namespace DivineBrush {
     void Material::Render(GLuint shaderProgramHandle) {
         for (int texture_index = 0; texture_index < textures.size(); ++texture_index) {
             auto textureUnit = GL_TEXTURE0 + texture_index;
-            auto textureHandle = textures[texture_index].second->GetTextureHandle();
+            auto texture2d = textures[texture_index].second;
+            if (texture2d == nullptr)
+                continue;
+            auto textureHandle = texture2d->GetTextureHandle();
             RenderCommandBuffer::ActiveAndBindTextureHandler(textureUnit, textureHandle);
 
             //设置Shader程序从纹理单元读取颜色数据

@@ -135,37 +135,26 @@ namespace DivineBrush {
         auto font = Font::Load("font/hkyuan.ttf", 20);
         std::string str = "Brush";
         auto characters = font->LoadString(str);
-        int offset = 0;
+        int offsetX = 0;
         for (auto character: characters) {
-            offset += 2;
-            //std::cout << "Character: " << ch << " " << character->left_top_x_ << " " << character->left_top_y_ << " " << character->right_bottom_x_ << " " << character->right_bottom_y_ << std::endl;
-            //offset += character->right_bottom_x_ - character->left_top_x_;
+            offsetX += 2;
             //因为FreeType生成的bitmap是上下颠倒的，所以这里UV坐标也要做对应翻转，将左上角作为零点。
             std::vector<MeshFilter::Vertex> vertex_vector = {
-//                    {{-1.0f, -1.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
-//                    {{1.0f,  -1.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
-//                    {{1.0f,  1.0f,  1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
-//                    {{-1.0f, 1.0f,  1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
+                    {{-1.0 +
+                      offsetX,         2.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {character->left_top_x,     character->right_bottom_y}},
+                    {{1.0f +
+                      offsetX,         2.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {character->right_bottom_x, character->right_bottom_y}},
+                    {{1.0f +
+                      offsetX,         4.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {character->right_bottom_x, character->left_top_y}},
+                    {{-1.0f +
+                      offsetX,         4.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {character->left_top_x,     character->left_top_y}},
+            };
+            std::vector<unsigned int> index_vector = {0, 1, 2, 0, 2, 3};
 
-                    {{-1.0f +
-                      offset, 2.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {character->left_top_x,     character->left_top_y}},
-                    {{1.0f +
-                      offset, 2.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {character->right_bottom_x, character->left_top_y}},
-                    {{1.0f +
-                      offset, 4.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {character->right_bottom_x, character->right_bottom_y}},
-                    {{-1.0f +
-                      offset, 4.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}, {character->left_top_x,     character->right_bottom_y}}
-            };
-            std::vector<unsigned int> index_vector = {
-                    0, 1, 2,
-                    0, 2, 3
-            };
             //创建模型 GameObject
             auto go = new GameObject("font");
             go->SetLayer(0x01);
-            //挂上 Transform 组件
-            auto transform = go->GetComponent<Transform>();
-            transform->SetPosition({-8.f, 0.f, 0.f});
+            go->GetComponent<Transform>()->SetPosition({-8.f, 0.f, 0.f});
             //挂上 MeshFilter 组件
             auto mesh_filter = go->AddComponent<MeshFilter>();
             mesh_filter->CreateMesh(vertex_vector, index_vector);
@@ -199,7 +188,7 @@ namespace DivineBrush {
         uiCamera->SetCenter(glm::vec3(0, 0, 0));
         uiCamera->SetUp(glm::vec3(0, 1, 0));
         uiCamera->SetOrthographic(-Screen::GetWidth() / 2, Screen::GetWidth() / 2, -Screen::GetHeight() / 2,
-                                   Screen::GetHeight() / 2);
+                                  Screen::GetHeight() / 2);
         uiCamera->SetNear(-100);
         uiCamera->SetFar(100);
         uiCamera->SetMode(Camera::CameraMode::Orthographic);
@@ -209,9 +198,8 @@ namespace DivineBrush {
         headGameObject->SetLayer(0x02);
         //挂上 Image 组件
         auto image = headGameObject->AddComponent<UI::Image>();
-        //Texture2d::CompressFile("image/Head.png", "image/Head.glt");
-        image->Load("image/image2.glt");
-        //headGameObject->GetComponent<Transform>()->SetScale(glm::vec3(0.6, 0.6, 0.6));
+        //Texture2d::CompressFile("image/image2.png", "image/image2.cpt");
+        image->Load("image/Head.cpt");
 
         //创建 GameObject
         auto go_mask = new GameObject("mask");
@@ -219,9 +207,8 @@ namespace DivineBrush {
         go_mask->SetParent(headGameObject);
         //挂上 Mask 组件
         auto mask = go_mask->AddComponent<UI::Mask>();
-        //Texture2d::CompressFile("image/mask.png", "image/mask.glt");
-        mask->Load("image/mask.glt");
-
+        //Texture2d::CompressFile("image/mask.png", "image/mask.cpt");
+        mask->Load("image/mask.cpt");
 
         //生成文字贴图
         Font *font = Font::Load("font/hkyuan.ttf", 24);
@@ -241,14 +228,14 @@ namespace DivineBrush {
         auto go_button_image_normal = new GameObject("button_normal");
         go_button_image_normal->SetLayer(0x02);
         auto ui_image_button_image_normal = go_button_image_normal->AddComponent<UI::Image>();
-        //Texture2d::CompressFile("image/02.png", "image/02.cpt");
-        ui_image_button_image_normal->SetTexture2d(Texture2d::LoadCompressFile("image/02.cpt"));
+        //Texture2d::CompressFile("image/Head.png", "image/Head.cpt");
+        ui_image_button_image_normal->Load("image/02.cpt");
         //创建按钮按下状态图片
         auto go_button_image_normal_press = new GameObject("button_press");
         go_button_image_normal_press->SetLayer(0x02);
         auto ui_image_button_image_normal_press = go_button_image_normal_press->AddComponent<UI::Image>();
         //Texture2d::CompressFile("image/03.png", "image/03.cpt");
-        ui_image_button_image_normal_press->SetTexture2d(Texture2d::LoadCompressFile("image/03.cpt"));
+        ui_image_button_image_normal_press->Load("image/03.cpt");
         //创建按钮
         auto go_ui_button = new GameObject("button");
         go_ui_button->SetLayer(0x02);

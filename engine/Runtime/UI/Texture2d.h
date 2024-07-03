@@ -23,7 +23,7 @@ namespace DivineBrush {
 
         static Texture2d *LoadFile(std::string path);
 
-        static Texture2d *LoadCompressFile(std::string path);
+        static Texture2d *LoadCompressFile(const std::string& path);
 
         static void CompressFile(std::string imageFilePath, std::string targetImageFilePath);
 

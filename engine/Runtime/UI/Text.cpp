@@ -92,10 +92,10 @@ namespace DivineBrush::UI {
                 unsigned short width = (character->right_bottom_x - character->left_top_x) * fontTexture->GetWidth();
                 unsigned short height = (character->right_bottom_y - character->left_top_y) * fontTexture->GetHeight();
                 vertex_vector.insert(vertex_vector.end(), {
-                        {{x,         -height,   0.0f}, color, {character->left_top_x,     character->left_top_y}},
-                        {{x + width, -height,   0.0f}, color, {character->right_bottom_x, character->left_top_y}},
-                        {{x + width, 0.0f, 0.0f}, color, {character->right_bottom_x, character->right_bottom_y}},
-                        {{x,         0.0f, 0.0f}, color, {character->left_top_x,     character->right_bottom_y}}
+                        {{x,         0.0f,   0.0f}, color, {character->left_top_x,     character->right_bottom_y}},
+                        {{x + width, 0.0f,   0.0f}, color, {character->right_bottom_x, character->right_bottom_y}},
+                        {{x + width, height, 0.0f}, color, {character->right_bottom_x, character->left_top_y}},
+                        {{x,         height, 0.0f}, color, {character->left_top_x,     character->left_top_y}},
                 });
                 x += width;
                 for (int j = 0; j < index.size(); ++j) {

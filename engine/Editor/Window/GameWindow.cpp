@@ -54,9 +54,9 @@ namespace DivineBrush::Editor {
         //在使用 GLFW 和 ImGui 时，出现绘制的模型在 ImGui 窗口中上下颠倒的问题，通常是由于坐标系统的差异引起的。GLFW 和 OpenGL 一般使用左下角作为原点，而 ImGui 使用左上角作为原点。
         //要解决这个问题，可以在渲染时对模型进行垂直翻转。
         //在 ImGui::Image 函数中，ImVec2(0, 1) 和 ImVec2(1, 0) 分别代表纹理的左上角和右下角，通过交换它们可以实现垂直翻转。
-        //ImGui::Image((void *) (intptr_t) textureID, windowsSize, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((void *) (intptr_t) textureID, windowsSize, ImVec2(0, 1), ImVec2(1, 0));
         //TODO 这个颠倒了,需要修改,调用上面是正常的
-        ImGui::Image((void *) (intptr_t) textureID, windowsSize);
+        //ImGui::Image((void *) (intptr_t) textureID, windowsSize);
     }
 
 } // DivineBrush

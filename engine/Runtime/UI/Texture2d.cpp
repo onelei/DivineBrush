@@ -81,7 +81,7 @@ namespace DivineBrush {
         return pTexture2D;
     }
 
-    Texture2d *Texture2d::LoadCompressFile(std::string path) {
+    Texture2d *Texture2d::LoadCompressFile(const std::string& path) {
         auto *texture2d = new Texture2d();
         //读取 cpt 压缩纹理文件
         std::ifstream fileStream(Application::GetDataPath() + path, std::ios::in | std::ios::binary);

@@ -3,6 +3,8 @@
 //
 
 #include "Image.h"
+
+#include <utility>
 #include "../Render/MeshFilter.h"
 #include "../Component/GameObject.h"
 #include "rttr/registration.h"
@@ -25,7 +27,7 @@ namespace DivineBrush::UI {
     }
 
     void Image::Load(std::string filename) {
-        texture2d = Texture2d::LoadCompressFile(filename);
+        texture2d = Texture2d::LoadCompressFile(std::move(filename));
     }
 
     void Image::OnUpdate() {
