@@ -6,7 +6,7 @@
 #define ENGINE_MASK_H
 
 #include <string>
-#include "Texture2d.h"
+#include "Texture2D.h"
 #include "UIBehaviour.h"
 
 namespace DivineBrush::UI {
@@ -33,7 +33,7 @@ namespace DivineBrush::UI {
         unsigned int width = 0;
         unsigned int height = 0;
         std::string file_name;
-        Texture2d *texture2d;
+        Texture2D *texture2d;
     };
 
 } // DivineBrush

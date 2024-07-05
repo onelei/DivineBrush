@@ -5,7 +5,7 @@
 #ifndef ENGINE_TEXT_H
 #define ENGINE_TEXT_H
 
-#include <glm/vec4.hpp>
+#include <glm/glm.hpp>
 #include "../Component/Component.h"
 #include "Font.h"
 

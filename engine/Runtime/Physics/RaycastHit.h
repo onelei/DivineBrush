@@ -5,7 +5,7 @@
 #ifndef ENGINE_RAYCASTHIT_H
 #define ENGINE_RAYCASTHIT_H
 
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 #include "../Component/GameObject.h"
 
 namespace DivineBrush {

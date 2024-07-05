@@ -28,11 +28,15 @@ namespace DivineBrush {
             return gl_texture_id;
         }
 
+        void SetTextureID(GLuint texture_id) {
+            this->gl_texture_id = texture_id;
+        }
+
     protected:
         GLint mipmapCount = 0;
         GLsizei width = 0;
         GLsizei height = 0;
-        GLenum gl_texture_format;
+        GLenum internalformat;
         GLuint gl_texture_id = 0;
         unsigned int textureHandle = 0;
     };

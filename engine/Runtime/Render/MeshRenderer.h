@@ -6,7 +6,7 @@
 #define ENGINE_MESHRENDERER_H
 
 #include <string>
-#include <glm/detail/type_mat4x4.hpp>
+#include <glm/glm.hpp>
 #include "Material.h"
 #include "MeshFilter.h"
 #include "../Component/Component.h"
@@ -40,6 +40,7 @@ namespace DivineBrush {
 
         void SetUniformMatrix4fv(unsigned int shader_program_handle, const char *uniform_name, bool transpose,
                                  glm::mat4 &matrix);
+    RTTR_ENABLE(Component);
     };
 
 } // DivineBrush

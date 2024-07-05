@@ -6,6 +6,7 @@
 #include "rttr/registration.h"
 #include "../Component/GameObject.h"
 #include "../Animation/Animation.h"
+#include <glm/glm.hpp>
 
 namespace DivineBrush {
     RTTR_REGISTRATION {
@@ -23,22 +24,25 @@ namespace DivineBrush {
 
     void SkinnedMeshRenderer::OnUpdate() {
         auto meshFilter = GetGameObject()->GetComponent<MeshFilter>();
-        if (meshFilter == nullptr) {
+        if (!meshFilter) {
             return;
         }
         auto mesh = meshFilter->GetMesh();
-        if (mesh == nullptr) {
+        if (!mesh) {
             return;
         }
         auto boneInfo = meshFilter->GetBoneInfo();
-        if (boneInfo == nullptr) {
+        if (!boneInfo) {
             return;
         }
         auto animation = GetGameObject()->GetComponent<Animation>();
-        if (animation == nullptr) {
+        if (!animation) {
             return;
         }
         auto animationClip = animation->GetAnimationClip();
+        if(!animationClip){
+            return;
+        }
         auto boneMat4 = animationClip->GetCurrentFrameBoneMat4();
         auto boneMat3 = animationClip->GetCurrentFrameNormalBoneMat3();
         auto skinMesh = meshFilter->GetSkinMesh();
@@ -53,16 +57,23 @@ namespace DivineBrush {
         }
         //计算当前帧的骨骼矩阵
         for (int i = 0; i < skinMesh->vertex_num; i++) {
-            auto vertex = mesh->vertex_data[i];
+            auto& vertex = mesh->vertex_data[i];
             auto vertexPos = glm::vec4(vertex.pos, 1.0f);
-            glm::vec4 bonePos;
-            glm::vec3 boneNormal;
+            //对每个Bone计算一次位置，然后乘以权重，最后求和
+            glm::vec4 bonePos = glm::vec4(0.0f);
+            glm::vec3 boneNormal = glm::vec3(0.0f);
             for (int j = 0; j < 4; j++) {
+                //顶点关联的骨骼索引
                 auto boneIndex = boneInfo[i].index[j];
                 if (boneIndex == -1)
                     continue;
+                //顶点关联的骨骼权重
                 auto boneWeight = boneInfo[i].weight[j] / 100.0f;
-                bonePos = bonePos + boneMat4[boneIndex] * vertexPos * boneWeight;
+                //当前帧顶点关联的骨骼矩阵
+                auto boneMat = boneMat4[boneIndex];
+                //计算当前帧顶点位置(模型坐标系，bone_matrix里带了相对于模型坐标系的位置，作用到骨骼坐标系的位置上，就转换到了模型坐标系)
+                auto worldPos = boneMat * vertexPos;
+                bonePos = bonePos + worldPos * boneWeight;
                 //TODO SkinMesh
                 //boneNormal = boneNormal + boneMat3[boneIndex] * vertex.normal * boneWeight;
             }
@@ -70,9 +81,5 @@ namespace DivineBrush {
             //TODO SkinMesh
             //skinMesh->vertex_data[i].normal = boneNormal;
         }
-    }
-
-    void SkinnedMeshRenderer::Render() {
-        MeshRenderer::Render();
     }
 } // DivineBrush

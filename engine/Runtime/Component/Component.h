@@ -57,8 +57,8 @@ namespace DivineBrush {
         bool is_dirty = true;
         GameObject *gameObject = nullptr;
         sol::table luaComponent;
+    RTTR_ENABLE();
     };
-
 } // DivineBrush
 
 #endif //ENGINE_COMPONENT_H

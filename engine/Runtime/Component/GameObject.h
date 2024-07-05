@@ -88,7 +88,14 @@ namespace DivineBrush {
             auto componentName = t.get_name().to_string();
             auto component = GetComponent(componentName);
             if (component == nullptr) {
-                return nullptr;
+                //从子类里面查找
+                auto derived_classes = t.get_derived_classes();
+                for (auto &derived_class : derived_classes) {
+                    component = GetComponent(derived_class.get_name().to_string());
+                    if (component != nullptr) {
+                        break;
+                    }
+                }
             }
             return dynamic_cast<T *>(component);
         }

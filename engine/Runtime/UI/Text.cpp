@@ -83,7 +83,7 @@ namespace DivineBrush::UI {
             std::vector<Font::Character *> character_vec = font->LoadString(text);
             //遍历每个字符进行绘制
             std::vector<MeshFilter::Vertex> vertex_vector;
-            std::vector<unsigned int> index_vector(character_vec.size() * 6);
+            std::vector<unsigned short> index_vector(character_vec.size() * 6);
             int x = 0;
             std::vector<unsigned short> index = {0, 1, 2, 0, 2, 3};
             //合并Mesh

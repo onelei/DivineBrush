@@ -7,9 +7,7 @@
 
 #include <GL/glew.h>
 #include <GL/gl.h>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/vec2.hpp>
+#include <glm/glm.hpp>
 #include <functional>
 #include <utility>
 #include "../Component/Component.h"
@@ -184,6 +182,7 @@ namespace DivineBrush {
         static Camera *current_camera;
 
         static void SortByDepth();
+    RTTR_ENABLE(Component);
     };
 
 } // DivineBrush

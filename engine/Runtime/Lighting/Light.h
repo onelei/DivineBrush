@@ -6,7 +6,7 @@
 #define ENGINE_LIGHT_H
 
 #include "../Component/Component.h"
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 
 namespace DivineBrush {
 
@@ -78,6 +78,7 @@ namespace DivineBrush {
         float attenuationLinear = 0.0f;
         //点光衰减二次项
         float attenuationQuadratic = 0.0f;
+    RTTR_ENABLE(Component);
     };
 
 } // DivineBrush

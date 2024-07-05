@@ -5,20 +5,20 @@
 #include <GL/glew.h>
 #include "TopBarWindow.h"
 #include "Layouts/GUILayout.h"
-#include "../../Runtime/UI/Texture2d.h"
+#include "../../Runtime/UI/Texture2D.h"
 #include "../../depends/stacklayout/imgui_stacklayout.h"
 
 namespace DivineBrush::Editor {
     TopBarWindow::TopBarWindow() : EditorWindow(k_TopBar) {
-        dragButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_ViewToolMove On@2x.png");
-        moveButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_MoveTool@2x.png");
-        rotateButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_RotateTool@2x.png");
-        scaleButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_ScaleTool@2x.png");
-        rectButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_RectTool@2x.png");
+        dragButtonTextureId = (void *) (intptr_t)Texture2D::LoadGLTextureId("../Resources/d_ViewToolMove On@2x.png");
+        moveButtonTextureId = (void *) (intptr_t)Texture2D::LoadGLTextureId("../Resources/d_MoveTool@2x.png");
+        rotateButtonTextureId = (void *) (intptr_t)Texture2D::LoadGLTextureId("../Resources/d_RotateTool@2x.png");
+        scaleButtonTextureId = (void *) (intptr_t)Texture2D::LoadGLTextureId("../Resources/d_ScaleTool@2x.png");
+        rectButtonTextureId = (void *) (intptr_t)Texture2D::LoadGLTextureId("../Resources/d_RectTool@2x.png");
 
-        playButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/PlayButton On@2x.png");
-        pauseButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/PauseButton On@2x.png");
-        nextButtonTextureId = (void *) (intptr_t)Texture2d::LoadGLTextureId("../Resources/d_StepButton On@2x.png");
+        playButtonTextureId = (void *) (intptr_t)Texture2D::LoadGLTextureId("../Resources/PlayButton On@2x.png");
+        pauseButtonTextureId = (void *) (intptr_t)Texture2D::LoadGLTextureId("../Resources/PauseButton On@2x.png");
+        nextButtonTextureId = (void *) (intptr_t)Texture2D::LoadGLTextureId("../Resources/d_StepButton On@2x.png");
     }
 
     TopBarWindow::~TopBarWindow() {

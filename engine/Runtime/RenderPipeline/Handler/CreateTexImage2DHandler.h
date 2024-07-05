@@ -19,8 +19,8 @@ namespace DivineBrush {
         unsigned int textureHandle = 0;
         int width = 0;
         int height = 0;
-        unsigned int glTextureFormat = 0;
-        unsigned int clientFormat = 0;
+        unsigned int internalformat = 0;
+        unsigned int format = 0;
         unsigned int dataType = 0;
         unsigned char *data = nullptr;
 

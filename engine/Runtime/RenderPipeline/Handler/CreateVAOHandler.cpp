@@ -25,7 +25,7 @@ namespace DivineBrush {
         auto vpos_location = glGetAttribLocation(program_id, "a_pos");
         auto vcol_location = glGetAttribLocation(program_id, "a_color");
         auto a_uv_location = glGetAttribLocation(program_id, "a_uv");
-        auto vnormal_location = glGetAttribLocation(program_id, "a_normal");
+        //auto vnormal_location = glGetAttribLocation(program_id, "a_normal");
 
         // Create VBO and EBO, set VAO
         GLuint kVBO, kEBO;
@@ -35,7 +35,7 @@ namespace DivineBrush {
         glGenBuffers(1, &kVBO);
         glBindBuffer(GL_ARRAY_BUFFER, kVBO);
         // Upload vertex data to VBO
-        glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, GL_DYNAMIC_DRAW);
         RenderGenerater::SetVBO(vboHandle, kVBO);
 
         // Generate and bind EBO
@@ -56,13 +56,13 @@ namespace DivineBrush {
                                   (void *) offsetof(MeshFilter::Vertex, color));
             glVertexAttribPointer(a_uv_location, 2, GL_FLOAT, GL_FALSE, sizeof(MeshFilter::Vertex),
                                   (void *) offsetof(MeshFilter::Vertex, uv));
-            glVertexAttribPointer(vnormal_location, 3, GL_FLOAT, GL_FALSE, sizeof(MeshFilter::Vertex),
-                                  (void *) offsetof(MeshFilter::Vertex, normal));
+         //   glVertexAttribPointer(vnormal_location, 3, GL_FLOAT, GL_FALSE, sizeof(MeshFilter::Vertex),
+         //                         (void *) offsetof(MeshFilter::Vertex, normal));
 
             glEnableVertexAttribArray(vpos_location);
             glEnableVertexAttribArray(vcol_location);
             glEnableVertexAttribArray(a_uv_location);
-            glEnableVertexAttribArray(vnormal_location);
+          //  glEnableVertexAttribArray(vnormal_location);
 
             // Bind EBO
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, kEBO);

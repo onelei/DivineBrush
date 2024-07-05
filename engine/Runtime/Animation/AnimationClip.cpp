@@ -56,7 +56,6 @@ namespace DivineBrush {
         for (unsigned short i = 0; i < frameCount; i++) {
             std::vector<glm::mat4> boneMat4s;
             std::vector<glm::mat3> boneMat3s;
-            fileStream.read(reinterpret_cast<char *>(&boneCount), sizeof(boneCount));
             for (unsigned short j = 0; j < boneCount; j++) {
                 glm::mat4 boneMat4;
                 fileStream.read(reinterpret_cast<char *>(&boneMat4), sizeof(float) * 16);

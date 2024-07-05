@@ -10,9 +10,7 @@
 #include <assimp/postprocess.h>
 #include <GL/glew.h>
 #include <GL/gl.h>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/vec2.hpp>
+#include <glm/glm.hpp>
 #include <vector>
 #include "fstream"
 #include "../Component/Component.h"
@@ -32,24 +30,22 @@ namespace DivineBrush {
             glm::vec4 color;
             glm::vec2 uv;
             //TODO SkinMesh
-            glm::vec3 normal;
+            //glm::vec3 normal;
         };
 
         struct MeshFileHead {
             char type[4];
-            //TODO SkinMesh
-            //char name[32];
+            char name[32];
             unsigned short vertex_num;
             unsigned short vertex_index_num;
         };
 
         struct Mesh {
-            //TODO SkinMesh
-            //char *name = nullptr;
+            char *name = nullptr;
             unsigned short vertex_num = 0;
             unsigned short vertex_index_num = 0;
             Vertex *vertex_data = nullptr;
-            unsigned int *vertex_index_data = nullptr;
+            unsigned short *vertex_index_data = nullptr;
 
             ~Mesh() {
                 if (vertex_data) {
@@ -64,20 +60,23 @@ namespace DivineBrush {
 
             unsigned short GetSize() {
                 return sizeof(vertex_num) + sizeof(Vertex) * vertex_num
-                       + sizeof(vertex_index_num) + vertex_index_num * sizeof(unsigned int);
+                       + sizeof(vertex_index_num) + vertex_index_num * sizeof(unsigned short);
             }
         };
 
+        // 顶点关联骨骼及权重,每个顶点最多可以关联4个骨骼。
         struct BoneInfo {
             //骨骼顶点索引
-            char index[4];
+            char index[4];//骨骼索引，一般骨骼少于128个，用char就行。
             //骨骼权重
-            char weight[4];
+            char weight[4];//骨骼权重，权重不会超过100，所以用char类型就可以。
         };
 
-        void LoadModel(const std::string& filePath);
+        void LoadMesh(const std::string& filePath);
 
-        void CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned int> &vertex_index_data);
+        //void LoadModel(const std::string& filePath);
+
+        void CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned short> &vertex_index_data);
 
         void CreateMeshLua(std::vector<float> &vertex_data, std::vector<unsigned short> &vertex_index_data);
 
@@ -89,14 +88,12 @@ namespace DivineBrush {
             return this->skinMesh;
         }
 
-        void SetSkinMesh(Mesh *mesh) {
-            this->skinMesh = mesh;
+        void SetSkinMesh(Mesh *skinMesh) {
+            this->skinMesh = skinMesh;
         }
 
         const char *GetMeshName(){
-            return nullptr;
-            //TODO SkinMesh
-            //this->mesh->name;
+           return this->mesh->name;
         }
 
         BoneInfo *GetBoneInfo() {
@@ -107,22 +104,24 @@ namespace DivineBrush {
 
         void LoadWeight(std::string filePath);
 
-        const std::vector<Vertex>& GetVertices() const { return vertices; }
-        const std::vector<unsigned int>& GetIndices() const { return indices; }
+        //const std::vector<Vertex>& GetVertices() const { return vertices; }
+        //const std::vector<unsigned short>& GetIndices() const { return indices; }
 
-        void ProcessNode(aiNode *node, const aiScene *scene);
+        //void ProcessNode(aiNode *node, const aiScene *scene);
 
-        Mesh* ProcessMesh(aiMesh *aiMesh);
+        //Mesh *ProcessMesh(aiMesh *aiMesh, const aiScene *scene);
 
     private:
         Mesh *mesh = nullptr;
         Mesh *skinMesh = nullptr;
         BoneInfo *boneInfo = nullptr;
 
-        std::vector<Vertex> vertices;
-        std::vector<unsigned int> indices;
-        std::vector<MeshFilter::Mesh*> meshes;
-        std::vector<Material> materials;
+        std::string fullPath;
+        //std::vector<Vertex> vertices;
+        //std::vector<unsigned short> indices;
+        //std::vector<MeshFilter::Mesh*> meshes;
+        //std::vector<Material*> materials;
+    RTTR_ENABLE(Component);
     };
 
 } // DivineBrush

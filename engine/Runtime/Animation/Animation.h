@@ -32,6 +32,7 @@ namespace DivineBrush {
     private:
         AnimationClip *animationClip = nullptr;
         std::unordered_map<std::string, AnimationClip *> animationClips;
+    RTTR_ENABLE(Component);
     };
 
 } // DivineBrush

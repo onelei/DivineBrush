@@ -61,7 +61,7 @@ namespace DivineBrush {
         auto dataSize = font->font_texture_size * font->font_texture_size;
         auto *pixels = (unsigned char *) malloc(dataSize);
         memset(pixels, 0, font->font_texture_size * font->font_texture_size);
-        font->font_texture = Texture2d::Create(font->font_texture_size, font->font_texture_size, GL_RED, GL_RED,
+        font->font_texture = Texture2D::Create(font->font_texture_size, font->font_texture_size, GL_RED, GL_RED,
                                                GL_UNSIGNED_BYTE, pixels, dataSize);
         free(pixels);
         return font;

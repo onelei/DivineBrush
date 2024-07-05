@@ -68,8 +68,8 @@ add_executable(${PROJECT_NAME}
         depends/template/DynamicArrayPool.h
         Runtime/UI/Texture.cpp
         Runtime/UI/Texture.h
-        Runtime/UI/Texture2d.cpp
-        Runtime/UI/Texture2d.h
+        Runtime/UI/Texture2D.cpp
+        Runtime/UI/Texture2D.h
         Runtime/EditorApplication.cpp
         Runtime/EditorApplication.h
         Runtime/Application.cpp

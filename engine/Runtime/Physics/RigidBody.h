@@ -45,6 +45,7 @@ namespace DivineBrush {
         Collider *collider = nullptr;
         bool enableCCD = false;
         bool isDynamic = false;
+    RTTR_ENABLE(Component);
     };
 
 } // DivineBrush

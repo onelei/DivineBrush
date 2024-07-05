@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <vector>
 #include "freetype/ftglyph.h"
-#include "Texture2d.h"
+#include "Texture2D.h"
 
 namespace DivineBrush {
 
@@ -23,7 +23,7 @@ namespace DivineBrush {
 
         void LoadCharacter(char ch);
 
-        Texture2d *GetFontTexture() { return font_texture; }
+        Texture2D *GetFontTexture() { return font_texture; }
 
         struct Character {
             float left_top_x;
@@ -45,7 +45,7 @@ namespace DivineBrush {
         char *font_file_buffer = nullptr;//ttf字体文件加载到内存
         FT_Library ft_library;
         FT_Face ft_face;
-        Texture2d *font_texture;
+        Texture2D *font_texture;
         unsigned short font_texture_size = 1024;
         unsigned short font_texture_fill_x=0;//当前行的起始点
         unsigned short font_texture_fill_y=0;//新的一行的纵向起始点

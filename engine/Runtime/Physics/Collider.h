@@ -52,6 +52,7 @@ namespace DivineBrush {
 
     private:
         PhysicMaterial *physicMaterial = nullptr;
+    RTTR_ENABLE(Component);
     };
 
 } // DivineBrush

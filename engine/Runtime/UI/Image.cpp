@@ -27,7 +27,7 @@ namespace DivineBrush::UI {
     }
 
     void Image::Load(std::string filename) {
-        texture2d = Texture2d::LoadCompressFile(std::move(filename));
+        texture2d = Texture2D::LoadCompressFile(std::move(filename));
     }
 
     void Image::OnUpdate() {
@@ -46,7 +46,7 @@ namespace DivineBrush::UI {
                 {{texture2d->GetWidth(), texture2d->GetHeight(), 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
                 {{0.f,                   texture2d->GetHeight(), 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.f, 1.f}}
         };
-        std::vector<unsigned int> index_vector = {
+        std::vector<unsigned short> index_vector = {
                 0, 1, 2,
                 0, 2, 3
         };

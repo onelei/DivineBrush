@@ -9,7 +9,7 @@
 #include <GL/gl.h>
 #include "FreeImage.h"
 #include "UIBehaviour.h"
-#include "Texture2d.h"
+#include "Texture2D.h"
 
 namespace DivineBrush::UI {
 
@@ -21,11 +21,11 @@ namespace DivineBrush::UI {
 
         void Load(std::string filename);
 
-        void SetTexture2d(Texture2d *texture2d) {
+        void SetTexture2d(Texture2D *texture2d) {
             this->texture2d = texture2d;
         }
 
-        Texture2d *GetTexture2d() {
+        Texture2D *GetTexture2d() {
             return texture2d;
         }
 
@@ -37,7 +37,7 @@ namespace DivineBrush::UI {
 
     private:
         std::string file_name;
-        Texture2d *texture2d;
+        Texture2D *texture2d;
     };
 
 } // DivineBrush

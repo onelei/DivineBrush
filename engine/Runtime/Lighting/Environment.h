@@ -5,7 +5,7 @@
 #ifndef ENGINE_ENVIRONMENT_H
 #define ENGINE_ENVIRONMENT_H
 
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 
 namespace DivineBrush {
 

@@ -20,7 +20,7 @@ namespace DivineBrush {
 
         GLuint VAO, VBO, EBO;
         std::vector<MeshFilter::Vertex> vertices;
-        std::vector<unsigned int> indices;
+        std::vector<unsigned short> indices;
 
         void Run() override;
 

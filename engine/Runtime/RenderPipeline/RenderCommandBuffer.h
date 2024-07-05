@@ -32,8 +32,8 @@ namespace DivineBrush {
         static void CreateTexImage2DHandler(unsigned int textureHandle,
                                             int width,
                                             int height,
-                                            unsigned int glTextureFormat,
-                                            unsigned int clientFormat,
+                                            unsigned int internalformat,
+                                            unsigned int format,
                                             unsigned int dataType,
                                             unsigned char *data, unsigned int dataSize);
 
@@ -51,8 +51,8 @@ namespace DivineBrush {
                                      unsigned int vaoHandle,
                                      unsigned int vboHandle,
                                      unsigned int vertexDataSize,
-                                     MeshFilter::Vertex *vertexData,
-                                     unsigned int vertexIndexDataSize,
+                                     void *vertexData,
+                                     unsigned short vertexIndexDataSize,
                                      void * vertexIndexData);
 
         static void UpdateVBODataHandler(unsigned int vboHandle,
@@ -114,7 +114,7 @@ namespace DivineBrush {
                                      unsigned int size,
                                      void *data);
 
-        static void BindMeshHandler(std::vector<MeshFilter::Vertex> vertices, std::vector<unsigned int> indices);
+        static void BindMeshHandler(std::vector<MeshFilter::Vertex> vertices, std::vector<unsigned short> indices);
 
         static bool IsEmpty();
 

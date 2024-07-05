@@ -13,6 +13,8 @@
 #include "../../Runtime/UI/Text.h"
 #include "../../Runtime/UI/Button.h"
 #include "../../Runtime/Binder/LuaBinder.h"
+#include "../../Runtime/Animation/Animation.h"
+#include "../../Runtime/Render/SkinnedMeshRenderer.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -27,22 +29,33 @@ namespace DivineBrush {
     }
 
     void SampleScene::OnAwake() {
-        //Texture2d::CompressFile("image/Diffuse_FishSoup_Pot_1.jpg", "image/diffuse_fishsoup_pot.cpt");
+        //Texture2D::CompressFile("image/Diffuse_FishSoup_Pot_1.jpg", "image/diffuse_fishsoup_pot.cpt");
 
         auto gameObject = new GameObject("3DModel");
         transform = gameObject->GetComponent<Transform>();
-        transform->SetScale(glm::vec3(1, 1, 1));
+        transform->SetRotation(glm::vec3(-90, 0, 0));
+
         auto mesh_filter = gameObject->AddComponent<MeshFilter>();
-        //mesh_filter->LoadModel("model/cube.obj");
-        //mesh_filter->LoadModel("model/FishSoup_Pot.obj");
-        mesh_filter->LoadModel("model/su7.fbx");
+        mesh_filter->LoadMesh("model/fbx_extra_jiulian.mesh");
         auto material = new Material();
-        material->Parse("material/cube.mat");
-        //material->Parse("material/fishsoup_pot.mat");
-        //material->Parse("material/fishsoup_pot.mat");
-        auto mesh_render = gameObject->AddComponent<MeshRenderer>();
-        mesh_render->SetMeshFilter(mesh_filter);
+        material->Parse("material/fbx_extra_jiulian.mat");
+
+        //auto mesh_render = gameObject->AddComponent<MeshRenderer>();
+        //mesh_render->SetMaterial(material);
+
+        auto animation = gameObject->AddComponent<Animation>();
+        animation->LoadFromFile("animation/fbx_extra_bip001_bip001_take_001_baselayer.skeleton_anim","idle");
+        mesh_filter->LoadWeight("model/fbx_extra_jiulian.weight");//加载权重文件
+        auto mesh_render = gameObject->AddComponent<SkinnedMeshRenderer>();
         mesh_render->SetMaterial(material);
+        animation->Play("idle");
+
+        //Texture2D::CompressFile("image/Part1_albedo.jpg", "image/Part1_albedo.cpt");
+//        mesh_filter->LoadModel("model/FishSoup_Pot.fbx");
+//        auto material = new Material();
+//        material->Parse("material/computer.mat");
+//        auto mesh_render = gameObject->AddComponent<MeshRenderer>();
+//        mesh_render->SetMaterial(material);
 
         auto camera_gameObject = new GameObject("SceneCamera");
         sceneCameraTransform = camera_gameObject->GetComponent<Transform>();
@@ -107,11 +120,11 @@ namespace DivineBrush {
 //            transform->SetRotation(rotation);
 //        }
         //旋转物体
-        static float rotate_eulerAngle = 0.f;
-        rotate_eulerAngle += 0.1f;
-        glm::vec3 rotation = transform->GetRotation();
-        rotation.y = rotate_eulerAngle;
-        transform->SetRotation(rotation);
+//        static float rotate_eulerAngle = 0.f;
+//        rotate_eulerAngle += 0.1f;
+//        glm::vec3 rotation = transform->GetRotation();
+//        rotation.y = rotate_eulerAngle;
+//        transform->SetRotation(rotation);
 
         //旋转相机
         if (Input::GetKeyDown(GLFW_KEY_LEFT_ALT) && Input::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) {
@@ -149,7 +162,7 @@ namespace DivineBrush {
                     {{-1.0f +
                       offsetX,         4.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}, {character->left_top_x,     character->left_top_y}},
             };
-            std::vector<unsigned int> index_vector = {0, 1, 2, 0, 2, 3};
+            std::vector<unsigned short> index_vector = {0, 1, 2, 0, 2, 3};
 
             //创建模型 GameObject
             auto go = new GameObject("font");
@@ -164,7 +177,6 @@ namespace DivineBrush {
             //挂上 MeshRenderer 组件
             auto mesh_renderer = go->AddComponent<MeshRenderer>();
             mesh_renderer->SetMaterial(material);
-            mesh_renderer->SetMeshFilter(mesh_filter);
             //使用文字贴图
             material->SetTexture("u_diffuse_texture", font->GetFontTexture());
         }
@@ -198,7 +210,7 @@ namespace DivineBrush {
         headGameObject->SetLayer(0x02);
         //挂上 Image 组件
         auto image = headGameObject->AddComponent<UI::Image>();
-        //Texture2d::CompressFile("image/image2.png", "image/image2.cpt");
+        //Texture2D::CompressFile("image/image2.png", "image/image2.cpt");
         image->Load("image/Head.cpt");
 
         //创建 GameObject
@@ -207,7 +219,7 @@ namespace DivineBrush {
         go_mask->SetParent(headGameObject);
         //挂上 Mask 组件
         auto mask = go_mask->AddComponent<UI::Mask>();
-        //Texture2d::CompressFile("image/mask.png", "image/mask.cpt");
+        //Texture2D::CompressFile("image/mask.png", "image/mask.cpt");
         mask->Load("image/mask.cpt");
 
         //生成文字贴图
@@ -228,13 +240,13 @@ namespace DivineBrush {
         auto go_button_image_normal = new GameObject("button_normal");
         go_button_image_normal->SetLayer(0x02);
         auto ui_image_button_image_normal = go_button_image_normal->AddComponent<UI::Image>();
-        //Texture2d::CompressFile("image/Head.png", "image/Head.cpt");
+        //Texture2D::CompressFile("image/Head.png", "image/Head.cpt");
         ui_image_button_image_normal->Load("image/02.cpt");
         //创建按钮按下状态图片
         auto go_button_image_normal_press = new GameObject("button_press");
         go_button_image_normal_press->SetLayer(0x02);
         auto ui_image_button_image_normal_press = go_button_image_normal_press->AddComponent<UI::Image>();
-        //Texture2d::CompressFile("image/03.png", "image/03.cpt");
+        //Texture2D::CompressFile("image/03.png", "image/03.cpt");
         ui_image_button_image_normal_press->Load("image/03.cpt");
         //创建按钮
         auto go_ui_button = new GameObject("button");

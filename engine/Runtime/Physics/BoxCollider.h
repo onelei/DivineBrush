@@ -5,7 +5,7 @@
 #ifndef ENGINE_BOXCOLLIDER_H
 #define ENGINE_BOXCOLLIDER_H
 
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 #include "Collider.h"
 
 namespace DivineBrush {
@@ -25,6 +25,7 @@ namespace DivineBrush {
 
     private:
         glm::vec3 size = glm::vec3(1, 1, 1);
+    RTTR_ENABLE(Collider);
     };
 
 } // DivineBrush

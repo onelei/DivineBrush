@@ -23,6 +23,7 @@ namespace DivineBrush {
 
     private:
         float radius = 1.0f;
+    RTTR_ENABLE(Collider);
     };
 
 } // DivineBrush

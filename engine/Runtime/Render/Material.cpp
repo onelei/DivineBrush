@@ -17,35 +17,34 @@ namespace DivineBrush {
         rapidxml::xml_document<> document;
         document.parse<0>(xml_file.data());
         //根节点
-        rapidxml::xml_node<> *material_node = document.first_node("material");
+        auto material_node = document.first_node("material");
         if (material_node == nullptr) {
             return;
         }
-        rapidxml::xml_attribute<> *material_shader_attribute = material_node->first_attribute("shader");
+        auto material_shader_attribute = material_node->first_attribute("shader");
         if (material_shader_attribute == nullptr) {
             return;
         }
         shader = Shader::Find(material_shader_attribute->value());
         //解析Texture
-        rapidxml::xml_node<> *material_texture_node = material_node->first_node("texture");
+        auto material_texture_node = material_node->first_node("texture");
         while (material_texture_node != nullptr) {
-            rapidxml::xml_attribute<> *texture_name_attribute = material_texture_node->first_attribute("name");
+            auto texture_name_attribute = material_texture_node->first_attribute("name");
             if (texture_name_attribute == nullptr) {
                 return;
             }
-            rapidxml::xml_attribute<> *texture_image_attribute = material_texture_node->first_attribute("image");
+            auto texture_image_attribute = material_texture_node->first_attribute("image");
             if (texture_image_attribute == nullptr) {
                 return;
             }
             std::string shader_property_name = texture_name_attribute->value();
             std::string image_path = texture_image_attribute->value();
-            textures.emplace_back(texture_name_attribute->value(),
-                                  image_path.empty() ? nullptr : Texture2d::LoadCompressFile(image_path));
+            textures.emplace_back(shader_property_name,image_path.empty() ? nullptr : Texture2D::LoadCompressFile(image_path));
             material_texture_node = material_texture_node->next_sibling("texture");
         }
     }
 
-    void Material::SetTexture(const std::string &shaderPropertyName, Texture2d *texture) {
+    void Material::SetTexture(const std::string &shaderPropertyName, Texture2D *texture) {
         if (texture == nullptr) {
             return;
         }
@@ -95,27 +94,48 @@ namespace DivineBrush {
         }
     }
 
-    void Material::LoadFromAssimpMaterial(aiMaterial *material, std::string fullPath) {
-        aiString str;
+    void Material::LoadFromAssimpMaterial(const aiScene* scene, const aiMaterial *material, const std::string& fullPath) {
+        aiString imagePath;
         if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
-            material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
+            material->GetTexture(aiTextureType_DIFFUSE, 0, &imagePath);
             // Combine model directory with texture relative path
-            auto modelDir = std::filesystem::path(fullPath).parent_path();
-            std::filesystem::path fullTexturePath = modelDir / str.C_Str();
-            auto texture = Texture2d::LoadFile(fullTexturePath.string());
-            SetTexture("u_diffuse_texture", texture);
+            //利用此方法判断是否是FBX模型内嵌贴图
+            auto tex = scene->GetEmbeddedTexture(imagePath.C_Str());
+            if (tex != nullptr)
+            {
+                //有内嵌贴图
+                auto texture = Texture2D::LoadFile(tex, false);
+                std::string textureKey = "u_diffuse_texture";
+                if (!Contains(textureKey)) {
+                    textures.emplace_back(textureKey, texture);
+                }
+            } else {
+                auto modelDir = std::filesystem::path(fullPath).parent_path();
+                std::filesystem::path fullTexturePath = modelDir / imagePath.C_Str();
+                auto texture = Texture2D::LoadFile(fullTexturePath.string());
+                std::string textureKey = "u_diffuse_texture";
+                if (!Contains(textureKey)) {
+                    textures.emplace_back(textureKey, texture);
+                }
+            }
         }
 
-        aiColor4D color;
-        if (AI_SUCCESS == material->Get(AI_MATKEY_COLOR_DIFFUSE, color)) {
-            glm::vec3 diffuseColor(color.r, color.g, color.b);
-            SetUniformVector3("u_color", diffuseColor);
-        }
+//        aiColor4D color;
+//        if (AI_SUCCESS == material->Get(AI_MATKEY_COLOR_DIFFUSE, color)) {
+//            glm::vec3 diffuseColor(color.r, color.g, color.b);
+//            SetUniformVector3("u_color", diffuseColor);
+//        }
+//
+//        float shininess;
+//        if (AI_SUCCESS == material->Get(AI_MATKEY_SHININESS, shininess)) {
+//            SetUniformFloat("u_specular_highlight_shininess", shininess);
+//        }
+    }
 
-        float shininess;
-        if (AI_SUCCESS == material->Get(AI_MATKEY_SHININESS, shininess)) {
-            SetUniformFloat("u_specular_highlight_shininess", shininess);
-        }
+    bool Material::Contains(const std::string& key) {
+        return std::any_of(textures.begin(), textures.end(), [&key](const auto& pair) {
+            return pair.first == key;
+        });
     }
 
 } // DivineBrush

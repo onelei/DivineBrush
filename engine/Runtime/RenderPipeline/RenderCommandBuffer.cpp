@@ -85,16 +85,16 @@ namespace DivineBrush {
     void RenderCommandBuffer::CreateTexImage2DHandler(unsigned int textureHandle,
                                                       int width,
                                                       int height,
-                                                      unsigned int glTextureFormat,
-                                                      unsigned int clientFormat,
+                                                      unsigned int internalformat,
+                                                      unsigned int format,
                                                       unsigned int dataType,
                                                       unsigned char *data, unsigned int dataSize) {
         auto handler = ObjectPool<DivineBrush::CreateTexImage2DHandler>::Get();
         handler->textureHandle = textureHandle;
         handler->width = width;
         handler->height = height;
-        handler->glTextureFormat = glTextureFormat;
-        handler->clientFormat = clientFormat;
+        handler->internalformat = internalformat;
+        handler->format = format;
         handler->dataType = dataType;
         handler->data = static_cast<unsigned char *>(malloc(dataSize));
         memcpy(handler->data, data, dataSize);
@@ -140,9 +140,9 @@ namespace DivineBrush {
                                                unsigned int vaoHandle,
                                                unsigned int vboHandle,
                                                unsigned int vertexDataSize,
-                                               MeshFilter::Vertex *vertexData,
-                                               unsigned int vertexIndexDataSize,
-                                               void* vertexIndexData) {
+                                               void *vertexData,
+                                               unsigned short vertexIndexDataSize,
+                                               void *vertexIndexData) {
         auto handler = ObjectPool<DivineBrush::CreateVAOHandler>::Get();
         handler->vaoHandle = vaoHandle;
         handler->vboHandle = vboHandle;
@@ -332,7 +332,7 @@ namespace DivineBrush {
         RenderCommandBuffer::Enqueue(handler);
     }
 
-    void RenderCommandBuffer::BindMeshHandler(std::vector<MeshFilter::Vertex> vertices, std::vector<unsigned int> indices) {
+    void RenderCommandBuffer::BindMeshHandler(std::vector<MeshFilter::Vertex> vertices, std::vector<unsigned short> indices) {
         auto handler = ObjectPool<DivineBrush::BindMeshHandler>::Get();
         handler->vertices = std::move(vertices);
         handler->indices = std::move(indices);

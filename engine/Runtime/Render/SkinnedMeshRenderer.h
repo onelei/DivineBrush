@@ -17,8 +17,7 @@ namespace DivineBrush {
 
         void OnUpdate() override;
 
-        void Render() override;
-
+    RTTR_ENABLE(MeshRenderer);
     };
 
 } // DivineBrush

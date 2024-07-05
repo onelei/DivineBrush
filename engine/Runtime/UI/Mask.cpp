@@ -24,7 +24,7 @@ namespace DivineBrush::UI {
     }
 
     void Mask::Load(std::string filename) {
-        texture2d = Texture2d::LoadCompressFile(filename);
+        texture2d = Texture2D::LoadCompressFile(filename);
     }
 
     void Mask::OnUpdate() {
@@ -39,12 +39,12 @@ namespace DivineBrush::UI {
         //创建 MeshFilter
         //生成顶点数据
         std::vector<MeshFilter::Vertex> vertex_vector = {
-                {{0.f,                                       0.0f,                                       0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.f, 0.f}, {0.0f, 0.0f, 1.0f}},
-                {{static_cast<float>(texture2d->GetWidth()), 0.0f,                                       0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {1.f, 0.f}, {0.0f, 0.0f, 1.0f}},
-                {{static_cast<float>(texture2d->GetWidth()), static_cast<float>(texture2d->GetHeight()), 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {1.f, 1.f}, {0.0f, 0.0f, 1.0f}},
-                {{0.f,                                       static_cast<float>(texture2d->GetHeight()), 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.f, 1.f}, {0.0f, 0.0f, 1.0f}}
+                {{0.f,                                       0.0f,                                       0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
+                {{static_cast<float>(texture2d->GetWidth()), 0.0f,                                       0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
+                {{static_cast<float>(texture2d->GetWidth()), static_cast<float>(texture2d->GetHeight()), 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
+                {{0.f,                                       static_cast<float>(texture2d->GetHeight()), 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, {0.f, 1.f}}
         };
-        std::vector<unsigned int> index_vector = {
+        std::vector<unsigned short> index_vector = {
                 0, 1, 2,
                 0, 2, 3
         };

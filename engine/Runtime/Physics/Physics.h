@@ -6,7 +6,7 @@
 #define ENGINE_PHYSICS_H
 
 #include <PxPhysicsAPI.h>
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 #include "SimulationEventCallback.h"
 #include "RaycastHit.h"
 
