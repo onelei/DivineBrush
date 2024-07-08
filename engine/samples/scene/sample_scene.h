@@ -28,6 +28,8 @@ namespace DivineBrush {
 
         void CreateUI();
 
+        void TestAudio();
+
     private:
         Camera *uiCamera;
         Camera *sceneCamera;

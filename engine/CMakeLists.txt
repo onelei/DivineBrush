@@ -30,6 +30,7 @@ find_package(unofficial-omniverse-physx-sdk CONFIG REQUIRED)
 find_package(OpenAL CONFIG REQUIRED)
 find_package(Stb REQUIRED)
 find_package(assimp CONFIG REQUIRED)
+find_package(SndFile CONFIG REQUIRED)
 
 find_path(RAPIDXML_INCLUDE_DIRS "rapidxml/rapidxml.hpp")
 
@@ -259,6 +260,13 @@ add_executable(${PROJECT_NAME}
         Runtime/RenderPipeline/Handler/BindMeshHandler.h
         Runtime/RenderPipeline/Handler/BindMeshHandler.cpp
         Runtime/RenderPipeline/Handler/BindMeshHandler.cpp
+        Runtime/Audio/AudioClip.cpp
+        Runtime/Audio/AudioClip.h
+        Runtime/Audio/AudioClip.h
+        Runtime/Audio/AudioListener.cpp
+        Runtime/Audio/AudioListener.h
+        Runtime/Audio/AudioSource.cpp
+        Runtime/Audio/AudioSource.h
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -280,7 +288,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         SPSCQueue::SPSCQueue
         unofficial::omniverse-physx-sdk::sdk
         OpenAL::OpenAL
-        assimp::assimp)
+        assimp::assimp
+        SndFile::sndfile)
 
 
 #if (MSVC)

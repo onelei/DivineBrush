@@ -23,7 +23,7 @@ namespace DivineBrush {
         renderThread.detach();
     }
 
-    void RenderPipeline::Dispose() {
+    void RenderPipeline::Destroy() {
         isDispose = true;
         if (renderThread.joinable()) {
             renderThread.join();

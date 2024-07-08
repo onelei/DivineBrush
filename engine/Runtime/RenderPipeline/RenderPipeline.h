@@ -18,7 +18,7 @@ namespace DivineBrush {
     public:
         static void Init(GLFWwindow *window);
 
-        static void Dispose();
+        static void Destroy();
 
         static GLuint GetColorTextureId() {
             return color_texture_id;

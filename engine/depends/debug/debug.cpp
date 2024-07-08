@@ -6,6 +6,7 @@
 #include "debug.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/basic_file_sink.h"
+#define DEBUG
 
 namespace DivineBrush {
 
@@ -33,6 +34,12 @@ namespace DivineBrush {
 
     void Debug::Log(const std::string &message) {
         SPDLOG_INFO(message);
+    }
+
+    void Debug::LogEditor(const std::string &message) {
+#if defined(DEBUG)
+        SPDLOG_INFO(message);
+#endif
     }
 
     void Debug::LogWarning(const std::string &message) {

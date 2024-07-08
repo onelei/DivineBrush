@@ -42,7 +42,9 @@ https://damassets.autodesk.net/content/dam/autodesk/www/adn/fbx/2020-2-1/fbx2020
 
 19. vcpkg install ImGuizmo
 
-20. 
+20. vcpkg install sndfile
+
+21. 
 
     
 

@@ -15,6 +15,9 @@
 #include "../../Runtime/Binder/LuaBinder.h"
 #include "../../Runtime/Animation/Animation.h"
 #include "../../Runtime/Render/SkinnedMeshRenderer.h"
+#include "../../Runtime/Audio/AudioClip.h"
+#include "../../Runtime/Audio/AudioSource.h"
+#include "../../Runtime/Audio/AudioListener.h"
 
 namespace DivineBrush {
     using namespace rttr;
@@ -81,6 +84,8 @@ namespace DivineBrush {
         CreateFont();
 
         CreateUI();
+
+        TestAudio();
 
         auto luaBinder = new LuaBinder();
         luaBinder->Init();
@@ -264,6 +269,21 @@ namespace DivineBrush {
 
     void SampleScene::OnDestroy() {
         Component::OnDestroy();
+    }
+
+    void SampleScene::TestAudio() {
+        auto audioClip = new AudioClip("audio/background_music.wav");
+        auto audioSourceObj = new GameObject("audioSource1");
+        auto audioSource = audioSourceObj->AddComponent<AudioSource>();
+        audioSource->SetClip(audioClip);
+
+        auto audioClip2 = new AudioClip("audio/sound_effect.wav");
+        auto audioSourceObj2 = new GameObject("audioSource2");
+        auto audioSource2 = audioSourceObj2->AddComponent<AudioSource>();
+        audioSource2->SetClip(audioClip2);
+
+        auto audioListenerObj = new GameObject("audioListener1");
+        auto audioListener = audioListenerObj->AddComponent<AudioListener>();
     }
 
 } // DivineBrush

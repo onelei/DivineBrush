@@ -17,6 +17,7 @@ namespace DivineBrush {
     public:
         static void Init();
         static void Log(const std::string& message);
+        static void LogEditor(const std::string& message);
         static void LogWarning(const std::string& message);
         static void LogError(const std::string& message);
         static void LogException(const std::string& message);

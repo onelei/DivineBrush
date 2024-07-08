@@ -5,8 +5,6 @@
 #include "RenderGenerater.h"
 #include "../../depends/debug/debug.h"
 
-#define DEBUG
-
 namespace DivineBrush {
     unsigned int RenderGenerater::shaderIndex;//Shader程序索引
     unsigned int RenderGenerater::vaoIndex;//VAO索引

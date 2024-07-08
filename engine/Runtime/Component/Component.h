@@ -33,6 +33,8 @@ namespace DivineBrush {
 
         virtual void OnAwake();
 
+        virtual void OnStart();
+
         virtual void OnUpdate();
 
         virtual void OnFixUpdate();
@@ -54,6 +56,7 @@ namespace DivineBrush {
         virtual void OnTriggerExit(GameObject *other);
 
     protected:
+        bool isStarted = false;
         bool is_dirty = true;
         GameObject *gameObject = nullptr;
         sol::table luaComponent;

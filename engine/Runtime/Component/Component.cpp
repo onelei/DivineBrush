@@ -19,7 +19,15 @@ namespace DivineBrush {
         ExecuteLuaComponent("OnAwake");
     }
 
+    void Component::OnStart() {
+        ExecuteLuaComponent("OnStart");
+    }
+
     void Component::OnUpdate() {
+        if (!isStarted) {
+            isStarted = true;
+            OnStart();
+        }
         ExecuteLuaComponent("OnUpdate");
     }
 
@@ -75,5 +83,6 @@ namespace DivineBrush {
             //DEBUG_LOG_ERROR("\n---- RUN LUA_FUNCTION ERROR ----\nComponent call Awake error,type:{}\n{}\n------------------------",component_type_name,err.what());
         }
     }
+
 
 } // DivineBrush

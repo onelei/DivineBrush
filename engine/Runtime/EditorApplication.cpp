@@ -147,7 +147,8 @@ namespace DivineBrush {
 
         Physics::Init();
 
-        Audio::Play2D("nullptr");
+        Audio::Init();
+
         return 0;
     }
 
@@ -281,7 +282,8 @@ namespace DivineBrush {
 #ifdef __EMSCRIPTEN__
         EMSCRIPTEN_MAINLOOP_END;
 #endif
-        RenderPipeline::Dispose();
+        RenderPipeline::Destroy();
+        Audio::Destroy();
         profiler::stopListen(); // 停止profiler服务器
         // Cleanup
         ImGui_ImplOpenGL3_Shutdown();

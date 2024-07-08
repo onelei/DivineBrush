@@ -8,8 +8,11 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <vector>
+#include <unordered_set>
 #include <string>
+#include <condition_variable>
 #include "glm/glm.hpp"
+#include "AudioSource.h"
 
 namespace DivineBrush {
 
@@ -18,28 +21,23 @@ namespace DivineBrush {
 
         static void Init();
 
-        static void Play2D(const std::string &filename);
+        static void Update();
 
-        static void Play3D(const std::string &filename, glm::vec3 pos);
+        static void AddAudioSource(AudioSource *source);
 
-        static void Play(ALuint sfxSource);
+        static void RemoveAudioSource(AudioSource *source);
 
-        static void Pause(ALuint sfxSource);
-
-        static void Resume(ALuint sfxSource);
-
-        static void Stop(ALuint sfxSource);
-
-        static void Clear(ALuint sfxSource);
-
-        static void ClearAll();
+        static void Destroy();
 
     private:
-        static bool isInit;
+        static std::unordered_set<AudioSource *> sources;
+        static std::thread audioThread;
+        static std::mutex mutex;
+        static bool exitFlag;
+        static ALCdevice *device;
+        static ALCcontext *context;
 
         static std::vector<char> LoadWAV(const std::string &filename, ALenum &format, ALsizei &freq);
-
-        static void CheckError(const char *operation);
     };
 
 } // DivineBrush
