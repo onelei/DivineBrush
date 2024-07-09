@@ -40,6 +40,23 @@ namespace DivineBrush {
             unsigned short vertex_index_num;
         };
 
+        struct MeshFile {
+            MeshFileHead meshFileHead;
+            Vertex *vertex_data = nullptr;
+            unsigned short *vertex_index_data = nullptr;
+
+            ~MeshFile() {
+                if (vertex_data) {
+                    delete[] vertex_data;
+                    vertex_data = nullptr;
+                }
+                if (vertex_index_data) {
+                    delete[] vertex_index_data;
+                    vertex_index_data = nullptr;
+                }
+            }
+        };
+
         struct Mesh {
             char *name = nullptr;
             unsigned short vertex_num = 0;
@@ -48,6 +65,10 @@ namespace DivineBrush {
             unsigned short *vertex_index_data = nullptr;
 
             ~Mesh() {
+                if (name) {
+                    delete[] name;
+                    name = nullptr;
+                }
                 if (vertex_data) {
                     delete[] vertex_data;
                     vertex_data = nullptr;
@@ -72,9 +93,7 @@ namespace DivineBrush {
             char weight[4];//骨骼权重，权重不会超过100，所以用char类型就可以。
         };
 
-        void LoadMesh(const std::string& filePath);
-
-        //void LoadModel(const std::string& filePath);
+        void LoadMesh(const std::string &filePath);
 
         void CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned short> &vertex_index_data);
 
@@ -92,8 +111,8 @@ namespace DivineBrush {
             this->skinMesh = skinMesh;
         }
 
-        const char *GetMeshName(){
-           return this->mesh->name;
+        const char *GetMeshName() {
+            return this->mesh->name;
         }
 
         BoneInfo *GetBoneInfo() {
@@ -104,12 +123,15 @@ namespace DivineBrush {
 
         void LoadWeight(std::string filePath);
 
-        //const std::vector<Vertex>& GetVertices() const { return vertices; }
-        //const std::vector<unsigned short>& GetIndices() const { return indices; }
+        static void ExportMesh(const std::string &filePath);
 
-        //void ProcessNode(aiNode *node, const aiScene *scene);
+        static void ProcessNode(aiNode *node, const aiScene *scene, std::vector<MeshFile *> &meshFiles);
 
-        //Mesh *ProcessMesh(aiMesh *aiMesh, const aiScene *scene);
+        static MeshFile *ProcessMesh(const aiMesh *aiMesh);
+
+        static std::wstring utf8_to_utf16(const std::string& utf8_str);
+
+        static std::string utf16_to_utf8(const std::wstring& utf16_str);
 
     private:
         Mesh *mesh = nullptr;
@@ -117,10 +139,6 @@ namespace DivineBrush {
         BoneInfo *boneInfo = nullptr;
 
         std::string fullPath;
-        //std::vector<Vertex> vertices;
-        //std::vector<unsigned short> indices;
-        //std::vector<MeshFilter::Mesh*> meshes;
-        //std::vector<Material*> materials;
     RTTR_ENABLE(Component);
     };
 

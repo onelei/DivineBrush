@@ -30,6 +30,8 @@ namespace DivineBrush {
 
         void TestAudio();
 
+        void TestExportMesh();
+
     private:
         Camera *uiCamera;
         Camera *sceneCamera;

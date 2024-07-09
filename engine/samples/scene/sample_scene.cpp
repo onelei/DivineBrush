@@ -33,6 +33,7 @@ namespace DivineBrush {
 
     void SampleScene::OnAwake() {
         //Texture2D::CompressFile("image/Diffuse_FishSoup_Pot_1.jpg", "image/diffuse_fishsoup_pot.cpt");
+        TestExportMesh();
 
         auto gameObject = new GameObject("3DModel");
         transform = gameObject->GetComponent<Transform>();
@@ -284,6 +285,10 @@ namespace DivineBrush {
 
         auto audioListenerObj = new GameObject("audioListener1");
         auto audioListener = audioListenerObj->AddComponent<AudioListener>();
+    }
+
+    void SampleScene::TestExportMesh() {
+        MeshFilter::ExportMesh("model/fbx_extra.fbx");
     }
 
 } // DivineBrush
