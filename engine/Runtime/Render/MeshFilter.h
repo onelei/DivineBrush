@@ -93,6 +93,23 @@ namespace DivineBrush {
             char weight[4];//骨骼权重，权重不会超过100，所以用char类型就可以。
         };
 
+        struct WeightFile {
+            BoneInfo* boneInfo = nullptr;
+            int vertexCount;
+
+            WeightFile(int vertexCount){
+                boneInfo = new BoneInfo[vertexCount];
+                this->vertexCount = vertexCount;
+            }
+
+            ~WeightFile() {
+                if (boneInfo) {
+                    delete[] boneInfo;
+                    boneInfo = nullptr;
+                }
+            }
+        };
+
         void LoadMesh(const std::string &filePath);
 
         void CreateMesh(std::vector<Vertex> &vertex_data, std::vector<unsigned short> &vertex_index_data);
@@ -129,9 +146,7 @@ namespace DivineBrush {
 
         static MeshFile *ProcessMesh(const aiMesh *aiMesh);
 
-        static std::wstring utf8_to_utf16(const std::string& utf8_str);
-
-        static std::string utf16_to_utf8(const std::wstring& utf16_str);
+        static void ExportWeight(const std::string& filePath);
 
     private:
         Mesh *mesh = nullptr;

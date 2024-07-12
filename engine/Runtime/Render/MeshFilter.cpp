@@ -5,12 +5,13 @@
 #include <fstream>
 #include <filesystem>
 #include <codecvt>
+#include <utf8h/utf8.h>
+#include "utf8cpp/utf8.h"
 #include "rttr/registration.h"
 #include "MeshFilter.h"
 #include "../Application.h"
 #include "../../depends/debug/debug.h"
 #include "../RenderPipeline/RenderCommandBuffer.h"
-#include "MeshRenderer.h"
 #include "../Component/GameObject.h"
 
 namespace DivineBrush {
@@ -104,18 +105,18 @@ namespace DivineBrush {
         fileStream.seekg(0, std::ios::end);
         int fileSize = fileStream.tellg();
         fileStream.seekg(6, std::ios::beg);
-        boneInfo = (BoneInfo *)(malloc(fileSize - 6));
+        boneInfo = (BoneInfo *) (malloc(fileSize - 6));
         fileStream.read((char *) boneInfo, fileSize - 6);
         fileStream.close();
     }
 
     void MeshFilter::LoadMesh(const std::string &filePath) {
-        std::ifstream input_file_stream(Application::GetDataPath()+filePath,std::ios::in | std::ios::binary);
+        std::ifstream input_file_stream(Application::GetDataPath() + filePath, std::ios::in | std::ios::binary);
         MeshFileHead meshFileHead;
-        input_file_stream.read((char*)&meshFileHead, sizeof(meshFileHead));
+        input_file_stream.read((char *) &meshFileHead, sizeof(meshFileHead));
         //读取顶点数据
-        auto vertex_data =(char*)malloc(meshFileHead.vertex_num * sizeof(Vertex));
-        input_file_stream.read((char*)vertex_data, meshFileHead.vertex_num * sizeof(Vertex));
+        auto vertex_data = (char *) malloc(meshFileHead.vertex_num * sizeof(Vertex));
+        input_file_stream.read((char *) vertex_data, meshFileHead.vertex_num * sizeof(Vertex));
         //读取顶点索引数据
         auto vertex_index_data = (unsigned short *) malloc(meshFileHead.vertex_index_num * sizeof(unsigned short));
         input_file_stream.read((char *) vertex_index_data, meshFileHead.vertex_index_num * sizeof(unsigned short));
@@ -131,26 +132,28 @@ namespace DivineBrush {
 
     void MeshFilter::ExportMesh(const std::string &filePath) {
         auto fullPath = Application::GetDataPath() + filePath;
-        if (!std::filesystem::exists(fullPath)){
+        if (!std::filesystem::exists(fullPath)) {
             Debug::LogError("Texture2D::LoadFile Texture file not found: " + fullPath);
             return;
         }
 
         Assimp::Importer importer;
-        const aiScene *scene = importer.ReadFile(fullPath, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
-
+        // 下面两个参数不能添加
+        // aiProcess_FlipUVs
+        // aiProcess_JoinIdenticalVertices
+        const aiScene *scene = importer.ReadFile(fullPath, aiProcess_Triangulate);
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
             std::cerr << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
             return;
         }
-        std::vector<MeshFile*> meshFiles;
-        ProcessNode(scene->mRootNode, scene,meshFiles);
+        std::vector<MeshFile *> meshFiles;
+        ProcessNode(scene->mRootNode, scene, meshFiles);
 
-        for (auto meshFile:meshFiles) {
+        for (auto meshFile: meshFiles) {
             auto meshName = meshFile->meshFileHead.name;
             std::filesystem::path inputPath(fullPath);
             std::string inputFileName = inputPath.filename().stem().string();
-            std::string outputFileName=fmt::format("{}_{}.mesh", inputFileName, meshName);
+            std::string outputFileName = fmt::format("{}_{}.mesh", inputFileName, meshName);
             inputPath.replace_filename(outputFileName);
             auto filename = inputPath.string();
 
@@ -160,9 +163,11 @@ namespace DivineBrush {
                 return;
             }
 
-            outputFile.write(reinterpret_cast<const char*>(&meshFile->meshFileHead), sizeof(meshFile->meshFileHead));
-            outputFile.write(reinterpret_cast<const char*>(meshFile->vertex_data), sizeof(Vertex) * meshFile->meshFileHead.vertex_num);
-            outputFile.write(reinterpret_cast<const char*>(meshFile->vertex_index_data), sizeof(unsigned short) * meshFile->meshFileHead.vertex_index_num);
+            outputFile.write(reinterpret_cast<const char *>(&meshFile->meshFileHead), sizeof(meshFile->meshFileHead));
+            outputFile.write(reinterpret_cast<const char *>(meshFile->vertex_data),
+                             sizeof(Vertex) * meshFile->meshFileHead.vertex_num);
+            outputFile.write(reinterpret_cast<const char *>(meshFile->vertex_index_data),
+                             sizeof(unsigned short) * meshFile->meshFileHead.vertex_index_num);
             outputFile.close();
         }
 
@@ -182,68 +187,112 @@ namespace DivineBrush {
         }
     }
 
-    MeshFilter::MeshFile* MeshFilter::ProcessMesh(const aiMesh *aiMesh) {
+    MeshFilter::MeshFile *MeshFilter::ProcessMesh(const aiMesh *aiMesh) {
         auto meshFile = new MeshFile();
-        meshFile->meshFileHead.vertex_num = aiMesh->mNumFaces * 3; // 每个面有3个顶点
+        meshFile->meshFileHead.vertex_num = aiMesh->mNumVertices;
         meshFile->vertex_data = new Vertex[meshFile->meshFileHead.vertex_num];
-        meshFile->meshFileHead.vertex_index_num = aiMesh->mNumFaces * 3;
-        meshFile->vertex_index_data = new unsigned short[meshFile->meshFileHead.vertex_index_num];
 
-        unsigned int index = 0;
-        for (unsigned int i = 0; i < aiMesh->mNumFaces; ++i) {
-            const aiFace& face = aiMesh->mFaces[i];
-            for (unsigned int j = 0; j < face.mNumIndices; ++j) {
-                unsigned int vertexIndex = face.mIndices[j];
-                meshFile->vertex_index_data[index] = index;
-
-                meshFile->vertex_data[index].pos =
-                        glm::vec3(aiMesh->mVertices[vertexIndex].x, aiMesh->mVertices[vertexIndex].y,
-                                  aiMesh->mVertices[vertexIndex].z);
-                if (aiMesh->HasVertexColors(0)) {
-                    meshFile->vertex_data[index].color = glm::vec4(aiMesh->mColors[0][vertexIndex].r, aiMesh->mColors[0][vertexIndex].g, aiMesh->mColors[0][vertexIndex].b, aiMesh->mColors[0][vertexIndex].a);
-                } else {
-                    meshFile->vertex_data[index].color = glm::vec4(1.0f); // 默认颜色
-                }
-                if (aiMesh->HasTextureCoords(0)) {
-                    auto uv = aiMesh->mTextureCoords[0][vertexIndex];
-                    meshFile->vertex_data[index].uv = glm::vec2(uv.x,  uv.y);
-                } else {
-                    meshFile->vertex_data[index].uv = glm::vec2(0.0f); // 默认UV
-                }
-                ++index;
+        for (unsigned int i = 0; i < aiMesh->mNumVertices; i++) {
+            meshFile->vertex_data[i].pos = glm::vec3(aiMesh->mVertices[i].x, aiMesh->mVertices[i].y,
+                                                     aiMesh->mVertices[i].z);
+            if (aiMesh->HasVertexColors(0)) {
+                meshFile->vertex_data[i].color = glm::vec4(aiMesh->mColors[0][i].r, aiMesh->mColors[0][i].g,
+                                                           aiMesh->mColors[0][i].b, aiMesh->mColors[0][i].a);
+            } else {
+                meshFile->vertex_data[i].color = glm::vec4(1.0f); // 默认颜色
+            }
+            if (aiMesh->HasTextureCoords(0)) {
+                meshFile->vertex_data[i].uv = glm::vec2(aiMesh->mTextureCoords[0][i].x, aiMesh->mTextureCoords[0][i].y);
+            } else {
+                meshFile->vertex_data[i].uv = glm::vec2(0.0f); // 默认UV
             }
         }
 
-        // 复制mesh名称
-
-        // 获取UTF-8编码的名称
-        std::string mesh_name = aiMesh->mName.C_Str();
-        // 转换为UTF-16编码
-        std::wstring utf16_name = utf8_to_utf16(mesh_name);
-        // 截取UTF-16编码的名称到31个字符以内
-        if (utf16_name.size() > 31) {
-            utf16_name = utf16_name.substr(0, 31);
+        // 处理索引
+        meshFile->meshFileHead.vertex_index_num = aiMesh->mNumFaces * 3;
+        meshFile->vertex_index_data = new unsigned short[meshFile->meshFileHead.vertex_index_num];
+        unsigned int index = 0;
+        for (unsigned int i = 0; i < aiMesh->mNumFaces; i++) {
+            const aiFace &face = aiMesh->mFaces[i];
+            for (unsigned int j = 0; j < face.mNumIndices; j++) {
+                meshFile->vertex_index_data[index++] = face.mIndices[j];
+            }
         }
-        // 转换回UTF-8编码
-        std::string truncated_name = utf16_to_utf8(utf16_name);
-        // 复制到meshFileHead.name字段，确保不超过31个字符，并以空字符结尾
-        std::strncpy(meshFile->meshFileHead.name, truncated_name.c_str(), 31);
-        meshFile->meshFileHead.name[31] = '\0';
-
+        // 设置mesh文件头
         std::strncpy(meshFile->meshFileHead.type, "Mesh", 4);
+        // 复制mesh名称
+        // 将其转换为UTF-8格式
+        auto meshName = aiMesh->mName.C_Str();
+        std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
+        auto utf16_str = convert.from_bytes(meshName);
+        std::strncpy(meshFile->meshFileHead.name, reinterpret_cast<const char *>(utf16_str.c_str()), 31); // 复制最多31个字符
+        meshFile->meshFileHead.name[31] = '\0'; // 确保字符串以空字符结尾
 
+        //TODO
+        std::string _meshName = "jiulian";
+        std::strcpy(meshFile->meshFileHead.name, _meshName.c_str());
         return meshFile;
     }
 
-    std::wstring MeshFilter::utf8_to_utf16(const std::string &utf8_str) {
-        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-        return converter.from_bytes(utf8_str);
-    }
+    void MeshFilter::ExportWeight(const std::string &filePath) {
+        auto fullPath = Application::GetDataPath() + filePath;
+        if (!std::filesystem::exists(fullPath)) {
+            Debug::LogError("Texture2D::LoadFile Texture file not found: " + fullPath);
+            return;
+        }
 
-    std::string MeshFilter::utf16_to_utf8(const std::wstring &utf16_str) {
-        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-        return converter.to_bytes(utf16_str);
-    }
+        Assimp::Importer importer;
+        const aiScene *scene = importer.ReadFile(fullPath, aiProcess_Triangulate);
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+            std::cerr << "Error::Assimp:: " << importer.GetErrorString() << std::endl;
+            return;
+        }
+        for (unsigned int i = 0; i < scene->mNumMeshes; ++i) {
+            aiMesh *mesh = scene->mMeshes[i];
 
+            auto weightFile = new MeshFilter::WeightFile(mesh->mNumVertices);
+            std::vector<std::vector<std::pair<int, float>>> vertexBoneData(mesh->mNumVertices);
+
+            for (unsigned int j = 0; j < mesh->mNumBones; ++j) {
+                aiBone *bone = mesh->mBones[j];
+                int boneIndex = j;
+
+                for (unsigned int k = 0; k < bone->mNumWeights; ++k) {
+                    aiVertexWeight weight = bone->mWeights[k];
+                    int vertexId = weight.mVertexId;
+                    float weightValue = weight.mWeight;
+
+                    vertexBoneData[vertexId].emplace_back(boneIndex, weightValue);
+                }
+            }
+
+            for (unsigned int j = 0; j < mesh->mNumVertices; ++j) {
+                MeshFilter::BoneInfo &boneInfo = weightFile->boneInfo[j];
+                const auto &boneData = vertexBoneData[j];
+
+                std::memset(boneInfo.index, 0, sizeof(boneInfo.index));
+                std::memset(boneInfo.weight, 0, sizeof(boneInfo.weight));
+
+                for (unsigned int k = 0; k < boneData.size() && k < 4; ++k) {
+                    boneInfo.index[k] = static_cast<char>(boneData[k].first);
+                    boneInfo.weight[k] = static_cast<char>(boneData[k].second * 100);
+                }
+            }
+
+            std::filesystem::path inputPath(fullPath);
+            inputPath.replace_extension(".weight");
+            auto filename = inputPath.string();
+            std::ofstream outFile(filename, std::ios::binary);
+            if (!outFile) {
+                std::cerr << "Failed to open file for writing: " << filename << std::endl;
+                return;
+            }
+
+            outFile.write("weight", sizeof("weight") - 1);
+            outFile.write(reinterpret_cast<char *>(weightFile->boneInfo),
+                          sizeof(weightFile->boneInfo) * weightFile->vertexCount);
+            outFile.close();
+        }
+    }
 
 } // DivineBrush

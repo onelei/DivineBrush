@@ -33,23 +33,44 @@ namespace DivineBrush {
 
     void SampleScene::OnAwake() {
         //Texture2D::CompressFile("image/Diffuse_FishSoup_Pot_1.jpg", "image/diffuse_fishsoup_pot.cpt");
-        TestExportMesh();
+        //TestExportMesh();
+        //TODO
+        //TestExportAnimation();
+        //TestExportWeight();
+        //MeshFilter::ExportMesh("model/bird.FBX");
+        AnimationClip::ExportSkeletonAnimation("model/bird.FBX");
+        //MeshFilter::ExportWeight("model/bird.FBX");
+        //Texture2D::CompressFile("image/bird2.jpg", "image/bird.cpt");
 
         auto gameObject = new GameObject("3DModel");
         transform = gameObject->GetComponent<Transform>();
-        transform->SetRotation(glm::vec3(-90, 0, 0));
+        transform->SetRotation(glm::vec3(0, 0, 0));
+        transform->SetPosition(glm::vec3(-10, 0, -10));
+        transform->SetScale(glm::vec3(0.5, 0.5, 0.5));
+
+//        auto mesh_filter = gameObject->AddComponent<MeshFilter>();
+//        mesh_filter->LoadMesh("model/fbx_extra_jiulian.mesh");
+//        auto material = new Material();
+//        material->Parse("material/fbx_extra_jiulian.mat");
+//
+//        //auto mesh_render = gameObject->AddComponent<MeshRenderer>();
+//        //mesh_render->SetMaterial(material);
+//
+//        auto animation = gameObject->AddComponent<Animation>();
+//        animation->LoadFromFile("animation/fbx_extra_bip001_bip001_take_001_baselayer.skeleton_anim","idle");
+//        mesh_filter->LoadWeight("model/fbx_extra_jiulian.weight");//加载权重文件
+//        auto mesh_render = gameObject->AddComponent<SkinnedMeshRenderer>();
+//        mesh_render->SetMaterial(material);
+//        animation->Play("idle");
+
 
         auto mesh_filter = gameObject->AddComponent<MeshFilter>();
-        mesh_filter->LoadMesh("model/fbx_extra_jiulian.mesh");
+        mesh_filter->LoadMesh("model/bird_jiulian.mesh");
         auto material = new Material();
-        material->Parse("material/fbx_extra_jiulian.mat");
-
-        //auto mesh_render = gameObject->AddComponent<MeshRenderer>();
-        //mesh_render->SetMaterial(material);
-
+        material->Parse("material/fbx_bird.mat");
         auto animation = gameObject->AddComponent<Animation>();
-        animation->LoadFromFile("animation/fbx_extra_bip001_bip001_take_001_baselayer.skeleton_anim","idle");
-        mesh_filter->LoadWeight("model/fbx_extra_jiulian.weight");//加载权重文件
+        animation->LoadFromFile("animation/bird_take_001.skeleton_anim","idle");
+        mesh_filter->LoadWeight("model/bird.weight");//加载权重文件
         auto mesh_render = gameObject->AddComponent<SkinnedMeshRenderer>();
         mesh_render->SetMaterial(material);
         animation->Play("idle");
@@ -289,6 +310,14 @@ namespace DivineBrush {
 
     void SampleScene::TestExportMesh() {
         MeshFilter::ExportMesh("model/fbx_extra.fbx");
+    }
+
+    void SampleScene::TestExportAnimation() {
+        AnimationClip::ExportSkeletonAnimation("model/fbx_extra.fbx");
+    }
+
+    void SampleScene::TestExportWeight() {
+        MeshFilter::ExportWeight("model/fbx_extra.fbx");
     }
 
 } // DivineBrush

@@ -32,6 +32,10 @@ namespace DivineBrush {
 
         void TestExportMesh();
 
+        void TestExportAnimation();
+
+        void TestExportWeight();
+
     private:
         Camera *uiCamera;
         Camera *sceneCamera;
