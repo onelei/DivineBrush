@@ -71,7 +71,7 @@ namespace DivineBrush {
                 auto boneWeight = boneInfo[i].weight[j] / 100.0f;
                 //当前帧顶点关联的骨骼矩阵
                 auto boneMat = boneMat4[boneIndex];
-                //计算当前帧顶点位置(模型坐标系，bone_matrix里带了相对于模型坐标系的位置，作用到骨骼坐标系的位置上，就转换到了模型坐标系)
+                //计算当前帧顶点位置(模型坐标系，boneMat里带了相对于模型坐标系的位置，作用到骨骼坐标系的位置上，就转换到了模型坐标系)
                 auto worldPos = boneMat * vertexPos;
                 bonePos = bonePos + worldPos * boneWeight;
                 //TODO SkinMesh

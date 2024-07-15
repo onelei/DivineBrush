@@ -61,12 +61,12 @@ namespace DivineBrush {
         }
 
         // 球面线性插值函数
-        static glm::quat Slerp(const glm::quat& start, const glm::quat& end, float factor) {
+        static glm::quat Slerp(const glm::quat &start, const glm::quat &end, float factor) {
             return glm::slerp(start, end, factor);
         }
 
-// 查找关键帧索引
-        static unsigned int FindKeyFrameIndex(const aiNodeAnim* channel, double time, unsigned int numKeys) {
+        // 查找关键帧索引
+        static unsigned int FindKeyFrameIndex(const aiNodeAnim *channel, double time, unsigned int numKeys) {
             for (unsigned int i = 0; i < numKeys - 1; ++i) {
                 if (time < channel->mPositionKeys[i + 1].mTime) {
                     return i;
@@ -75,8 +75,8 @@ namespace DivineBrush {
             return numKeys - 1;
         }
 
-// 递归计算骨骼的全局变换
-        static glm::mat4 CalculateGlobalTransform(const aiNode* node, const glm::mat4& parentTransform) {
+        // 递归计算骨骼的全局变换
+        static glm::mat4 CalculateGlobalTransform(const aiNode *node, const glm::mat4 &parentTransform) {
             aiVector3D position;
             aiQuaternion rotation;
             aiVector3D scaling;
@@ -128,16 +128,17 @@ namespace DivineBrush {
             return channel->mNumRotationKeys - 1;
         }
 
-        static void Interpolate(aiQuaternion& out, const aiQuaternion& start, const aiQuaternion& end, float factor) {
+        static void Interpolate(aiQuaternion &out, const aiQuaternion &start, const aiQuaternion &end, float factor) {
             aiQuaternion::Interpolate(out, start, end, factor);
             out.Normalize();
         }
 
         // 递归计算节点的全局变换矩阵
-        static glm::mat4 ComputeGlobalTransform(const aiNode* node, const std::unordered_map<std::string, glm::mat4>& boneTransforms) {
+        static glm::mat4
+        ComputeGlobalTransform(const aiNode *node, const std::unordered_map<std::string, glm::mat4> &boneTransforms) {
             glm::mat4 transform = glm::mat4(1.0f);
 
-            const aiNode* currentNode = node;
+            const aiNode *currentNode = node;
             while (currentNode) {
                 std::string nodeName(currentNode->mName.C_Str());
                 if (boneTransforms.find(nodeName) != boneTransforms.end()) {
@@ -150,7 +151,9 @@ namespace DivineBrush {
         }
 
         // 递归更新每个节点的全局变换矩阵
-        static void UpdateGlobalTransforms(const aiNode* node, const std::unordered_map<std::string, glm::mat4>& boneTransforms, std::unordered_map<std::string, glm::mat4>& globalTransforms) {
+        static void
+        UpdateGlobalTransforms(const aiNode *node, const std::unordered_map<std::string, glm::mat4> &boneTransforms,
+                               std::unordered_map<std::string, glm::mat4> &globalTransforms) {
             std::string nodeName(node->mName.C_Str());
             globalTransforms[nodeName] = ComputeGlobalTransform(node, boneTransforms);
 
@@ -159,11 +162,207 @@ namespace DivineBrush {
             }
         }
 
-        static void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform, const aiAnimation* pAnimation, const std::unordered_map<std::string, unsigned int>& boneMapping, const std::vector<glm::mat4>& BoneOffsets, std::vector<glm::mat4>& BoneTransforms);
-        static const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName);
-        static void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-        static void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-        static void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+        static // 插值函数
+        glm::vec3 InterpolatePosition(aiNodeAnim* channel, unsigned int frame) {
+            if (channel->mNumPositionKeys == 1) return glm::vec3(channel->mPositionKeys[0].mValue.x, channel->mPositionKeys[0].mValue.y, channel->mPositionKeys[0].mValue.z);
+
+            for (unsigned int i = 0; i < channel->mNumPositionKeys - 1; i++) {
+                if (frame < channel->mPositionKeys[i + 1].mTime) {
+                    float t = (frame - channel->mPositionKeys[i].mTime) / (channel->mPositionKeys[i + 1].mTime - channel->mPositionKeys[i].mTime);
+                    glm::vec3 start(channel->mPositionKeys[i].mValue.x, channel->mPositionKeys[i].mValue.y, channel->mPositionKeys[i].mValue.z);
+                    glm::vec3 end(channel->mPositionKeys[i + 1].mValue.x, channel->mPositionKeys[i + 1].mValue.y, channel->mPositionKeys[i + 1].mValue.z);
+                    return glm::mix(start, end, t);
+                }
+            }
+            return glm::vec3(0.0f);
+        }
+
+        static glm::quat InterpolateRotation(aiNodeAnim* channel, unsigned int frame) {
+            if (channel->mNumRotationKeys == 1) return glm::quat(channel->mRotationKeys[0].mValue.w, channel->mRotationKeys[0].mValue.x, channel->mRotationKeys[0].mValue.y, channel->mRotationKeys[0].mValue.z);
+
+            for (unsigned int i = 0; i < channel->mNumRotationKeys - 1; i++) {
+                if (frame < channel->mRotationKeys[i + 1].mTime) {
+                    float t = (frame - channel->mRotationKeys[i].mTime) / (channel->mRotationKeys[i + 1].mTime - channel->mRotationKeys[i].mTime);
+                    glm::quat start(channel->mRotationKeys[i].mValue.w, channel->mRotationKeys[i].mValue.x, channel->mRotationKeys[i].mValue.y, channel->mRotationKeys[i].mValue.z);
+                    glm::quat end(channel->mRotationKeys[i + 1].mValue.w, channel->mRotationKeys[i + 1].mValue.x, channel->mRotationKeys[i + 1].mValue.y, channel->mRotationKeys[i + 1].mValue.z);
+                    return glm::slerp(start, end, t);
+                }
+            }
+            return glm::quat();
+        }
+
+        static glm::vec3 InterpolateScaling(aiNodeAnim* channel, unsigned int frame) {
+            if (channel->mNumScalingKeys == 1) return glm::vec3(channel->mScalingKeys[0].mValue.x, channel->mScalingKeys[0].mValue.y, channel->mScalingKeys[0].mValue.z);
+
+            for (unsigned int i = 0; i < channel->mNumScalingKeys - 1; i++) {
+                if (frame < channel->mScalingKeys[i + 1].mTime) {
+                    float t = (frame - channel->mScalingKeys[i].mTime) / (channel->mScalingKeys[i + 1].mTime - channel->mScalingKeys[i].mTime);
+                    glm::vec3 start(channel->mScalingKeys[i].mValue.x, channel->mScalingKeys[i].mValue.y, channel->mScalingKeys[i].mValue.z);
+                    glm::vec3 end(channel->mScalingKeys[i + 1].mValue.x, channel->mScalingKeys[i + 1].mValue.y, channel->mScalingKeys[i + 1].mValue.z);
+                    return glm::mix(start, end, t);
+                }
+            }
+            return glm::vec3(1.0f);
+        }
+        static void CalculateGlobalTransform(aiNode* node, const std::unordered_map<std::string, glm::mat4>& boneOffsetMatrices,
+                                             const std::unordered_map<std::string, glm::mat4>& boneTransforms,
+                                             std::unordered_map<std::string, glm::mat4>& globalTransforms,
+                                             const glm::mat4& parentTransform = glm::mat4(1.0f)) {
+            std::string nodeName(node->mName.C_Str());
+            glm::mat4 nodeTransform = AiMatrix4x4ToGlm(node->mTransformation);
+
+            if (boneTransforms.find(nodeName) != boneTransforms.end()) {
+                nodeTransform = boneTransforms.at(nodeName);
+            }
+
+            glm::mat4 globalTransform = parentTransform * nodeTransform;
+            globalTransforms[nodeName] = globalTransform;
+
+            for (unsigned int i = 0; i < node->mNumChildren; ++i) {
+                CalculateGlobalTransform(node->mChildren[i], boneOffsetMatrices, boneTransforms, globalTransforms, globalTransform);
+            }
+        }
+
+
+        // Function to convert aiMatrix4x4 to glm::mat4
+        static glm::mat4 AiMatrix4x4ToGlm(const aiMatrix4x4& from) {
+            glm::mat4 to;
+            to[0][0] = from.a1; to[1][0] = from.a2; to[2][0] = from.a3; to[3][0] = from.a4;
+            to[0][1] = from.b1; to[1][1] = from.b2; to[2][1] = from.b3; to[3][1] = from.b4;
+            to[0][2] = from.c1; to[1][2] = from.c2; to[2][2] = from.c3; to[3][2] = from.c4;
+            to[0][3] = from.d1; to[1][3] = from.d2; to[2][3] = from.d3; to[3][3] = from.d4;
+            return to;
+        }
+
+        static void ProcessNodeHierarchy(const aiNode* node, const aiAnimation* animation, float currentTime, const glm::mat4& parentTransform, std::unordered_map<std::string, glm::mat4>& boneTransforms) {
+
+        }
+
+        static const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string& nodeName)
+        {
+            // 遍历动画的所有通道
+            for (unsigned int i = 0; i < pAnimation->mNumChannels; i++) {
+                const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
+
+                // 检查通道名称是否与目标名称匹配
+                if (std::string(pNodeAnim->mNodeName.data) == nodeName) {
+                    return pNodeAnim;
+                }
+            }
+
+            // 找不到匹配的通道，返回空指针
+            return nullptr;
+        }
+
+        static void CalculateBoneTransform(aiNode* node, const glm::mat4& parentTransform, std::unordered_map<std::string, glm::mat4>& boneTransforms, const std::unordered_map<std::string, glm::mat4>& boneOffsetMatrices, const std::unordered_map<std::string, glm::mat4>& boneLocalTransforms) {
+            std::string nodeName(node->mName.C_Str());
+            glm::mat4 nodeTransform = AiMatrix4x4ToGlm(node->mTransformation);
+
+            if (boneLocalTransforms.find(nodeName) != boneLocalTransforms.end()) {
+                nodeTransform = boneLocalTransforms.at(nodeName);
+            }
+
+            glm::mat4 globalTransform = parentTransform * nodeTransform;
+
+            if (boneOffsetMatrices.find(nodeName) != boneOffsetMatrices.end()) {
+                boneTransforms[nodeName] = globalTransform * boneOffsetMatrices.at(nodeName);
+            }
+
+            for (unsigned int i = 0; i < node->mNumChildren; i++) {
+                CalculateBoneTransform(node->mChildren[i], globalTransform, boneTransforms, boneOffsetMatrices, boneLocalTransforms);
+            }
+        }
+
+        static void CalculateBoneTransforms(const aiNode* node, const glm::mat4& parentTransform,
+                                                    const std::unordered_map<std::string, glm::mat4>& boneTransforms,
+                                                    std::vector<glm::mat4>& finalTransforms,
+                                                    const std::unordered_map<std::string, glm::mat4>& boneOffsetMatrices) {
+            std::string nodeName = node->mName.C_Str();
+            glm::mat4 nodeTransform = AiMatrix4x4ToGlm(node->mTransformation);
+
+            if (boneTransforms.find(nodeName) != boneTransforms.end()) {
+                nodeTransform = boneTransforms.at(nodeName);
+            }
+
+            glm::mat4 globalTransform = parentTransform * nodeTransform;
+
+            if (boneOffsetMatrices.find(nodeName) != boneOffsetMatrices.end()) {
+                unsigned int boneIndex = std::distance(boneOffsetMatrices.begin(), boneOffsetMatrices.find(nodeName));
+                finalTransforms[boneIndex] = globalTransform * boneOffsetMatrices.at(nodeName);
+            }
+
+            for (unsigned int i = 0; i < node->mNumChildren; ++i) {
+                CalculateBoneTransforms(node->mChildren[i], globalTransform, boneTransforms, finalTransforms, boneOffsetMatrices);
+            }
+        }
+
+        static const aiNode* FindNode(const aiNode* rootNode, const std::string& nodeName) {
+            if (rootNode->mName.C_Str() == nodeName) {
+                return rootNode;
+            }
+
+            for (unsigned int i = 0; i < rootNode->mNumChildren; ++i) {
+                const aiNode* foundNode = FindNode(rootNode->mChildren[i], nodeName);
+                if (foundNode) {
+                    return foundNode;
+                }
+            }
+
+            return nullptr;
+        }
+
+        static void CalculateInitialGlobalTransforms(const aiNode* node, const glm::mat4& parentTransform, std::unordered_map<std::string, glm::mat4>& boneInitialGlobalTransforms) {
+            std::string nodeName = node->mName.C_Str();
+            glm::mat4 nodeTransform = AiMatrix4x4ToGlm(node->mTransformation);
+
+            glm::mat4 globalTransform = parentTransform * nodeTransform;
+            boneInitialGlobalTransforms[nodeName] = globalTransform;
+
+            for (unsigned int i = 0; i < node->mNumChildren; ++i) {
+                CalculateInitialGlobalTransforms(node->mChildren[i], globalTransform, boneInitialGlobalTransforms);
+            }
+        }
+
+        static glm::mat4 EvaluateGlobalTransform(const aiNode* rootNode, const std::string& boneName, const std::unordered_map<std::string, glm::mat4>& boneTransforms) {
+            const aiNode* node = FindNode(rootNode,boneName);
+            if (!node) {
+                return glm::mat4(1.0f);
+            }
+
+            glm::mat4 globalTransform = glm::mat4(1.0f);
+            while (node) {
+                std::string nodeName = node->mName.C_Str();
+                glm::mat4 nodeTransform = AiMatrix4x4ToGlm(node->mTransformation);
+
+                if (boneTransforms.find(nodeName) != boneTransforms.end()) {
+                    nodeTransform = boneTransforms.at(nodeName);
+                }
+
+                globalTransform = nodeTransform * globalTransform;
+
+                node = node->mParent;
+            }
+
+            return globalTransform;
+        }
+
+        // 递归地计算全局变换矩阵
+        static void CalculateGlobalTransform(const aiNode* node, const std::unordered_map<std::string, glm::mat4>& boneOffsetMatrices, const std::unordered_map<std::string, glm::mat4>& boneTransforms, glm::mat4 parentTransform, std::unordered_map<std::string, glm::mat4>& globalTransforms) {
+            std::string nodeName(node->mName.C_Str());
+            glm::mat4 nodeTransform = AiMatrix4x4ToGlm(node->mTransformation);
+
+            auto it = boneTransforms.find(nodeName);
+            if (it != boneTransforms.end()) {
+                nodeTransform = it->second;
+            }
+
+            glm::mat4 globalTransform = parentTransform * nodeTransform;
+            globalTransforms[nodeName] = globalTransform;
+
+            for (unsigned int i = 0; i < node->mNumChildren; ++i) {
+                CalculateGlobalTransform(node->mChildren[i], boneOffsetMatrices, boneTransforms, globalTransform, globalTransforms);
+            }
+        }
 
     private:
         std::string name;
