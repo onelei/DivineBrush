@@ -2,6 +2,10 @@
 
 ![divinebrush_logo](./doc/pic/divinebrush_logo.png)
 
+![game](./doc/pic/game.png)
+
+![scene](./doc/pic/scene.png)
+
 ## 缘起
 
 ![name_gpt](./doc/pic/name_gpt.png)
